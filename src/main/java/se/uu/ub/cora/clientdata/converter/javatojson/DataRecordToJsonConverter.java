@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,7 +23,6 @@ import java.util.Map;
 
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
-import se.uu.ub.cora.json.builder.JsonArrayBuilder;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
@@ -52,14 +51,14 @@ public final class DataRecordToJsonConverter {
 	JsonObjectBuilder toJsonObjectBuilder() {
 		convertMainClientDataGroup();
 		convertActionLinks();
-		convertKeys();
 		return createTopLevelJsonObjectWithRecordAsChild();
 	}
 
 	private void convertMainClientDataGroup() {
 		DataToJsonConverterFactory dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(jsonBuilderFactory, clientDataRecord.getClientDataGroup());
+				.createForClientDataElement(jsonBuilderFactory,
+						clientDataRecord.getClientDataGroup());
 		JsonObjectBuilder jsonDataGroupObjectBuilder = dataToJsonConverter.toJsonObjectBuilder();
 		recordJsonObjectBuilder.addKeyJsonObjectBuilder("data", jsonDataGroupObjectBuilder);
 	}
@@ -80,24 +79,6 @@ public final class DataRecordToJsonConverter {
 				jsonBuilderFactory, actionLinks);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		recordJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);
-	}
-
-	private void convertKeys() {
-		if (recordHasKeys()) {
-			addKeysToRecord();
-		}
-	}
-
-	private boolean recordHasKeys() {
-		return !clientDataRecord.getKeys().isEmpty();
-	}
-
-	private void addKeysToRecord() {
-		JsonArrayBuilder keyBuilder = jsonBuilderFactory.createArrayBuilder();
-		for (String key : clientDataRecord.getKeys()) {
-			keyBuilder.addString(key);
-		}
-		recordJsonObjectBuilder.addKeyJsonArrayBuilder("keys", keyBuilder);
 	}
 
 	private JsonObjectBuilder createTopLevelJsonObjectWithRecordAsChild() {

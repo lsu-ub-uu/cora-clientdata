@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -27,7 +27,6 @@ import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataRecordToJsonConverter;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
@@ -46,38 +45,6 @@ public class DataRecordToJsonConverterTest {
 	}
 
 	@Test
-	public void testToJsonWithKey() {
-		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
-		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-		clientDataRecord.addKey("KEY1");
-
-		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
-		String jsonString = dataRecordToJsonConverter.toJson();
-
-		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}"
-				+ ",\"keys\":[\"KEY1\"]" + "}}");
-	}
-
-	@Test
-	public void testToJsonWithKeys() {
-		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
-		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-		clientDataRecord.addKey("KEY1");
-		clientDataRecord.addKey("KEY2");
-		clientDataRecord.addKey("KEY3");
-
-		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
-		String jsonString = dataRecordToJsonConverter.toJson();
-
-		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}"
-				+ ",\"keys\":[\"KEY1\",\"KEY2\",\"KEY3\"]" + "}}");
-	}
-
-	@Test
 	public void testToJsonWithActionLinks() {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
@@ -88,12 +55,11 @@ public class DataRecordToJsonConverterTest {
 				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
 		String jsonString = dataRecordToJsonConverter.toJson();
 
-		assertEquals(jsonString,
-				"{\"record\":{\"data\":{\"name\":\"groupNameInData\"}" + ",\"actionLinks\":{"
-						+ "\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\","
-						+ "\"contentType\":\"application/metadata_record+json\","
-						+ "\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\","
-						+ "\"accept\":\"application/metadata_record+json\"}" + "}}}");
+		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}"
+				+ ",\"actionLinks\":{" + "\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\","
+				+ "\"contentType\":\"application/metadata_record+json\","
+				+ "\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\","
+				+ "\"accept\":\"application/metadata_record+json\"}" + "}}}");
 	}
 
 	private ActionLink createReadActionLink() {

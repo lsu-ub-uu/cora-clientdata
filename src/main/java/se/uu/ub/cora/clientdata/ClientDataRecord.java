@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,13 +20,10 @@
 package se.uu.ub.cora.clientdata;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 public final class ClientDataRecord implements ClientData {
 	private ClientDataGroup clientDataGroup;
-	private Set<String> keys = new LinkedHashSet<>();
 	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 
 	public static ClientDataRecord withClientDataGroup(ClientDataGroup clientDataGroup) {
@@ -39,14 +36,6 @@ public final class ClientDataRecord implements ClientData {
 
 	public ClientDataGroup getClientDataGroup() {
 		return clientDataGroup;
-	}
-
-	public void addKey(String key) {
-		keys.add(key);
-	}
-
-	public Set<String> getKeys() {
-		return keys;
 	}
 
 	public void addActionLink(String key, ActionLink actionLink) {

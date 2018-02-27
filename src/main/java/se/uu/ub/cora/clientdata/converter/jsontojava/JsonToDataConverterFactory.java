@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,5 +24,7 @@ import se.uu.ub.cora.json.parser.JsonValue;
 public interface JsonToDataConverterFactory {
 
 	JsonToDataConverter createForJsonObject(JsonValue jsonValue);
+
+	JsonToDataConverter createForJsonString(String json);
 
 }
