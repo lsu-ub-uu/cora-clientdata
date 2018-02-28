@@ -46,6 +46,21 @@ public class DataRecordToJsonConverterTest {
 	}
 
 	@Test
+	public void testToJsonWithDataActionLinksButNoActionLinks() {
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
+		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
+		ClientDataActionLinks dataActionLinks = new ClientDataActionLinks();
+		clientDataRecord.setActionLinks(dataActionLinks);
+
+		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
+		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
+				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
+		String jsonString = dataRecordToJsonConverter.toJson();
+
+		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
+	}
+
+	@Test
 	public void testToJsonWithActionLinks() {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);

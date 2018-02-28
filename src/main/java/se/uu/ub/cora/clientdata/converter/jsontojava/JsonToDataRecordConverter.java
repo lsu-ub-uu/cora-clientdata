@@ -1,5 +1,6 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
+import se.uu.ub.cora.clientdata.ClientDataActionLinks;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.parser.JsonObject;
@@ -43,7 +44,8 @@ public class JsonToDataRecordConverter {
 
 		JsonObject actionLinksObject = jsonObjectRecord.getValueAsJsonObject("actionLinks");
 		JsonToDataConverter actionLinksConverter = factory.createForJsonObject(actionLinksObject);
-		// ActionLinks actionlinks = (ActionLinks) actionLinksConverter.toInstance();
+		ClientDataActionLinks actionlinks = (ClientDataActionLinks) actionLinksConverter
+				.toInstance();
 		return ClientDataRecord.withClientDataGroup(clientDataGroup);
 	}
 

@@ -21,7 +21,6 @@ package se.uu.ub.cora.clientdata;
 
 public final class ClientDataRecord implements ClientData {
 	private ClientDataGroup clientDataGroup;
-	// private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 	private ClientDataActionLinks actionLinks;
 
 	public static ClientDataRecord withClientDataGroup(ClientDataGroup clientDataGroup) {
@@ -36,17 +35,9 @@ public final class ClientDataRecord implements ClientData {
 		return clientDataGroup;
 	}
 
-	// public void addActionLink(String key, ActionLink actionLink) {
-	// actionLinks.put(key, actionLink);
-	// }
-
 	public ClientDataActionLinks getActionLinks() {
 		return actionLinks;
 	}
-	//
-	// public ActionLink getActionLink(String key) {
-	// return actionLinks.get(key);
-	// }
 
 	public void setActionLinks(ClientDataActionLinks actionLinks) {
 		this.actionLinks = actionLinks;

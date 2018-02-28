@@ -75,6 +75,41 @@ public class JsonToDataConverterFactoryTest {
 		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
 	}
 
+	@Test
+	public void testFactorOnJsonStringActionLinksContainingRead() {
+		String json = "{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
+	}
+
+	// @Test
+	// public void testFactorOnJsonStringActionLinksContainingUpdate() {
+	// String json =
+	// "{\"update\":{\"requestMethod\":\"GET\",\"rel\":\"update\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
+	// JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+	// .createForJsonString(json);
+	// assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
+	// }
+	//
+	// @Test
+	// public void testFactorOnJsonStringActionLinksContainingDelete() {
+	// String json =
+	// "{\"delete\":{\"requestMethod\":\"GET\",\"rel\":\"delete\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
+	// JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+	// .createForJsonString(json);
+	// assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
+	// }
+	//
+	// @Test
+	// public void testFactorOnJsonStringActionLinksContainingReadIncomingLinks() {
+	// String json =
+	// "{\"read_incoming_links\":{\"requestMethod\":\"GET\",\"rel\":\"read_incoming_links\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
+	// JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+	// .createForJsonString(json);
+	// assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
+	// }
+
 	@Test(expectedExceptions = JsonParseException.class)
 	public void testFactorOnJsonObjectNullJson() {
 		jsonToDataConverterFactory.createForJsonString(null);

@@ -16,7 +16,7 @@ public class JsonToDataConverterSpy implements JsonToDataConverter {
 
 	@Override
 	public ClientDataElement toInstance() {
-		if (jsonValue.containsKey("actionLinks")) {
+		if (jsonValue.containsKey("read")) {
 			returnedElement = new ClientDataActionLinks();
 		} else {
 			String nameinData = jsonValue.getValueAsJsonString("name").getStringValue();

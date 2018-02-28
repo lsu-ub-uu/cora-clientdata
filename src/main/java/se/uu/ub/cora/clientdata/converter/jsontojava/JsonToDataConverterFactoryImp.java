@@ -19,6 +19,8 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
+import java.util.Map.Entry;
+
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -41,6 +43,10 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		if (isAtomicData()) {
 			return JsonToDataAtomicConverter.forJsonObject(jsonObject);
 		}
+		// TODO: hur avgöra att detta är actionLinks??
+		if (isActionLinks()) {
+			return JsonToDataActionLinksConverter.forJsonObject(jsonObject);
+		}
 		return JsonToDataAttributeConverter.forJsonObject(jsonObject);
 	}
 
@@ -50,6 +56,19 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 
 	private boolean isGroup() {
 		return jsonObject.containsKey("children");
+	}
+
+	private boolean isActionLinks() {
+		for (Entry<String, JsonValue> entry : jsonObject.entrySet()) {
+			if (entry.getValue() instanceof JsonObject) {
+				JsonObject child = (JsonObject) entry.getValue();
+				if (child.containsKey("requestMethod")) {
+					return true;
+				}
+			}
+		}
+		return false;
+		// return jsonObject.containsKey("read") || jsonObject.containsKey("update");
 	}
 
 	@Override
