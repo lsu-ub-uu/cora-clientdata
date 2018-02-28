@@ -40,6 +40,9 @@ public class JsonToDataRecordConverter {
 		JsonToDataConverter converter = factory.createForJsonObject(jsonDataObject);
 
 		ClientDataGroup clientDataGroup = (ClientDataGroup) converter.toInstance();
+
+		JsonObject actionLinks = jsonObjectRecord.getValueAsJsonObject("actionLinks");
+		JsonToDataConverter actionLinksConverter = factory.createForJsonObject(actionLinks);
 		return ClientDataRecord.withClientDataGroup(clientDataGroup);
 	}
 

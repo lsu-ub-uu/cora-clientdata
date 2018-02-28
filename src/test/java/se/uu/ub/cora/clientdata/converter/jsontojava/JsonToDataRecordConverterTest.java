@@ -20,17 +20,22 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
+import se.uu.ub.cora.json.parser.JsonArray;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
 public class JsonToDataRecordConverterTest {
+
+	private JsonToDataConverterFactory factory;
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
 			+ "Error parsing jsonRecord: Record data must contain key: record")
@@ -42,7 +47,7 @@ public class JsonToDataRecordConverterTest {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
 		JsonToDataConverterFactory factory2 = new JsonToDataConverterFactoryImp();
-		JsonToDataConverterFactory factory = new JsonToDataConverterFactoryOnlyGroupConverterSpy();
+		factory = new JsonToDataConverterFactoryOnlyGroupConverterSpy();
 		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverter
 				.forJsonObjectUsingConverterFactory(((JsonObject) jsonValue), factory);
 		return jsonToDataConverter.toInstance();
@@ -138,19 +143,46 @@ public class JsonToDataRecordConverterTest {
 		json += "}";
 		json += "}";
 		json += "}";
-		createClientDataRecordForJsonStringUsingSpy(json);
-
+		createClientDataRecordForJsonString(json);
+		JsonToDataConverterFactoryOnlyGroupConverterSpy factorySpy = (JsonToDataConverterFactoryOnlyGroupConverterSpy) factory;
+		JsonObject jsonValueSentToFactory = factorySpy.jsonObjects.get(0);
+		assertEquals(jsonValueSentToFactory.getValueAsJsonString("name").getStringValue(), "groupNameInData");
 	}
 
-	private ClientDataRecord createClientDataRecordForJsonStringUsingSpy(String json) {
-		OrgJsonParser jsonParser = new OrgJsonParser();
-		JsonValue jsonValue = jsonParser.parseString(json);
-		// JsonToDataConverterFactory factory = new JsonToDataConverterFactorySpy();
-		JsonToDataConverterFactory factory = new JsonToDataConverterFactoryOnlyGroupConverterSpy();
-		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverter
-				.forJsonObjectUsingConverterFactory(((JsonObject) jsonValue), factory);
-		return jsonToDataConverter.toInstance();
+	@Test
+	public void providedFactoryIsUsedForActionLinks() throws Exception {
+		String json = "{\"record\":{\"data\":{";
+		json += "\"name\":\"groupNameInData\", \"children\":[]";
+		json += "}";
+		json += ", \"actionLinks\":{";
+		json += " \"read\":{";
+		json += " \"requestMethod\":\"GET\",";
+		json += " \"rel\":\"read\",";
+		json += " \"url\":\"https://cora.example.org/somesystem/rest/record/somerecordtype/somerecordid\",";
+		json += " \"accept\":\"application/vnd.uub.record+json\"";
+		json += "}";
+		json += "}";
+		json += "}";
+		json += "}";
+		createClientDataRecordForJsonString(json);
+		JsonToDataConverterFactoryOnlyGroupConverterSpy factorySpy = (JsonToDataConverterFactoryOnlyGroupConverterSpy) factory;
+		JsonObject jsonValueSentToFactory = factorySpy.jsonObjects.get(1);
+		JsonObject readLink = jsonValueSentToFactory.getValueAsJsonObject("read");
+		assertEquals(readLink.getValueAsJsonString("requestMethod").getStringValue(), "GET");
+		assertEquals(readLink.getValueAsJsonString("rel").getStringValue(), "read");
+		assertEquals(readLink.getValueAsJsonString("url").getStringValue(), "https://cora.example.org/somesystem/rest/record/somerecordtype/somerecordid");
+		assertEquals(readLink.getValueAsJsonString("accept").getStringValue(), "application/vnd.uub.record+json");
 	}
+
+//	private ClientDataRecord createClientDataRecordForJsonStringUsingSpy(String json) {
+//		OrgJsonParser jsonParser = new OrgJsonParser();
+//		JsonValue jsonValue = jsonParser.parseString(json);
+//		// JsonToDataConverterFactory factory = new JsonToDataConverterFactorySpy();
+//		JsonToDataConverterFactory factory = new JsonToDataConverterFactoryOnlyGroupConverterSpy();
+//		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverter
+//				.forJsonObjectUsingConverterFactory(((JsonObject) jsonValue), factory);
+//		return jsonToDataConverter.toInstance();
+//	}
 
 	@Test
 	public void testToClass() {
