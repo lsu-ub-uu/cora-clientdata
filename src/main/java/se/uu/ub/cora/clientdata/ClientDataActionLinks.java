@@ -9,7 +9,6 @@ public class ClientDataActionLinks implements ClientDataElement {
 
 	@Override
 	public String getNameInData() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

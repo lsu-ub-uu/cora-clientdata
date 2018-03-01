@@ -36,17 +36,24 @@ public class JsonToDataRecordConverter {
 		jsonObjectRecord = jsonObject.getValueAsJsonObject("record");
 		validateOnlyCorrectKeysAtSecondLevel();
 
+		ClientDataGroup clientDataGroup = convertDataGroup();
+		ClientDataActionLinks actionlinks = convertDataActionLinks();
+
+		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
+		clientDataRecord.setActionLinks(actionlinks);
+		return clientDataRecord;
+	}
+
+	private ClientDataGroup convertDataGroup() {
 		JsonObject jsonDataObject = jsonObjectRecord.getValueAsJsonObject("data");
-
 		JsonToDataConverter converter = factory.createForJsonObject(jsonDataObject);
+		return (ClientDataGroup) converter.toInstance();
+	}
 
-		ClientDataGroup clientDataGroup = (ClientDataGroup) converter.toInstance();
-
+	private ClientDataActionLinks convertDataActionLinks() {
 		JsonObject actionLinksObject = jsonObjectRecord.getValueAsJsonObject("actionLinks");
 		JsonToDataConverter actionLinksConverter = factory.createForJsonObject(actionLinksObject);
-		ClientDataActionLinks actionlinks = (ClientDataActionLinks) actionLinksConverter
-				.toInstance();
-		return ClientDataRecord.withClientDataGroup(clientDataGroup);
+		return (ClientDataActionLinks) actionLinksConverter.toInstance();
 	}
 
 	private void validateOnlyRecordKeyAtTopLevel() {

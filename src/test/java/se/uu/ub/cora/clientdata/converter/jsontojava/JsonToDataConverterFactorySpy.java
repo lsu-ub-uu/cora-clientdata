@@ -4,6 +4,8 @@ import se.uu.ub.cora.json.parser.JsonValue;
 
 public class JsonToDataConverterFactorySpy implements JsonToDataConverterFactory {
 
+	public int numberOfTimesCalled = 0;
+
 	@Override
 	public JsonToDataConverter createForJsonString(String json) {
 		return null;
@@ -11,7 +13,7 @@ public class JsonToDataConverterFactorySpy implements JsonToDataConverterFactory
 
 	@Override
 	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
-		// TODO Auto-generated method stub
+		numberOfTimesCalled++;
 		return null;
 	}
 
