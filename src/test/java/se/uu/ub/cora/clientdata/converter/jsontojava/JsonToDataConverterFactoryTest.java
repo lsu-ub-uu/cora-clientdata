@@ -76,39 +76,22 @@ public class JsonToDataConverterFactoryTest {
 	}
 
 	@Test
-	public void testFactorOnJsonStringActionLinksContainingRead() {
+	public void testFactorOnJsonStringActionLinks() {
 		String json = "{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
+		assertTrue(((JsonToDataActionLinksConverter)jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
 	}
 
-	// @Test
-	// public void testFactorOnJsonStringActionLinksContainingUpdate() {
-	// String json =
-	// "{\"update\":{\"requestMethod\":\"GET\",\"rel\":\"update\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
-	// JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-	// .createForJsonString(json);
-	// assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
-	// }
-	//
-	// @Test
-	// public void testFactorOnJsonStringActionLinksContainingDelete() {
-	// String json =
-	// "{\"delete\":{\"requestMethod\":\"GET\",\"rel\":\"delete\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
-	// JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-	// .createForJsonString(json);
-	// assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
-	// }
-	//
-	// @Test
-	// public void testFactorOnJsonStringActionLinksContainingReadIncomingLinks() {
-	// String json =
-	// "{\"read_incoming_links\":{\"requestMethod\":\"GET\",\"rel\":\"read_incoming_links\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
-	// JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-	// .createForJsonString(json);
-	// assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
-	// }
+	@Test
+	public void testFactorOnJsonStringActionLink() {
+		String json = "{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinkConverter);
+		assertTrue(((JsonToDataActionLinkConverter)jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+	}
 
 	@Test(expectedExceptions = JsonParseException.class)
 	public void testFactorOnJsonObjectNullJson() {

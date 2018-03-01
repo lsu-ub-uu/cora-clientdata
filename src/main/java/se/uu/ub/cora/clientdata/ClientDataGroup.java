@@ -31,12 +31,12 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	private List<ClientDataElement> children = new ArrayList<>();
 	private String repeatId;
 
-	public static ClientDataGroup withNameInData(String nameInData) {
-		return new ClientDataGroup(nameInData);
-	}
-
 	protected ClientDataGroup(String nameInData) {
 		this.nameInData = nameInData;
+	}
+
+	public static ClientDataGroup withNameInData(String nameInData) {
+		return new ClientDataGroup(nameInData);
 	}
 
 	@Override

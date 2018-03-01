@@ -37,10 +37,10 @@ public class JsonToDataRecordConverter {
 		validateOnlyCorrectKeysAtSecondLevel();
 
 		ClientDataGroup clientDataGroup = convertDataGroup();
-		ClientDataActionLinks actionlinks = convertDataActionLinks();
+		ClientDataActionLinks clientDataActionLinks = convertDataActionLinks();
 
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-		clientDataRecord.setActionLinks(actionlinks);
+		clientDataRecord.setActionLinks(clientDataActionLinks);
 		return clientDataRecord;
 	}
 

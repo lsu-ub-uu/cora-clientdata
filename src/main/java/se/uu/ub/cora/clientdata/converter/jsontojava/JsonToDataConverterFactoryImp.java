@@ -19,8 +19,9 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import java.util.Map.Entry;
+import java.util.Arrays;
 
+import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -43,9 +44,13 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		if (isAtomicData()) {
 			return JsonToDataAtomicConverter.forJsonObject(jsonObject);
 		}
-		// TODO: hur avgöra att detta är actionLinks??
 		if (isActionLinks()) {
-			return JsonToDataActionLinksConverter.forJsonObject(jsonObject);
+			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
+			return JsonToDataActionLinksConverter.forJsonObjectUsingConverterFactory(jsonObject, factory);
+		}
+		if (isActionLink()) {
+			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
+			return JsonToDataActionLinkConverter.forJsonObjectUsingFactory(jsonObject, factory);
 		}
 		return JsonToDataAttributeConverter.forJsonObject(jsonObject);
 	}
@@ -59,16 +64,16 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 	}
 
 	private boolean isActionLinks() {
-		for (Entry<String, JsonValue> entry : jsonObject.entrySet()) {
-			if (entry.getValue() instanceof JsonObject) {
-				JsonObject child = (JsonObject) entry.getValue();
-				if (child.containsKey("requestMethod")) {
-					return true;
-				}
-			}
-		}
-		return false;
-		// return jsonObject.containsKey("read") || jsonObject.containsKey("update");
+		String firstKey = getFirstKeyInJsonObject();
+		return keyIsFoundInActionEnum(firstKey);
+	}
+
+	private String getFirstKeyInJsonObject() {
+		return jsonObject.keySet().iterator().next();
+	}
+
+	private boolean keyIsFoundInActionEnum(String firstKey) {
+		return Arrays.stream(Action.values()).anyMatch(action -> action.name().equals(firstKey.toUpperCase()));
 	}
 
 	@Override
@@ -77,5 +82,9 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		JsonValue jsonValue = jsonParser.parseString(json);
 
 		return createForJsonObject(jsonValue);
+	}
+
+	public boolean isActionLink() {
+		return jsonObject.containsKey("rel");
 	}
 }

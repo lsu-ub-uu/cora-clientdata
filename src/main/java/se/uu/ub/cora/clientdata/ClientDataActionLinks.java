@@ -1,11 +1,11 @@
 package se.uu.ub.cora.clientdata;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ClientDataActionLinks implements ClientDataElement {
 
-	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
+	private Map<String, ActionLink> actionLinks = new TreeMap<>();
 
 	@Override
 	public String getNameInData() {

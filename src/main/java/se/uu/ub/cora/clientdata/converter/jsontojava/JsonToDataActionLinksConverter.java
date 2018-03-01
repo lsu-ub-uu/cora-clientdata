@@ -20,6 +20,7 @@ package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import java.util.Map.Entry;
 
+import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataActionLinks;
 import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.json.parser.JsonObject;
@@ -28,7 +29,7 @@ import se.uu.ub.cora.json.parser.JsonValue;
 public class JsonToDataActionLinksConverter implements JsonToDataConverter {
 
 	private JsonObject jsonObject;
-	private JsonToDataConverterFactory factory;
+	protected JsonToDataConverterFactory factory;
 
 	public JsonToDataActionLinksConverter(JsonObject jsonObject) {
 		this.jsonObject = jsonObject;
@@ -44,18 +45,24 @@ public class JsonToDataActionLinksConverter implements JsonToDataConverter {
 		return new JsonToDataActionLinksConverter(jsonObject);
 	}
 
+	public static JsonToDataConverter forJsonObjectUsingConverterFactory(JsonObject jsonObject,
+			JsonToDataConverterFactory factory) {
+		return new JsonToDataActionLinksConverter(jsonObject, factory);
+	}
+
 	@Override
 	public ClientDataElement toInstance() {
 		ClientDataActionLinks clientDataActionLinks = new ClientDataActionLinks();
 		for (Entry<String, JsonValue> entry : jsonObject.entrySet()) {
-			factory.createForJsonObject(entry.getValue());
+			convertAndAddActionLinks(clientDataActionLinks, entry);
 		}
 		return clientDataActionLinks;
 	}
 
-	public static JsonToDataConverter forJsonObjectUsingConverterFactory(JsonObject jsonObject,
-			JsonToDataConverterFactory factory) {
-		return new JsonToDataActionLinksConverter(jsonObject, factory);
+	private void convertAndAddActionLinks(ClientDataActionLinks clientDataActionLinks, Entry<String, JsonValue> entry) {
+		JsonToDataConverter actionLinkConverter = factory.createForJsonObject(entry.getValue());
+		ActionLink actionLink = (ActionLink)actionLinkConverter.toInstance();
+		clientDataActionLinks.addActionLink(entry.getKey(), actionLink);
 	}
 
 }

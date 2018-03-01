@@ -21,7 +21,6 @@ public class JsonToDataConverterFactoryOnlyGroupConverterSpy implements JsonToDa
 				(JsonObject) jsonValue);
 		factoredConverters.add(converterSpy);
 		return converterSpy;
-		// return JsonToDataGroupConverter.forJsonObject((JsonObject) jsonValue);
 	}
 
 	@Override
