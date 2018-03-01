@@ -19,10 +19,9 @@
 
 package se.uu.ub.cora.clientdata;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class ClientDataGroup implements ClientDataElement, ClientData {
 
@@ -30,6 +29,8 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	private Map<String, String> attributes = new HashMap<>();
 	private List<ClientDataElement> children = new ArrayList<>();
 	private String repeatId;
+
+	private Predicate<ClientDataElement> isDataGroup = dataElement -> dataElement instanceof ClientDataGroup;
 
 	protected ClientDataGroup(String nameInData) {
 		this.nameInData = nameInData;
@@ -103,4 +104,34 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		}
 		return false;
 	}
+
+	public ClientDataGroup getFirstGroupWithNameInData(String childNameInData) {
+		Optional<ClientDataGroup> findFirst = getGroupChildrenWithNameInDataStream(childNameInData)
+				.findFirst();
+		if (findFirst.isPresent()) {
+			return findFirst.get();
+		}
+		throw new DataMissingException("Group not found for childNameInData:" + childNameInData);
+	}
+
+	private Stream<ClientDataGroup> getGroupChildrenWithNameInDataStream(String childNameInData) {
+		return getGroupChildrenStream().filter(filterByNameInData(childNameInData))
+				.map(ClientDataGroup.class::cast);
+	}
+
+	private Stream<ClientDataElement> getGroupChildrenStream() {
+		return getChildrenStream().filter(isDataGroup);
+	}
+	private Stream<ClientDataElement> getChildrenStream() {
+		return children.stream();
+	}
+
+	private Predicate<ClientDataElement> filterByNameInData(String childNameInData) {
+		return dataElement -> dataElementsNameInDataIs(dataElement, childNameInData);
+	}
+
+	private boolean dataElementsNameInDataIs(ClientDataElement dataElement, String childNameInData) {
+		return dataElement.getNameInData().equals(childNameInData);
+	}
+
 }

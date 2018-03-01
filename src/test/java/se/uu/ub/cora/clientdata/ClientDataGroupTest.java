@@ -118,4 +118,26 @@ public class ClientDataGroupTest {
 		dataGroup.removeFirstChildWithNameInData("childId_NOTFOUND");
 	}
 
+	@Test
+	public void testGetFirstGroupWithNameInData() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData", "child value");
+		dataGroup.addChild(atomicChild);
+		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		dataGroup.addChild(groupChild);
+
+		ClientDataGroup foundGroupChild =  dataGroup.getFirstGroupWithNameInData("childNameInData");
+
+		assertEquals(foundGroupChild, groupChild);
+	}
+
+	@Test(expectedExceptions = DataMissingException.class)
+	public void testGetFirstGroupWithNameInDataGroupNotFound() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData", "child value");
+		dataGroup.addChild(atomicChild);
+
+		dataGroup.getFirstGroupWithNameInData("childNameInData");
+	}
+
 }
