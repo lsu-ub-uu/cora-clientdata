@@ -1,10 +1,10 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import se.uu.ub.cora.json.parser.JsonObject;
-import se.uu.ub.cora.json.parser.JsonValue;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import se.uu.ub.cora.json.parser.JsonObject;
+import se.uu.ub.cora.json.parser.JsonValue;
 
 public class JsonToDataConverterFactorySpy implements JsonToDataConverterFactory {
 
@@ -19,11 +19,9 @@ public class JsonToDataConverterFactorySpy implements JsonToDataConverterFactory
 	@Override
 	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
 		numberOfTimesCalled++;
-		JsonToDataConverterSpy converterSpy = new JsonToDataConverterSpy(
-				(JsonObject) jsonValue);
+		JsonToDataConverterSpy converterSpy = new JsonToDataConverterSpy((JsonObject) jsonValue);
 		factoredConverters.add(converterSpy);
 		return converterSpy;
-//		return new JsonToDataConverterSpy((JsonObject) jsonValue);
 	}
 
 }
