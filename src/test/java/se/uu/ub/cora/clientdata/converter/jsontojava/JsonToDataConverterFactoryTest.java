@@ -81,7 +81,8 @@ public class JsonToDataConverterFactoryTest {
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
-		assertTrue(((JsonToDataActionLinksConverter)jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+		assertTrue(
+				((JsonToDataActionLinksConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
 	}
 
 	@Test
@@ -90,7 +91,8 @@ public class JsonToDataConverterFactoryTest {
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinkConverter);
-		assertTrue(((JsonToDataActionLinkConverter)jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+		assertTrue(
+				((JsonToDataActionLinkConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)
@@ -104,4 +106,27 @@ public class JsonToDataConverterFactoryTest {
 		jsonToDataConverterFactory.createForJsonString(json);
 	}
 
+	@Test
+	public void testFactorOnJsonStringRecordLink() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataRecordLinkConverter);
+	}
+
+	@Test
+	public void testFactorOnJsonStringRecordLinkMissingRecordTypeReturnsGroupConverter() {
+		String json = "{\"children\":[{\"name\":\"NOTlinkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
+	}
+
+	@Test
+	public void testFactorOnJsonStringRecordLinkMissingRecordIdReturnsGroupConverter() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"NOTlinkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
+	}
 }

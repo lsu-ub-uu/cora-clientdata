@@ -29,7 +29,7 @@ import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonString;
 import se.uu.ub.cora.json.parser.JsonValue;
 
-public final class JsonToDataGroupConverter implements JsonToDataConverter {
+public class JsonToDataGroupConverter implements JsonToDataConverter {
 
 	private static final int ONE_OPTIONAL_KEY_IS_PRESENT = 3;
 	private static final String CHILDREN = "children";
@@ -42,7 +42,7 @@ public final class JsonToDataGroupConverter implements JsonToDataConverter {
 		return new JsonToDataGroupConverter(jsonObject);
 	}
 
-	private JsonToDataGroupConverter(JsonObject jsonObject) {
+	protected JsonToDataGroupConverter(JsonObject jsonObject) {
 		this.jsonObject = jsonObject;
 	}
 
@@ -60,11 +60,11 @@ public final class JsonToDataGroupConverter implements JsonToDataConverter {
 		return createDataGroupInstance();
 	}
 
-	private String getNameInDataFromJsonObject() {
+	protected String getNameInDataFromJsonObject() {
 		return jsonObject.getValueAsJsonString("name").getStringValue();
 	}
 
-	private void validateOnlyCorrectKeysAtTopLevel() {
+	protected void validateOnlyCorrectKeysAtTopLevel() {
 
 		if (!jsonObject.containsKey("name")) {
 			throw new JsonParseException("Group data must contain key: name");
@@ -81,7 +81,7 @@ public final class JsonToDataGroupConverter implements JsonToDataConverter {
 		if (threeKeysAtTopLevelButAttributeAndRepeatIdIsMissing()) {
 			throw new JsonParseException(
 					"Group data must contain name and children, and may contain "
-							+ "attributes or repeatId");
+							+ "attributes or repeatId" + jsonObject.keySet());
 		}
 		if (maxKeysAtTopLevelButAttributeOrRepeatIdIsMissing()) {
 			throw new JsonParseException("Group data must contain key: attributes");
@@ -121,7 +121,8 @@ public final class JsonToDataGroupConverter implements JsonToDataConverter {
 
 	private void addRepeatIdToGroup() {
 		if (hasRepeatId()) {
-			clientDataGroup.setRepeatId(jsonObject.getValueAsJsonString("repeatId").getStringValue());
+			clientDataGroup
+					.setRepeatId(jsonObject.getValueAsJsonString("repeatId").getStringValue());
 		}
 
 	}
