@@ -43,7 +43,7 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 		this.jsonObject = jsonObject;
 	}
 
-	public JsonToDataGroupConverter(JsonObject jsonObject, JsonToDataConverterFactoryImp factory) {
+	public JsonToDataGroupConverter(JsonObject jsonObject, JsonToDataConverterFactory factory) {
 		this.jsonObject = jsonObject;
 		this.factory = factory;
 	}
@@ -52,7 +52,8 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 		return new JsonToDataGroupConverter(jsonObject);
 	}
 
-	public static JsonToDataGroupConverter forJsonObjectUsingConverterFactory(JsonObject jsonObject, JsonToDataConverterFactoryImp factory) {
+	public static JsonToDataGroupConverter forJsonObjectUsingConverterFactory(JsonObject jsonObject,
+			JsonToDataConverterFactory factory) {
 		return new JsonToDataGroupConverter(jsonObject, factory);
 	}
 
@@ -121,28 +122,31 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 	private ClientDataElement createDataGroupInstance() {
 		String nameInData = getNameInDataFromJsonObject();
 		clientDataGroup = ClientDataGroup.withNameInData(nameInData);
-		addRepeatIdToGroup();
+		possiblyAddRepeatId();
+		possiblyAddAttributes();
+		addChildrenToGroup();
+		return getMainDataGroup();
+	}
+
+	protected void possiblyAddAttributes() {
 		if (hasAttributes()) {
 			addAttributesToGroup();
 		}
-		addChildrenToGroup();
-		return getMainDataGroup();
+	}
+
+	protected boolean hasAttributes() {
+		return jsonObject.containsKey(ATTRIBUTES);
 	}
 
 	protected ClientDataGroup getMainDataGroup() {
 		return clientDataGroup;
 	}
 
-	protected void addRepeatIdToGroup() {
+	protected void possiblyAddRepeatId() {
 		if (hasRepeatId()) {
 			getMainDataGroup()
 					.setRepeatId(jsonObject.getValueAsJsonString("repeatId").getStringValue());
 		}
-
-	}
-
-	protected boolean hasAttributes() {
-		return jsonObject.containsKey(ATTRIBUTES);
 	}
 
 	protected boolean hasRepeatId() {
