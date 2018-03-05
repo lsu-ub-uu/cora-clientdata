@@ -39,17 +39,9 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 	protected JsonObject jsonObject;
 	private ClientDataGroup clientDataGroup;
 
-	protected JsonToDataGroupConverter(JsonObject jsonObject) {
-		this.jsonObject = jsonObject;
-	}
-
 	public JsonToDataGroupConverter(JsonObject jsonObject, JsonToDataConverterFactory factory) {
 		this.jsonObject = jsonObject;
 		this.factory = factory;
-	}
-
-	static JsonToDataGroupConverter forJsonObject(JsonObject jsonObject) {
-		return new JsonToDataGroupConverter(jsonObject);
 	}
 
 	public static JsonToDataGroupConverter forJsonObjectUsingConverterFactory(JsonObject jsonObject,
@@ -177,10 +169,8 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 	}
 
 	private void addChildToGroup(JsonValue child) {
-		JsonToDataConverterFactoryImp jsonToDataConverterFactoryImp = new JsonToDataConverterFactoryImp();
 		JsonObject jsonChildObject = (JsonObject) child;
-		JsonToDataConverter childJsonToDataConverter = jsonToDataConverterFactoryImp
-				.createForJsonObject(jsonChildObject);
+		JsonToDataConverter childJsonToDataConverter = factory.createForJsonObject(jsonChildObject);
 		getMainDataGroup().addChild(childJsonToDataConverter.toInstance());
 	}
 

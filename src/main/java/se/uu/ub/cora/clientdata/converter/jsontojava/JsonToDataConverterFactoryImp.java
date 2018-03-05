@@ -35,28 +35,26 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 
 	@Override
 	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
+		JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
 		if (!(jsonValue instanceof JsonObject)) {
 			throw new JsonParseException("Json value is not an object, can not convert");
 		}
 		jsonObject = (JsonObject) jsonValue;
 		if (isRecordLink()) {
-			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
-			return JsonToDataRecordLinkConverter.forJsonObjectUsingConverterFactory(jsonObject, factory);
+			return JsonToDataRecordLinkConverter.forJsonObjectUsingConverterFactory(jsonObject,
+					factory);
 		}
 		if (isGroup()) {
-			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
 			return JsonToDataGroupConverter.forJsonObjectUsingConverterFactory(jsonObject, factory);
 		}
 		if (isAtomicData()) {
 			return JsonToDataAtomicConverter.forJsonObject(jsonObject);
 		}
 		if (isActionLinks()) {
-			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
 			return JsonToDataActionLinksConverter.forJsonObjectUsingConverterFactory(jsonObject,
 					factory);
 		}
 		if (isActionLink()) {
-			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
 			return JsonToDataActionLinkConverter.forJsonObjectUsingFactory(jsonObject, factory);
 		}
 		return JsonToDataAttributeConverter.forJsonObject(jsonObject);
@@ -107,7 +105,7 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 
 	private boolean keyIsFoundInActionEnum(String firstKey) {
 		return Arrays.stream(Action.values())
-				.anyMatch(action -> action.name().equals(firstKey.toUpperCase()));
+				.anyMatch(action -> action.name().equalsIgnoreCase(firstKey));
 	}
 
 	@Override

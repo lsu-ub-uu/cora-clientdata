@@ -28,26 +28,29 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataConverter;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataGroupConverter;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
 public class JsonToDataGroupConverterTest {
+	private JsonToDataConverterFactorySpy factory;
+
 	@Test
 	public void testToClass() {
 		String json = "{\"name\":\"groupNameInData\", \"children\":[]}";
 		ClientDataGroup clientDataGroup = createClientDataGroupForJsonString(json);
 		assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
+		assertEquals(factory.numberOfTimesCalled, 0);
 	}
 
 	private ClientDataGroup createClientDataGroupForJsonString(String json) {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
+
+		factory = new JsonToDataConverterFactorySpy();
 		JsonToDataConverter jsonToDataConverter = JsonToDataGroupConverter
-				.forJsonObject((JsonObject) jsonValue);
+				.forJsonObjectUsingConverterFactory((JsonObject) jsonValue, factory);
 		ClientDataElement clientDataElement = jsonToDataConverter.toInstance();
 		ClientDataGroup clientDataGroup = (ClientDataGroup) clientDataElement;
 		return clientDataGroup;
@@ -59,6 +62,7 @@ public class JsonToDataGroupConverterTest {
 		ClientDataGroup clientDataGroup = createClientDataGroupForJsonString(json);
 		assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
 		assertEquals(clientDataGroup.getRepeatId(), "3");
+		assertEquals(factory.numberOfTimesCalled, 0);
 	}
 
 	@Test
@@ -68,6 +72,7 @@ public class JsonToDataGroupConverterTest {
 		assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
 		String attributeValue = clientDataGroup.getAttributes().get("attributeNameInData");
 		assertEquals(attributeValue, "attributeValue");
+		assertEquals(factory.numberOfTimesCalled, 0);
 	}
 
 	@Test
@@ -118,8 +123,9 @@ public class JsonToDataGroupConverterTest {
 		ClientDataGroup clientDataGroup = createClientDataGroupForJsonString(json);
 		assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
 		ClientDataAtomic child = (ClientDataAtomic) clientDataGroup.getChildren().iterator().next();
-		assertEquals(child.getNameInData(), "atomicNameInData");
-		assertEquals(child.getValue(), "atomicValue");
+		assertEquals(factory.numberOfTimesCalled, 1);
+		JsonToDataConverterSpy jsonToDataConverterSpy = factory.factoredConverters.get(0);
+		assertEquals(jsonToDataConverterSpy.returnedElement, child);
 	}
 
 	@Test
@@ -137,13 +143,14 @@ public class JsonToDataGroupConverterTest {
 		assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
 		Iterator<ClientDataElement> iterator = clientDataGroup.getChildren().iterator();
 		ClientDataAtomic child = (ClientDataAtomic) iterator.next();
-		assertEquals(child.getNameInData(), "atomicNameInData");
-		assertEquals(child.getValue(), "atomicValue");
 		ClientDataGroup child2 = (ClientDataGroup) iterator.next();
-		assertEquals(child2.getNameInData(), "groupNameInData2");
-		ClientDataAtomic subChild = (ClientDataAtomic) child2.getChildren().iterator().next();
-		assertEquals(subChild.getNameInData(), "atomicNameInData2");
-		assertEquals(subChild.getValue(), "atomicValue2");
+
+		assertEquals(factory.numberOfTimesCalled, 2);
+		JsonToDataConverterSpy jsonToDataConverterSpy = factory.factoredConverters.get(0);
+		assertEquals(jsonToDataConverterSpy.returnedElement, child);
+
+		JsonToDataConverterSpy jsonToDataConverterSpy2 = factory.factoredConverters.get(1);
+		assertEquals(jsonToDataConverterSpy2.returnedElement, child2);
 	}
 
 	@Test
@@ -172,12 +179,14 @@ public class JsonToDataGroupConverterTest {
 		assertEquals(child.getValue(), "atomicValue");
 		ClientDataGroup child2 = (ClientDataGroup) iterator.next();
 		assertEquals(child2.getNameInData(), "groupNameInData2");
-		ClientDataAtomic subChild = (ClientDataAtomic) child2.getChildren().iterator().next();
-		assertEquals(subChild.getNameInData(), "atomicNameInData2");
-		assertEquals(subChild.getValue(), "atomicValue2");
 
-		String attributeValue = child2.getAttributes().get("g2AttributeNameInData");
-		assertEquals(attributeValue, "g2AttributeValue");
+		assertEquals(factory.numberOfTimesCalled, 2);
+		JsonToDataConverterSpy jsonToDataConverterSpy = factory.factoredConverters.get(0);
+		assertEquals(jsonToDataConverterSpy.returnedElement, child);
+
+		JsonToDataConverterSpy jsonToDataConverterSpy2 = factory.factoredConverters.get(1);
+		assertEquals(jsonToDataConverterSpy2.returnedElement, child2);
+
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)

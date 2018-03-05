@@ -98,8 +98,8 @@ public class JsonToDataRecordLinkConverterTest {
 		Map<String, ActionLink> actionLinks = clientDataRecordLink.getActionLinks();
 		assertEquals(actionLinks.size(), 1);
 		assertNotNull(actionLinks.get("read"));
-		assertEquals(factory.numberOfTimesCalled, 1);
-		assertEquals(factory.factoredConverters.get(0).returnedElement, actionLinks.get("read"));
+		assertEquals(factory.numberOfTimesCalled, 4);
+		assertEquals(factory.factoredConverters.get(3).returnedElement, actionLinks.get("read"));
 	}
 
 	@Test
@@ -125,13 +125,8 @@ public class JsonToDataRecordLinkConverterTest {
 
 		List<ClientDataElement> children = clientDataRecordLink.getChildren();
 
-		ClientDataAtomic linkedRecordType = (ClientDataAtomic) children.get(0);
-		assertEquals(linkedRecordType.getNameInData(), "linkedRecordType");
-		assertEquals(linkedRecordType.getValue(), "coraText");
-
-		ClientDataAtomic linkedRecordId = (ClientDataAtomic) children.get(1);
-		assertEquals(linkedRecordId.getNameInData(), "linkedRecordId");
-		assertEquals(linkedRecordId.getValue(), "someDefText");
+		assertCorrectLinkedRecordType(children);
+		assertCorrectLinkedRecordId(children);
 	}
 
 	@Test
@@ -146,17 +141,25 @@ public class JsonToDataRecordLinkConverterTest {
 
 	private void assertCorrectChildren(ClientDataRecordLink clientDataRecordLink) {
 		List<ClientDataElement> children = clientDataRecordLink.getChildren();
-		ClientDataAtomic linkedRecordType = (ClientDataAtomic) children.get(0);
-		assertEquals(linkedRecordType.getNameInData(), "linkedRecordType");
-		assertEquals(linkedRecordType.getValue(), "coraText");
+		assertCorrectLinkedRecordType(children);
 
-		ClientDataAtomic linkedRecordId = (ClientDataAtomic) children.get(1);
-		assertEquals(linkedRecordId.getNameInData(), "linkedRecordId");
-		assertEquals(linkedRecordId.getValue(), "someDefText");
+		assertCorrectLinkedRecordId(children);
 
 		ClientDataAtomic linkedRepeatId = (ClientDataAtomic) children.get(2);
-		assertEquals(linkedRepeatId.getNameInData(), "linkedRepeatId");
-		assertEquals(linkedRepeatId.getValue(), "2");
+		JsonToDataConverterSpy jsonToDataConverterSpy3 = factory.factoredConverters.get(2);
+		assertEquals(jsonToDataConverterSpy3.returnedElement, linkedRepeatId);
+	}
+
+	private void assertCorrectLinkedRecordId(List<ClientDataElement> children) {
+		ClientDataAtomic linkedRecordId = (ClientDataAtomic) children.get(1);
+		JsonToDataConverterSpy jsonToDataConverterSpy2 = factory.factoredConverters.get(1);
+		assertEquals(jsonToDataConverterSpy2.returnedElement, linkedRecordId);
+	}
+
+	private void assertCorrectLinkedRecordType(List<ClientDataElement> children) {
+		ClientDataAtomic linkedRecordType = (ClientDataAtomic) children.get(0);
+		JsonToDataConverterSpy jsonToDataConverterSpy = factory.factoredConverters.get(0);
+		assertEquals(jsonToDataConverterSpy.returnedElement, linkedRecordType);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = "Group data must contain key: name")
