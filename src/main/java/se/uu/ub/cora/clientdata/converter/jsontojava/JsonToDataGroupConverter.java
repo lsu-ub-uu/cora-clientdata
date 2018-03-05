@@ -31,19 +31,29 @@ import se.uu.ub.cora.json.parser.JsonValue;
 
 public class JsonToDataGroupConverter implements JsonToDataConverter {
 
+	protected JsonToDataConverterFactory factory;
 	private static final int ONE_OPTIONAL_KEY_IS_PRESENT = 3;
 	private static final String CHILDREN = "children";
 	private static final String ATTRIBUTES = "attributes";
 	private static final int NUM_OF_ALLOWED_KEYS_AT_TOP_LEVEL = 4;
-	private JsonObject jsonObject;
+	protected JsonObject jsonObject;
 	private ClientDataGroup clientDataGroup;
+
+	protected JsonToDataGroupConverter(JsonObject jsonObject) {
+		this.jsonObject = jsonObject;
+	}
+
+	public JsonToDataGroupConverter(JsonObject jsonObject, JsonToDataConverterFactoryImp factory) {
+		this.jsonObject = jsonObject;
+		this.factory = factory;
+	}
 
 	static JsonToDataGroupConverter forJsonObject(JsonObject jsonObject) {
 		return new JsonToDataGroupConverter(jsonObject);
 	}
 
-	protected JsonToDataGroupConverter(JsonObject jsonObject) {
-		this.jsonObject = jsonObject;
+	public static JsonToDataGroupConverter forJsonObjectUsingConverterFactory(JsonObject jsonObject, JsonToDataConverterFactoryImp factory) {
+		return new JsonToDataGroupConverter(jsonObject, factory);
 	}
 
 	@Override
@@ -77,11 +87,11 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 		validateNoOfKeysAtTopLevel();
 	}
 
-	private void validateNoOfKeysAtTopLevel() {
+	protected void validateNoOfKeysAtTopLevel() {
 		if (threeKeysAtTopLevelButAttributeAndRepeatIdIsMissing()) {
 			throw new JsonParseException(
 					"Group data must contain name and children, and may contain "
-							+ "attributes or repeatId" + jsonObject.keySet());
+							+ "attributes or repeatId" + jsonObject.keySet().toString());
 		}
 		if (maxKeysAtTopLevelButAttributeOrRepeatIdIsMissing()) {
 			throw new JsonParseException("Group data must contain key: attributes");
@@ -104,7 +114,7 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 				&& (!hasAttributes() || !hasRepeatId());
 	}
 
-	private boolean moreKeysAtTopLevelThanAllowed() {
+	protected boolean moreKeysAtTopLevelThanAllowed() {
 		return jsonObject.keySet().size() > NUM_OF_ALLOWED_KEYS_AT_TOP_LEVEL;
 	}
 
@@ -116,26 +126,30 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 			addAttributesToGroup();
 		}
 		addChildrenToGroup();
+		return getMainDataGroup();
+	}
+
+	protected ClientDataGroup getMainDataGroup() {
 		return clientDataGroup;
 	}
 
-	private void addRepeatIdToGroup() {
+	protected void addRepeatIdToGroup() {
 		if (hasRepeatId()) {
-			clientDataGroup
+			getMainDataGroup()
 					.setRepeatId(jsonObject.getValueAsJsonString("repeatId").getStringValue());
 		}
 
 	}
 
-	private boolean hasAttributes() {
+	protected boolean hasAttributes() {
 		return jsonObject.containsKey(ATTRIBUTES);
 	}
 
-	private boolean hasRepeatId() {
+	protected boolean hasRepeatId() {
 		return jsonObject.containsKey("repeatId");
 	}
 
-	private void addAttributesToGroup() {
+	protected void addAttributesToGroup() {
 		JsonObject attributes = jsonObject.getValueAsJsonObject(ATTRIBUTES);
 		for (Entry<String, JsonValue> attributeEntry : attributes.entrySet()) {
 			addAttributeToGroup(attributeEntry);
@@ -144,14 +158,14 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 
 	private void addAttributeToGroup(Entry<String, JsonValue> attributeEntry) {
 		String value = ((JsonString) attributeEntry.getValue()).getStringValue();
-		clientDataGroup.addAttributeByIdWithValue(attributeEntry.getKey(), value);
+		getMainDataGroup().addAttributeByIdWithValue(attributeEntry.getKey(), value);
 	}
 
 	private boolean hasChildren() {
 		return jsonObject.containsKey(CHILDREN);
 	}
 
-	private void addChildrenToGroup() {
+	protected void addChildrenToGroup() {
 		JsonArray children = jsonObject.getValueAsJsonArray(CHILDREN);
 		for (JsonValue child : children) {
 			addChildToGroup(child);
@@ -163,6 +177,7 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 		JsonObject jsonChildObject = (JsonObject) child;
 		JsonToDataConverter childJsonToDataConverter = jsonToDataConverterFactoryImp
 				.createForJsonObject(jsonChildObject);
-		clientDataGroup.addChild(childJsonToDataConverter.toInstance());
+		getMainDataGroup().addChild(childJsonToDataConverter.toInstance());
 	}
+
 }

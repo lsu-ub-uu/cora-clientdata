@@ -40,6 +40,9 @@ public class JsonToDataConverterFactoryTest {
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
+		assertTrue(
+				((JsonToDataGroupConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+
 	}
 
 	@Test
@@ -112,6 +115,9 @@ public class JsonToDataConverterFactoryTest {
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataRecordLinkConverter);
+		assertTrue(
+				((JsonToDataRecordLinkConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+
 	}
 
 	@Test

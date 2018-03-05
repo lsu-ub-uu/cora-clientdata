@@ -23,16 +23,20 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.ClientDataElement;
-import se.uu.ub.cora.clientdata.ClientDataRecordLink;
+import se.uu.ub.cora.clientdata.*;
 import se.uu.ub.cora.json.parser.JsonObject;
+import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class JsonToDataRecordLinkConverterTest {
 	@Test
 	public void testToClass() {
-		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"linkedRecordPresentationLinkDefText\"}],\"name\":\"defTextId\"}";
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\"}";
 		ClientDataRecordLink clientDataRecordLink = createClientDataRecordLinkForJsonString(json);
 		assertEquals(clientDataRecordLink.getNameInData(), "defTextId");
 	}
@@ -47,225 +51,105 @@ public class JsonToDataRecordLinkConverterTest {
 		return clientDataRecordLink;
 	}
 
-	// @Test
-	// public void testToClassWithAttribute() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"attributes\":{\"attributeNameInData\":\"attributeValue\"},
-	// \"children\":[]}";
-	// ClientDataGroup clientDataGroup =
-	// createClientDataRecordLinkForJsonString(json);
-	// assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
-	// String attributeValue =
-	// clientDataGroup.getAttributes().get("attributeNameInData");
-	// assertEquals(attributeValue, "attributeValue");
-	// }
-	//
-	// @Test
-	// public void testToClassWithRepeatIdAndAttribute() {
-	// String json = "{\"name\":\"groupNameInData\",
-	// \"children\":[],\"repeatId\":\"3\""
-	// + ",\"attributes\":{\"attributeNameInData\":\"attributeValue\"}}";
-	// ClientDataGroup clientDataGroup =
-	// createClientDataRecordLinkForJsonString(json);
-	// assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
-	// String attributeValue =
-	// clientDataGroup.getAttributes().get("attributeNameInData");
-	// assertEquals(attributeValue, "attributeValue");
-	// assertEquals(clientDataGroup.getRepeatId(), "3");
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWithRepeatIdAndAttributeAndExtra() {
-	// String json = "{\"name\":\"groupNameInData\",
-	// \"children\":[],\"repeatId\":\"3\""
-	// + ",\"attributes\":{\"attributeNameInData\":\"attributeValue\"}"
-	// + ",\"extraKey\":\"extra\"}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWithRepeatIdMissingAttribute() {
-	// String json = "{\"name\":\"groupNameInData\",
-	// \"children\":[],\"repeatId\":\"3\""
-	// + ",\"NOTattributes\":{\"attributeNameInData\":\"attributeValue\"}}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test
-	// public void testToClassWithAttributes() {
-	// String json = "{\"name\":\"groupNameInData\",\"attributes\":{"
-	// + "\"attributeNameInData\":\"attributeValue\","
-	// + "\"attributeNameInData2\":\"attributeValue2\"" + "},\"children\":[]}";
-	//
-	// ClientDataGroup clientDataGroup =
-	// createClientDataRecordLinkForJsonString(json);
-	// assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
-	// String attributeValue =
-	// clientDataGroup.getAttributes().get("attributeNameInData");
-	// assertEquals(attributeValue, "attributeValue");
-	// String attributeValue2 =
-	// clientDataGroup.getAttributes().get("attributeNameInData2");
-	// assertEquals(attributeValue2, "attributeValue2");
-	// }
-	//
-	// @Test
-	// public void testToClassWithAtomicChild() {
-	// String json = "{\"name\":\"groupNameInData\","
-	// +
-	// "\"children\":[{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"}]}";
-	//
-	// ClientDataGroup clientDataGroup =
-	// createClientDataRecordLinkForJsonString(json);
-	// assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
-	// ClientDataAtomic child = (ClientDataAtomic)
-	// clientDataGroup.getChildren().iterator().next();
-	// assertEquals(child.getNameInData(), "atomicNameInData");
-	// assertEquals(child.getValue(), "atomicValue");
-	// }
-	//
-	// @Test
-	// public void testToClassGroupWithAtomicChildAndGroupChildWithAtomicChild() {
-	// String json = "{";
-	// json += "\"name\":\"groupNameInData\",";
-	// json += "\"children\":[";
-	// json += "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"},";
-	// json += "{\"name\":\"groupNameInData2\","
-	// +
-	// "\"children\":[{\"name\":\"atomicNameInData2\",\"value\":\"atomicValue2\"}]}";
-	// json += "]";
-	// json += "}";
-	//
-	// ClientDataGroup clientDataGroup =
-	// createClientDataRecordLinkForJsonString(json);
-	// assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
-	// Iterator<ClientDataElement> iterator =
-	// clientDataGroup.getChildren().iterator();
-	// ClientDataAtomic child = (ClientDataAtomic) iterator.next();
-	// assertEquals(child.getNameInData(), "atomicNameInData");
-	// assertEquals(child.getValue(), "atomicValue");
-	// ClientDataGroup child2 = (ClientDataGroup) iterator.next();
-	// assertEquals(child2.getNameInData(), "groupNameInData2");
-	// ClientDataAtomic subChild = (ClientDataAtomic)
-	// child2.getChildren().iterator().next();
-	// assertEquals(subChild.getNameInData(), "atomicNameInData2");
-	// assertEquals(subChild.getValue(), "atomicValue2");
-	// }
-	//
-	// @Test
-	// public void
-	// testToClassGroupWithAttributesAndAtomicChildAndGroupChildWithAtomicChild() {
-	// String json = "{";
-	// json += "\"name\":\"groupNameInData\",";
-	// json += "\"attributes\":{" + "\"attributeNameInData\":\"attributeValue\","
-	// + "\"attributeNameInData2\":\"attributeValue2\"" + "},";
-	// json += "\"children\":[";
-	// json += "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"},";
-	// json += "{\"name\":\"groupNameInData2\",";
-	// json += "\"attributes\":{\"g2AttributeNameInData\":\"g2AttributeValue\"},";
-	// json +=
-	// "\"children\":[{\"name\":\"atomicNameInData2\",\"value\":\"atomicValue2\"}]}";
-	// json += "]";
-	// json += "}";
-	//
-	// ClientDataGroup clientDataGroup =
-	// createClientDataRecordLinkForJsonString(json);
-	// assertEquals(clientDataGroup.getNameInData(), "groupNameInData");
-	//
-	// String attributeValue2 =
-	// clientDataGroup.getAttributes().get("attributeNameInData");
-	// assertEquals(attributeValue2, "attributeValue");
-	//
-	// Iterator<ClientDataElement> iterator =
-	// clientDataGroup.getChildren().iterator();
-	// ClientDataAtomic child = (ClientDataAtomic) iterator.next();
-	// assertEquals(child.getNameInData(), "atomicNameInData");
-	// assertEquals(child.getValue(), "atomicValue");
-	// ClientDataGroup child2 = (ClientDataGroup) iterator.next();
-	// assertEquals(child2.getNameInData(), "groupNameInData2");
-	// ClientDataAtomic subChild = (ClientDataAtomic)
-	// child2.getChildren().iterator().next();
-	// assertEquals(subChild.getNameInData(), "atomicNameInData2");
-	// assertEquals(subChild.getValue(), "atomicValue2");
-	//
-	// String attributeValue = child2.getAttributes().get("g2AttributeNameInData");
-	// assertEquals(attributeValue, "g2AttributeValue");
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonTopLevelNoName() {
-	// String json = "{\"children\":[],\"extra\":{\"id2\":\"value2\"}}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonTopLevelNoChildren() {
-	// String json = "{\"name\":\"id\",\"attributes\":{}}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonKeyTopLevel() {
-	// String json =
-	// "{\"name\":\"id\",\"children\":[],\"extra\":{\"id2\":\"value2\"}}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonKeyTopLevelWithAttributes() {
-	// String json = "{\"name\":\"id\",\"children\":[],
-	// \"attributes\":{},\"extra\":{\"id2\":\"value2\"}}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonAttributesIsGroup() {
-	// String json = "{\"name\":\"groupNameInData\",
-	// \"attributes\":{\"attributeNameInData\":\"attributeValue\",\"bla\":{} }}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonTwoAttributes() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"children\":[],\"attributes\":{\"attributeNameInData\":\"attributeValue\"}"
-	// + ",\"attributes\":{\"attributeNameInData2\":\"attributeValue2\"}}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonOneAttributesIsArray() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"children\":[],\"attributes\":{\"attributeNameInData\":\"attributeValue\",\"bla\":[true]
-	// }}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonAttributesIsArray() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"children\":[],\"attributes\":[{\"attributeNameInData\":\"attributeValue\"}]}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonOneChildIsArray() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"children\":[{\"atomicNameInData\":\"atomicValue\"},[]]}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonOneChildIsString() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"children\":[{\"atomicNameInData\":\"atomicValue\"},\"string\"]}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
-	//
-	// @Test(expectedExceptions = JsonParseException.class)
-	// public void testToClassWrongJsonChildrenIsNotCorrectObject() {
-	// String json =
-	// "{\"name\":\"groupNameInData\",\"children\":[{\"atomicNameInData\":\"atomicValue\""
-	// + ",\"atomicNameInData2\":\"atomicValue2\"}]}";
-	// createClientDataRecordLinkForJsonString(json);
-	// }
+	 @Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp ="Group data must contain key: name")
+	 public void testToClassWrongJsonTopLevelNoName() {
+	 	String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}]}";
+	 	createClientDataRecordLinkForJsonString(json);
+	 }
+
+	 @Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = "Group data must contain key: children")
+	 public void testToClassWrongJsonTopLevelNoChildren() {
+	 	String json = "{\"NOTchildren\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\"}";
+	 	createClientDataRecordLinkForJsonString(json);
+	 }
+
+	 @Test(expectedExceptions = JsonParseException.class)
+	 public void testToClassWrongJsonKeyTopLevel() {
+	 	String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\",\"someExtraKey\":{\"name\":\"extraKey\",\"value\":\"extraValue\"}}";
+	 	createClientDataRecordLinkForJsonString(json);
+	 }
+
+//	 @Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = "Group data must contain key: attributes")
+	@Test(expectedExceptions = JsonParseException.class)
+	public void testToClassWrongJsonKeyTopLevelWithAttributes() {
+	 	String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\",\"attributes\":{\"type\":\"someType\"},\"someExtraKey\":{\"name\":\"extraKey\",\"value\":\"extraValue\"}}";
+	 	createClientDataRecordLinkForJsonString(json);
+	 }
+
+	 @Test
+	 public void testToClassWithAttribute() {
+		 String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\",\"attributes\":{\"type\":\"someType\"}}";
+		 ClientDataRecordLink clientDataRecordLink = createClientDataRecordLinkForJsonString(json);
+		 assertEquals(clientDataRecordLink.getNameInData(), "defTextId");
+	 	 String attributeValue = clientDataRecordLink.getAttributes().get("type");
+	 	 assertEquals(attributeValue, "someType");
+	 }
+
+	 @Test
+	 public void testToClassWithRepeatIdAndAttribute() {
+		 String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\",\"attributes\":{\"type\":\"someType\"},\"repeatId\":\"3\"}";
+		 ClientDataRecordLink clientDataRecordLink = createClientDataRecordLinkForJsonString(json);
+		 assertEquals(clientDataRecordLink.getNameInData(), "defTextId");
+
+		 String attributeValue = clientDataRecordLink.getAttributes().get("type");
+		 assertEquals(attributeValue, "someType");
+		 assertEquals(clientDataRecordLink.getRepeatId(), "3");
+	 }
+
+	@Test
+	public void testToClassWithLinkedRecordTypeAndLinkedRecordId() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"}],\"name\":\"defTextId\",\"attributes\":{\"type\":\"someType\"},\"repeatId\":\"3\"}";
+
+		ClientDataRecordLink clientDataRecordLink = createClientDataRecordLinkForJsonString(json);
+		assertEquals(clientDataRecordLink.getNameInData(), "defTextId");
+
+		List<ClientDataElement> children = clientDataRecordLink.getChildren();
+
+		ClientDataAtomic linkedRecordType = (ClientDataAtomic) children.get(0);
+		assertEquals(linkedRecordType.getNameInData(), "linkedRecordType");
+		assertEquals(linkedRecordType.getValue(), "coraText");
+
+		ClientDataAtomic linkedRecordId = (ClientDataAtomic) children.get(1);
+		assertEquals(linkedRecordId.getNameInData(), "linkedRecordId");
+		assertEquals(linkedRecordId.getValue(), "someDefText");
+	}
+
+	@Test
+	public void testToClassWithLinkedRecordTypeAndLinkedRecordIdAndLinkedRepeatId() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"},{\"name\":\"linkedRepeatId\",\"value\":\"2\"}],\"name\":\"defTextId\",\"attributes\":{\"type\":\"someType\"},\"repeatId\":\"3\"}";
+		ClientDataRecordLink clientDataRecordLink = createClientDataRecordLinkForJsonString(json);
+
+		assertEquals(clientDataRecordLink.getNameInData(), "defTextId");
+
+
+		assertCorrectChildren(clientDataRecordLink);
+	}
+
+	private void assertCorrectChildren(ClientDataRecordLink clientDataRecordLink) {
+		List<ClientDataElement> children = clientDataRecordLink.getChildren();
+		ClientDataAtomic linkedRecordType = (ClientDataAtomic) children.get(0);
+		assertEquals(linkedRecordType.getNameInData(), "linkedRecordType");
+		assertEquals(linkedRecordType.getValue(), "coraText");
+
+		ClientDataAtomic linkedRecordId = (ClientDataAtomic) children.get(1);
+		assertEquals(linkedRecordId.getNameInData(), "linkedRecordId");
+		assertEquals(linkedRecordId.getValue(), "someDefText");
+
+		ClientDataAtomic linkedRepeatId = (ClientDataAtomic) children.get(2);
+		assertEquals(linkedRepeatId.getNameInData(), "linkedRepeatId");
+		assertEquals(linkedRepeatId.getValue(), "2");
+	}
+
+	@Test
+	public void testToClassWithActionLinks() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"someDefText\"},{\"name\":\"linkedRepeatId\",\"value\":\"2\"}],\"name\":\"defTextId\",\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/system/systemOne\",\"accept\":\"application/vnd.uub.record+json\"}}}";
+
+		ClientDataRecordLink clientDataRecordLink = createClientDataRecordLinkForJsonString(json);
+		assertEquals(clientDataRecordLink.getNameInData(), "defTextId");
+
+		assertCorrectChildren(clientDataRecordLink);
+		Map<String, ActionLink> actionLinks = clientDataRecordLink.getActionLinks();
+		assertEquals(actionLinks.size(), 1);
+	}
+
 }

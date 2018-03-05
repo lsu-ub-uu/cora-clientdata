@@ -40,10 +40,12 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		}
 		jsonObject = (JsonObject) jsonValue;
 		if (isRecordLink()) {
-			return JsonToDataRecordLinkConverter.forJsonObject(jsonObject);
+			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
+			return JsonToDataRecordLinkConverter.forJsonObjectUsingConverterFactory(jsonObject, factory);
 		}
 		if (isGroup()) {
-			return JsonToDataGroupConverter.forJsonObject(jsonObject);
+			JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
+			return JsonToDataGroupConverter.forJsonObjectUsingConverterFactory(jsonObject, factory);
 		}
 		if (isAtomicData()) {
 			return JsonToDataAtomicConverter.forJsonObject(jsonObject);
