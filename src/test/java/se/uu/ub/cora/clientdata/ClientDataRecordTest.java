@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -25,16 +25,9 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-
-import se.uu.ub.cora.clientdata.Action;
-import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientData;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
-import se.uu.ub.cora.clientdata.ClientDataRecord;
 
 public class ClientDataRecordTest {
 	private ClientDataRecord clientDataRecord;
@@ -56,28 +49,14 @@ public class ClientDataRecordTest {
 		assertEquals(nameInData, "nameInData");
 	}
 
-	@Test
-	public void testKeys() {
-		clientDataRecord.addKey("KEY1");
-		clientDataRecord.addKey("KEY2");
-		Set<String> keys = clientDataRecord.getKeys();
-		assertTrue(keys.contains("KEY1"));
-		assertTrue(keys.contains("KEY2"));
-	}
 
 	@Test
-	public void testActionLinks() {
-		clientDataRecord.addActionLink("read", ActionLink.withAction(Action.READ));
-		Map<String, ActionLink> actionLinks = clientDataRecord.getActionLinks();
-		ActionLink actionLinkOut = actionLinks.get("read");
-		assertEquals(actionLinkOut.getAction(), Action.READ);
-	}
-
-	@Test
-	public void testActionLinksGet() {
-		clientDataRecord.addActionLink("read", ActionLink.withAction(Action.READ));
-		ActionLink actionLinkOut = clientDataRecord.getActionLink("read");
-		assertEquals(actionLinkOut.getAction(), Action.READ);
+	public void testWithActionLinks() {
+		ActionLink actionLink = ActionLink.withAction(Action.READ);
+		clientDataRecord.addActionLink("read", actionLink);
+		assertEquals(clientDataRecord.getActionLink("read"), actionLink);
+		assertEquals(clientDataRecord.getActionLinks().get("read"), actionLink);
+		assertNull(clientDataRecord.getActionLink("notAnAction"));
 	}
 
 	@Test

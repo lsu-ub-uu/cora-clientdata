@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,7 +19,7 @@
 
 package se.uu.ub.cora.clientdata;
 
-public final class ActionLink {
+public final class ActionLink implements ClientData  {
 
 	private ClientDataGroup body;
 	private Action action;
@@ -28,12 +28,12 @@ public final class ActionLink {
 	private String accept;
 	private String contentType;
 
-	public static ActionLink withAction(Action read) {
-		return new ActionLink(read);
+	private ActionLink(Action action) {
+		this.action = action;
 	}
 
-	private ActionLink(Action read) {
-		this.action = read;
+	public static ActionLink withAction(Action action) {
+		return new ActionLink(action);
 	}
 
 	public Action getAction() {

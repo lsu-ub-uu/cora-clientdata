@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -32,12 +32,12 @@ public final class JsonToDataAtomicConverter implements JsonToDataConverter {
 	private static final String VALUE = "value";
 	private JsonObject jsonObject;
 
-	static JsonToDataAtomicConverter forJsonObject(JsonObject jsonObject) {
-		return new JsonToDataAtomicConverter(jsonObject);
-	}
-
 	private JsonToDataAtomicConverter(JsonObject jsonObject) {
 		this.jsonObject = jsonObject;
+	}
+
+	static JsonToDataAtomicConverter forJsonObject(JsonObject jsonObject) {
+		return new JsonToDataAtomicConverter(jsonObject);
 	}
 
 	@Override

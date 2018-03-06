@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -24,60 +24,40 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataAtomicConverter;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataAttributeConverter;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataConverter;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataConverterFactory;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataConverterFactoryImp;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataGroupConverter;
 import se.uu.ub.cora.json.parser.JsonParseException;
-import se.uu.ub.cora.json.parser.JsonParser;
-import se.uu.ub.cora.json.parser.JsonValue;
-import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
 public class JsonToDataConverterFactoryTest {
 	private JsonToDataConverterFactory jsonToDataConverterFactory;
-	private JsonParser jsonParser;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		jsonToDataConverterFactory = new JsonToDataConverterFactoryImp();
-		jsonParser = new OrgJsonParser();
 	}
 
 	@Test
 	public void testFactorOnJsonStringDataGroupEmptyChildren() {
 		String json = "{\"name\":\"groupNameInData\", \"children\":[]}";
-		JsonValue jsonValue = jsonParser.parseString(json);
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonObject(jsonValue);
+				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
-	}
+		assertTrue(
+				((JsonToDataGroupConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
 
-	@Test
-	public void testFactorOnJsonStringDataGroupAtomicChild() {
-		String json = "{\"name\":\"id\", \"children\":[{\"id2\":\"value\"}]}";
-		JsonValue jsonValue = jsonParser.parseString(json);
-		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonObject(jsonValue);
-		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
 	}
 
 	@Test
 	public void testFactorOnJsonStringDataAtomic() {
 		String json = "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"}";
-		JsonValue jsonValue = jsonParser.parseString(json);
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonObject(jsonValue);
+				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataAtomicConverter);
 	}
 
 	@Test
 	public void testFactorOnJsonStringDataAttribute() {
 		String json = "{\"attributeNameInData\":\"attributeValue\"}";
-		JsonValue jsonValue = jsonParser.parseString(json);
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonObject(jsonValue);
+				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataAttributeConverter);
 	}
 
@@ -85,25 +65,67 @@ public class JsonToDataConverterFactoryTest {
 	public void testFactorOnJsonStringDataRecordLink() {
 		String json = "{\"name\":\"link\", \"children\":[{\"name\": \"linkedRecordId\", \"value\": \"myLinkedRecordId\"} ]}";
 
-//		String json = "{\"linkedRecordId\":\"aRecordId\""
-//				+ ",\"name\":\"nameInData\"}";
-		JsonValue jsonValue = jsonParser.parseString(json);
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonObject(jsonValue);
-//		assertTrue(jsonToDataConverter instanceof JsonToDataRecordLinkConverter);
+				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)
 	public void testFactorOnJsonObjectNullJson() {
-		jsonToDataConverterFactory.createForJsonObject(null);
+		jsonToDataConverterFactory.createForJsonString(null);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)
 	public void testClassCreatorGroupNotAGroup() {
 		String json = "[{\"id\":{\"id2\":\"value\"}}]";
-		JsonValue jsonValue = jsonParser.parseString(json);
-		jsonToDataConverterFactory.createForJsonObject(jsonValue);
+		jsonToDataConverterFactory.createForJsonString(json);
 	}
 
+	@Test
+	public void testFactorOnJsonStringRecordLink() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataRecordLinkConverter);
+		assertTrue(
+				((JsonToDataRecordLinkConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+
+	}
+
+	@Test
+	public void testFactorOnJsonStringRecordLinkMissingRecordTypeReturnsGroupConverter() {
+		String json = "{\"children\":[{\"name\":\"NOTlinkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
+	}
+
+	@Test
+	public void testFactorOnJsonStringRecordLinkMissingRecordIdReturnsGroupConverter() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"NOTlinkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
+	}
+
+	@Test
+	public void testFactorActionLinkConverterOnJsonStringActionLink() {
+		String json = "{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}";
+		JsonToDataActionLinkConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createActionLinksConverterForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinkConverter);
+		assertTrue(
+				((JsonToDataActionLinkConverterImp) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+	}
+
+	@Test(expectedExceptions = JsonParseException.class)
+	public void testFactorActionLinkConverterOnJsonObjectNullJson() {
+		jsonToDataConverterFactory.createActionLinksConverterForJsonString(null);
+	}
+
+	@Test(expectedExceptions = JsonParseException.class)
+	public void testFactorActionLinkConverterOnNotAnJsonObject() {
+		String json = "[{\"id\":{\"id2\":\"value\"}}]";
+		jsonToDataConverterFactory.createActionLinksConverterForJsonString(json);
+	}
 }

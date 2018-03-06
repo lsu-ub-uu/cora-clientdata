@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -25,12 +25,12 @@ public final class ClientDataRecordLink extends ClientDataGroup{
 
     private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 
-    public static ClientDataRecordLink withNameInData(String nameInData){
-        return new ClientDataRecordLink(nameInData);
-    }
-
     private ClientDataRecordLink(String nameInData) {
         super(nameInData);
+    }
+
+    public static ClientDataRecordLink withNameInData(String nameInData){
+        return new ClientDataRecordLink(nameInData);
     }
 
     public void addActionLink(String key, ActionLink actionLink) {

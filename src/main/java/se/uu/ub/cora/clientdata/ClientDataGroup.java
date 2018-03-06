@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,6 +23,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ClientDataGroup implements ClientDataElement, ClientData {
 
@@ -31,12 +35,15 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	private List<ClientDataElement> children = new ArrayList<>();
 	private String repeatId;
 
-	public static ClientDataGroup withNameInData(String nameInData) {
-		return new ClientDataGroup(nameInData);
-	}
+	private Predicate<ClientDataElement> isDataGroup = dataElement -> dataElement instanceof ClientDataGroup;
+	private Predicate<ClientDataElement> isDataAtomic = dataElement -> dataElement instanceof ClientDataAtomic;
 
 	protected ClientDataGroup(String nameInData) {
 		this.nameInData = nameInData;
+	}
+
+	public static ClientDataGroup withNameInData(String nameInData) {
+		return new ClientDataGroup(nameInData);
 	}
 
 	@Override
@@ -103,4 +110,64 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		}
 		return false;
 	}
+
+	public ClientDataGroup getFirstGroupWithNameInData(String childNameInData) {
+		Optional<ClientDataGroup> findFirst = getGroupChildrenWithNameInDataStream(childNameInData)
+				.findFirst();
+		if (findFirst.isPresent()) {
+			return findFirst.get();
+		}
+		throw new DataMissingException("Group not found for childNameInData:" + childNameInData);
+	}
+
+	private Stream<ClientDataGroup> getGroupChildrenWithNameInDataStream(String childNameInData) {
+		return getGroupChildrenStream().filter(filterByNameInData(childNameInData))
+				.map(ClientDataGroup.class::cast);
+	}
+
+	private Stream<ClientDataElement> getGroupChildrenStream() {
+		return getChildrenStream().filter(isDataGroup);
+	}
+
+	private Stream<ClientDataElement> getChildrenStream() {
+		return children.stream();
+	}
+
+	private Predicate<ClientDataElement> filterByNameInData(String childNameInData) {
+		return dataElement -> dataElementsNameInDataIs(dataElement, childNameInData);
+	}
+
+	private boolean dataElementsNameInDataIs(ClientDataElement dataElement,
+			String childNameInData) {
+		return dataElement.getNameInData().equals(childNameInData);
+	}
+
+	public List<ClientDataGroup> getAllGroupsWithNameInData(String childNameInData) {
+		return getGroupChildrenWithNameInDataStream(childNameInData).collect(Collectors.toList());
+	}
+
+	public String getFirstAtomicValueWithNameInData(String childNameInData) {
+		Optional<ClientDataAtomic> optionalFirst = getAtomicChildrenWithNameInData(childNameInData)
+				.findFirst();
+		return possiblyReturnAtomicChildWithNameInData(childNameInData, optionalFirst);
+	}
+
+	private Stream<ClientDataAtomic> getAtomicChildrenWithNameInData(String childNameInData) {
+		return getAtomicChildrenStream().filter(filterByNameInData(childNameInData))
+				.map(ClientDataAtomic.class::cast);
+	}
+
+	private Stream<ClientDataElement> getAtomicChildrenStream() {
+		return getChildrenStream().filter(isDataAtomic);
+	}
+
+	private String possiblyReturnAtomicChildWithNameInData(String childNameInData,
+			Optional<ClientDataAtomic> optionalFirst) {
+		if (optionalFirst.isPresent()) {
+			return optionalFirst.get().getValue();
+		}
+		throw new DataMissingException(
+				"Atomic value not found for childNameInData:" + childNameInData);
+	}
+
 }

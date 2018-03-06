@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,28 +19,78 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import se.uu.ub.cora.json.parser.JsonArray;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
+import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
 public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory {
 
+	private static final String CHILDREN_STRING = "children";
 	private JsonObject jsonObject;
 
 	@Override
 	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
+		JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
 		if (!(jsonValue instanceof JsonObject)) {
 			throw new JsonParseException("Json value is not an object, can not convert");
 		}
 		jsonObject = (JsonObject) jsonValue;
-
+		if (isRecordLink()) {
+			return JsonToDataRecordLinkConverter.forJsonObjectUsingConverterFactory(jsonObject,
+					factory);
+		}
 		if (isGroup()) {
-			return JsonToDataGroupConverter.forJsonObject(jsonObject);
+			return JsonToDataGroupConverter.forJsonObjectUsingConverterFactory(jsonObject, factory);
 		}
 		if (isAtomicData()) {
 			return JsonToDataAtomicConverter.forJsonObject(jsonObject);
 		}
+
 		return JsonToDataAttributeConverter.forJsonObject(jsonObject);
+	}
+
+	private boolean isRecordLink() {
+		if (jsonObject.containsKey(CHILDREN_STRING)) {
+			return checkIfChildrenContainRecordLink();
+		}
+		return false;
+	}
+
+	private boolean checkIfChildrenContainRecordLink() {
+		List<String> foundNames = collectNameInDataFromChildren();
+		return childrenNamesIndicatesRecordLink(foundNames);
+	}
+
+	private List<String> collectNameInDataFromChildren() {
+		JsonArray children = jsonObject.getValueAsJsonArray(CHILDREN_STRING);
+		List<String> foundNames = new ArrayList<>();
+		for (JsonValue child : children) {
+			String name = getNameInDataFromChild(child);
+			foundNames.add(name);
+		}
+		return foundNames;
+	}
+
+	private String getNameInDataFromChild(JsonValue child) {
+		JsonObject value = (JsonObject)child;
+		return value.getValueAsJsonString("name").getStringValue();
+	}
+
+	private boolean childrenNamesIndicatesRecordLink(List<String> foundNames) {
+		List<String> requiredNames = getRequiredNames();
+		return foundNames.containsAll(requiredNames);
+	}
+
+	private List<String> getRequiredNames() {
+		List<String> requiredNames = new ArrayList<>();
+		requiredNames.add("linkedRecordType");
+		requiredNames.add("linkedRecordId");
+		return requiredNames;
 	}
 
 	private boolean isAtomicData() {
@@ -48,6 +98,30 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 	}
 
 	private boolean isGroup() {
-		return jsonObject.containsKey("children");
+		return jsonObject.containsKey(CHILDREN_STRING);
+	}
+
+	@Override
+	public JsonToDataConverter createForJsonString(String json) {
+		OrgJsonParser jsonParser = new OrgJsonParser();
+		JsonValue jsonValue = jsonParser.parseString(json);
+		return createForJsonObject(jsonValue);
+	}
+
+	@Override
+	public JsonToDataActionLinkConverter createActionLinksConverterForJsonString(String json) {
+		OrgJsonParser jsonParser = new OrgJsonParser();
+		JsonValue jsonValue = jsonParser.parseString(json);
+		return createJsonToDataActionLinkConverterForJsonObject(jsonValue);
+	}
+
+	@Override
+	public JsonToDataActionLinkConverter createJsonToDataActionLinkConverterForJsonObject(JsonValue jsonValue){
+		JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
+		if (!(jsonValue instanceof JsonObject)) {
+			throw new JsonParseException("Json value is not an object, can not convert");
+		}
+			return JsonToDataActionLinkConverterImp.forJsonObjectUsingFactory(jsonObject, factory);
+
 	}
 }

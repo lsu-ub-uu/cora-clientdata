@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2018 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,30 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-package se.uu.ub.cora.clientdata;
+import se.uu.ub.cora.clientdata.ClientData;
 
-public final class ClientDataAttribute implements ClientDataElement {
-
-	private String nameInData;
-	private String value;
-
-	public static ClientDataAttribute withNameInDataAndValue(String nameInData, String value) {
-		return new ClientDataAttribute(nameInData, value);
-	}
-
-	private ClientDataAttribute(String nameInData, String value) {
-		this.nameInData = nameInData;
-		this.value = value;
-	}
-
-	@Override
-	public String getNameInData() {
-		return nameInData;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
+public interface JsonToDataActionLinkConverter {
+    ClientData toInstance();
 }
