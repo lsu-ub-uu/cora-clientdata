@@ -12,6 +12,7 @@ import java.util.Map;
 public class JsonToDataRecordConverter {
 
 	private static final String ACTION_LINKS = "actionLinks";
+	private static final int NUM_OF_ALLOWED_KEYS = 2;
 	private JsonObject jsonObject;
 	private JsonObject jsonObjectRecord;
 	private JsonToDataConverterFactory factory;
@@ -90,7 +91,7 @@ public class JsonToDataRecordConverter {
 		if (!jsonObjectRecord.containsKey(ACTION_LINKS)) {
 			throw new JsonParseException("Record data must contain child with key: actionLinks");
 		}
-		if (jsonObjectRecord.keySet().size() != 2) {
+		if (jsonObjectRecord.keySet().size() != NUM_OF_ALLOWED_KEYS) {
 			throw new JsonParseException(
 					"Record data must contain only keys: data and actionLinks");
 		}

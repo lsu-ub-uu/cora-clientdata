@@ -39,25 +39,37 @@ public class DataRecordToJsonConverterTest {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 
-		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
-		String jsonString = dataRecordToJsonConverter.toJson();
-
+		String jsonString = getRecordAsJsonString(clientDataRecord);
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
 	}
 
 	@Test
-	public void testToJsonWithDataActionLinksButNoActionLinks() {
+	public void testToJsonWithDataActionLinksIsNull() {
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
+		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
+
+		clientDataRecord.setActionLinks(null);
+
+		String jsonString = getRecordAsJsonString(clientDataRecord);
+
+		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
+	}
+
+	private String getRecordAsJsonString(ClientDataRecord clientDataRecord) {
+		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
+		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
+				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
+		return dataRecordToJsonConverter.toJson();
+	}
+
+	@Test
+	public void testToJsonWithDataActionLinksButActionLinksIsEmpty() {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 
 		clientDataRecord.setActionLinks(new HashMap<>());
 
-		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
-		String jsonString = dataRecordToJsonConverter.toJson();
+		String jsonString = getRecordAsJsonString(clientDataRecord);
 
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
 	}
@@ -68,10 +80,7 @@ public class DataRecordToJsonConverterTest {
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 
 		clientDataRecord.addActionLink("read", createReadActionLink());
-		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
-		String jsonString = dataRecordToJsonConverter.toJson();
+		String jsonString = getRecordAsJsonString(clientDataRecord);
 
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}"
 				+ ",\"actionLinks\":{" + "\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\","
