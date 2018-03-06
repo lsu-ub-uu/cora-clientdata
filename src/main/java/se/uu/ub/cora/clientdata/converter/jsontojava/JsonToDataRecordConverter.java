@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class JsonToDataRecordConverter {
 
+	private static final String ACTION_LINKS = "actionLinks";
 	private JsonObject jsonObject;
 	private JsonObject jsonObjectRecord;
 	private JsonToDataConverterFactory factory;
@@ -54,7 +55,7 @@ public class JsonToDataRecordConverter {
 
 	private void possiblyAddActionLinks() {
 		if (hasActionLinks()) {
-			JsonObject actionLinks = jsonObjectRecord.getValueAsJsonObject("actionLinks");
+			JsonObject actionLinks = jsonObjectRecord.getValueAsJsonObject(ACTION_LINKS);
 			for (Map.Entry<String, JsonValue> actionLinkEntry : actionLinks.entrySet()) {
 				convertAndAddActionLink(actionLinkEntry);
 			}
@@ -69,7 +70,7 @@ public class JsonToDataRecordConverter {
 	}
 
 	private boolean hasActionLinks() {
-		return jsonObjectRecord.containsKey("actionLinks");
+		return jsonObjectRecord.containsKey(ACTION_LINKS);
 	}
 
 	private void validateOnlyRecordKeyAtTopLevel() {
@@ -86,7 +87,7 @@ public class JsonToDataRecordConverter {
 		if (!jsonObjectRecord.containsKey("data")) {
 			throw new JsonParseException("Record data must contain child with key: data");
 		}
-		if (!jsonObjectRecord.containsKey("actionLinks")) {
+		if (!jsonObjectRecord.containsKey(ACTION_LINKS)) {
 			throw new JsonParseException("Record data must contain child with key: actionLinks");
 		}
 		if (jsonObjectRecord.keySet().size() != 2) {

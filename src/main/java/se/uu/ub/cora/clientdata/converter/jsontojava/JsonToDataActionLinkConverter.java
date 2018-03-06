@@ -19,7 +19,6 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import se.uu.ub.cora.clientdata.ClientData;
-import se.uu.ub.cora.clientdata.ClientDataElement;
 
 public interface JsonToDataActionLinkConverter {
     ClientData toInstance();

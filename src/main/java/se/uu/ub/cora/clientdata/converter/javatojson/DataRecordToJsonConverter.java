@@ -32,16 +32,16 @@ public final class DataRecordToJsonConverter {
 	private ClientDataRecord clientDataRecord;
 	private JsonObjectBuilder recordJsonObjectBuilder;
 
-	public static DataRecordToJsonConverter usingJsonFactoryForClientDataRecord(
-			JsonBuilderFactory jsonFactory, ClientDataRecord clientDataRecord) {
-		return new DataRecordToJsonConverter(jsonFactory, clientDataRecord);
-	}
-
 	private DataRecordToJsonConverter(JsonBuilderFactory jsonFactory,
 			ClientDataRecord clientDataRecord) {
 		this.jsonBuilderFactory = jsonFactory;
 		this.clientDataRecord = clientDataRecord;
 		recordJsonObjectBuilder = jsonFactory.createObjectBuilder();
+	}
+
+	public static DataRecordToJsonConverter usingJsonFactoryForClientDataRecord(
+			JsonBuilderFactory jsonFactory, ClientDataRecord clientDataRecord) {
+		return new DataRecordToJsonConverter(jsonFactory, clientDataRecord);
 	}
 
 	public String toJson() {

@@ -26,12 +26,12 @@ public final class ClientDataRecord implements ClientData {
 	private ClientDataGroup clientDataGroup;
 	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 
-	public static ClientDataRecord withClientDataGroup(ClientDataGroup clientDataGroup) {
-		return new ClientDataRecord(clientDataGroup);
-	}
-
 	private ClientDataRecord(ClientDataGroup clientDataGroup) {
 		this.clientDataGroup = clientDataGroup;
+	}
+
+	public static ClientDataRecord withClientDataGroup(ClientDataGroup clientDataGroup) {
+		return new ClientDataRecord(clientDataGroup);
 	}
 
 	public ClientDataGroup getClientDataGroup() {

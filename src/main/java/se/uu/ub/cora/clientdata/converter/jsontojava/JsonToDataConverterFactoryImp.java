@@ -20,10 +20,8 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.json.parser.JsonArray;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
