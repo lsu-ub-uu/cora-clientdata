@@ -1,16 +1,20 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import se.uu.ub.cora.clientdata.ClientDataActionLinks;
+import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
+import se.uu.ub.cora.json.parser.JsonValue;
+
+import java.util.Map;
 
 public class JsonToDataRecordConverter {
 
 	private JsonObject jsonObject;
 	private JsonObject jsonObjectRecord;
 	private JsonToDataConverterFactory factory;
+	private	ClientDataRecord clientDataRecord;
 
 	public JsonToDataRecordConverter(JsonObject jsonObject, JsonToDataConverterFactory factory) {
 		this.jsonObject = jsonObject;
@@ -28,7 +32,6 @@ public class JsonToDataRecordConverter {
 		} catch (Exception e) {
 			throw new JsonParseException("Error parsing jsonRecord: " + e.getMessage(), e);
 		}
-
 	}
 
 	private ClientDataRecord tryToInstanciate() {
@@ -37,10 +40,9 @@ public class JsonToDataRecordConverter {
 		validateOnlyCorrectKeysAtSecondLevel();
 
 		ClientDataGroup clientDataGroup = convertDataGroup();
-		ClientDataActionLinks clientDataActionLinks = convertDataActionLinks();
 
-		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-		clientDataRecord.setActionLinks(clientDataActionLinks);
+		clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
+		possiblyAddActionLinks();
 		return clientDataRecord;
 	}
 
@@ -50,10 +52,24 @@ public class JsonToDataRecordConverter {
 		return (ClientDataGroup) converter.toInstance();
 	}
 
-	private ClientDataActionLinks convertDataActionLinks() {
-		JsonObject actionLinksObject = jsonObjectRecord.getValueAsJsonObject("actionLinks");
-		JsonToDataConverter actionLinksConverter = factory.createForJsonObject(actionLinksObject);
-		return (ClientDataActionLinks) actionLinksConverter.toInstance();
+	private void possiblyAddActionLinks() {
+		if (hasActionLinks()) {
+			JsonObject actionLinks = jsonObjectRecord.getValueAsJsonObject("actionLinks");
+			for (Map.Entry<String, JsonValue> actionLinkEntry : actionLinks.entrySet()) {
+				convertAndAddActionLink(actionLinkEntry);
+			}
+		}
+	}
+
+	private void convertAndAddActionLink(Map.Entry<String, JsonValue> actionLinkEntry) {
+		JsonToDataActionLinkConverter actionLinkConverter = factory
+				.createJsonToDataActionLinkConverterForJsonObject(actionLinkEntry.getValue());
+		ActionLink actionLink = (ActionLink) actionLinkConverter.toInstance();
+		clientDataRecord.addActionLink(actionLinkEntry.getKey(), actionLink);
+	}
+
+	private boolean hasActionLinks() {
+		return jsonObjectRecord.containsKey("actionLinks");
 	}
 
 	private void validateOnlyRecordKeyAtTopLevel() {

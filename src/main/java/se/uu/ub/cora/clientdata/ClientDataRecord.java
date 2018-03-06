@@ -19,9 +19,12 @@
 
 package se.uu.ub.cora.clientdata;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public final class ClientDataRecord implements ClientData {
 	private ClientDataGroup clientDataGroup;
-	private ClientDataActionLinks actionLinks;
+	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 
 	public static ClientDataRecord withClientDataGroup(ClientDataGroup clientDataGroup) {
 		return new ClientDataRecord(clientDataGroup);
@@ -35,11 +38,19 @@ public final class ClientDataRecord implements ClientData {
 		return clientDataGroup;
 	}
 
-	public ClientDataActionLinks getActionLinks() {
+	public void addActionLink(String key, ActionLink actionLink) {
+		actionLinks.put(key, actionLink);
+	}
+
+	public ActionLink getActionLink(String key) {
+		return actionLinks.get(key);
+	}
+
+	public Map<String, ActionLink> getActionLinks() {
 		return actionLinks;
 	}
 
-	public void setActionLinks(ClientDataActionLinks actionLinks) {
+	public void setActionLinks(Map<String, ActionLink> actionLinks) {
 		this.actionLinks = actionLinks;
 	}
 

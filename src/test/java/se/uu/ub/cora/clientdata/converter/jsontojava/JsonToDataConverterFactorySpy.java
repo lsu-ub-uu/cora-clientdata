@@ -17,6 +17,16 @@ public class JsonToDataConverterFactorySpy implements JsonToDataConverterFactory
 	}
 
 	@Override
+	public JsonToDataActionLinkConverter createActionLinksConverterForJsonString(String json) {
+		return null;
+	}
+
+	@Override
+	public JsonToDataActionLinkConverter createJsonToDataActionLinkConverterForJsonObject(JsonValue jsonValue) {
+		return null;
+	}
+
+	@Override
 	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
 		numberOfTimesCalled++;
 		JsonToDataConverterSpy converterSpy = new JsonToDataConverterSpy((JsonObject) jsonValue);

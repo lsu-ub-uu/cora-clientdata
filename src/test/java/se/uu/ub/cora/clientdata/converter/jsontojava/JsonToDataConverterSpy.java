@@ -1,8 +1,5 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import se.uu.ub.cora.clientdata.Action;
-import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataActionLinks;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
@@ -19,11 +16,7 @@ public class JsonToDataConverterSpy implements JsonToDataConverter {
 
 	@Override
 	public ClientDataElement toInstance() {
-		if (jsonValue.containsKey("read")) {
-			returnedElement = new ClientDataActionLinks();
-		} else if (jsonValue.containsKey("requestMethod")) {
-			returnedElement = ActionLink.withAction(Action.READ);
-		} else if (jsonValue.containsKey("name") && jsonValue.containsKey("value")) {
+		 if (jsonValue.containsKey("name") && jsonValue.containsKey("value")) {
 			returnedElement = ClientDataAtomic.withNameInDataAndValue("atomicNameInData",
 					"atomicValue");
 		} else {

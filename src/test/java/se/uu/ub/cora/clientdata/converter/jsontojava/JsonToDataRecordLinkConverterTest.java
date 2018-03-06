@@ -38,7 +38,7 @@ import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
 public class JsonToDataRecordLinkConverterTest {
 
-	private JsonToDataConverterFactorySpy factory;
+	private JsonToDataConverterFactoryForDataRecordSpy factory;
 
 	@Test
 	public void testToClass() {
@@ -50,7 +50,7 @@ public class JsonToDataRecordLinkConverterTest {
 	private ClientDataRecordLink createClientDataRecordLinkForJsonString(String json) {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
-		factory = new JsonToDataConverterFactorySpy();
+		factory = new JsonToDataConverterFactoryForDataRecordSpy();
 
 		JsonToDataRecordLinkConverter jsonToDataConverter = JsonToDataRecordLinkConverter
 				.forJsonObjectUsingConverterFactory((JsonObject) jsonValue, factory);
@@ -98,8 +98,8 @@ public class JsonToDataRecordLinkConverterTest {
 		Map<String, ActionLink> actionLinks = clientDataRecordLink.getActionLinks();
 		assertEquals(actionLinks.size(), 1);
 		assertNotNull(actionLinks.get("read"));
-		assertEquals(factory.numberOfTimesCalled, 4);
-		assertEquals(factory.factoredConverters.get(3).returnedElement, actionLinks.get("read"));
+		assertEquals(factory.numOfTimesFactoryCalled, 4);
+		assertEquals(factory.factoredActionLinksConverters.get(0).returnedElement, actionLinks.get("read"));
 	}
 
 	@Test

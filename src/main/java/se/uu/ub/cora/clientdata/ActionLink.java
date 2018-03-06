@@ -19,7 +19,7 @@
 
 package se.uu.ub.cora.clientdata;
 
-public final class ActionLink implements ClientDataElement  {
+public final class ActionLink implements ClientData  {
 
 	private ClientDataGroup body;
 	private Action action;
@@ -78,10 +78,5 @@ public final class ActionLink implements ClientDataElement  {
 
 	public ClientDataGroup getBody() {
 		return body;
-	}
-
-//	@Override
-	public String getNameInData() {
-		return null;
 	}
 }

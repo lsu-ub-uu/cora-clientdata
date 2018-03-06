@@ -49,39 +49,25 @@ public class ClientDataRecordTest {
 		assertEquals(nameInData, "nameInData");
 	}
 
-	@Test
-	public void testActionLinks() {
-		ClientDataActionLinks dataActionLinks = new ClientDataActionLinks();
-		dataActionLinks.addActionLink("read", ActionLink.withAction(Action.READ));
-		clientDataRecord.setActionLinks(dataActionLinks);
-		Map<String, ActionLink> actionLinks = clientDataRecord.getActionLinks().getActionLinks();
-		ActionLink actionLinkOut = actionLinks.get("read");
-		assertEquals(actionLinkOut.getAction(), Action.READ);
-	}
 
 	@Test
-	public void testActionLinksGet() {
-		ClientDataActionLinks dataActionLinks = new ClientDataActionLinks();
-		dataActionLinks.addActionLink("read", ActionLink.withAction(Action.READ));
-		clientDataRecord.setActionLinks(dataActionLinks);
-		ActionLink actionLinkOut = clientDataRecord.getActionLinks().getActionLink("read");
-		assertEquals(actionLinkOut.getAction(), Action.READ);
+	public void testWithActionLinks() {
+		ActionLink actionLink = ActionLink.withAction(Action.READ);
+		clientDataRecord.addActionLink("read", actionLink);
+		assertEquals(clientDataRecord.getActionLink("read"), actionLink);
+		assertEquals(clientDataRecord.getActionLinks().get("read"), actionLink);
+		assertNull(clientDataRecord.getActionLink("notAnAction"));
 	}
 
 	@Test
 	public void testSetActionLinks() throws Exception {
-		ClientDataActionLinks dataActionLinks = new ClientDataActionLinks();
-
 		ActionLink actionLink = ActionLink.withAction(Action.READ);
 		Map<String, ActionLink> actionLinks = new HashMap<>();
 		actionLinks.put("read", actionLink);
-		dataActionLinks.setActionLinks(actionLinks);
-		clientDataRecord.setActionLinks(dataActionLinks);
-
-		ClientDataActionLinks readActionLinks = clientDataRecord.getActionLinks();
-		assertEquals(readActionLinks.getActionLink("read"), actionLink);
-		assertEquals(readActionLinks.getActionLinks().get("read"), actionLink);
-		assertNull(readActionLinks.getActionLink("notAnAction"));
+		clientDataRecord.setActionLinks(actionLinks);
+		assertEquals(clientDataRecord.getActionLink("read"), actionLink);
+		assertEquals(clientDataRecord.getActionLinks().get("read"), actionLink);
+		assertNull(clientDataRecord.getActionLink("notAnAction"));
 	}
 
 }

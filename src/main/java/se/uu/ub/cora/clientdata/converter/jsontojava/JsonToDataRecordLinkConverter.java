@@ -78,8 +78,8 @@ public class JsonToDataRecordLinkConverter extends JsonToDataGroupConverter {
 	}
 
 	private void convertAndAddActionLink(Map.Entry<String, JsonValue> actionLinkEntry) {
-		JsonToDataConverter actionLinkConverter = factory
-				.createForJsonObject(actionLinkEntry.getValue());
+		JsonToDataActionLinkConverter actionLinkConverter = factory
+				.createJsonToDataActionLinkConverterForJsonObject(actionLinkEntry.getValue());
 		ActionLink actionLink = (ActionLink) actionLinkConverter.toInstance();
 		clientDataRecordLink.addActionLink(actionLinkEntry.getKey(), actionLink);
 	}

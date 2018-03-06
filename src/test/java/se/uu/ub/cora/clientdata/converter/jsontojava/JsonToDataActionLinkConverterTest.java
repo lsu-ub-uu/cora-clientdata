@@ -49,10 +49,10 @@ public class JsonToDataActionLinkConverterTest {
 		factory = new JsonToDataConverterFactorySpy();
 		JsonValue jsonValue = jsonParser.parseString(json);
 
-		JsonToDataConverter jsonToDataConverter = JsonToDataActionLinkConverter
+		JsonToDataActionLinkConverter jsonToDataConverter = JsonToDataActionLinkConverterImp
 				.forJsonObjectUsingFactory((JsonObject) jsonValue, factory);
-		ClientDataElement clientDataElement = jsonToDataConverter.toInstance();
-		return (ActionLink) clientDataElement;
+		ClientData clientData = jsonToDataConverter.toInstance();
+		return (ActionLink) clientData;
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = "Action link data must contain key: url")

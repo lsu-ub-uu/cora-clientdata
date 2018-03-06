@@ -27,4 +27,7 @@ public interface JsonToDataConverterFactory {
 
 	JsonToDataConverter createForJsonString(String json);
 
+	JsonToDataActionLinkConverter createActionLinksConverterForJsonString(String json);
+
+	JsonToDataActionLinkConverter createJsonToDataActionLinkConverterForJsonObject(JsonValue jsonValue);
 }

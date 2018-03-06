@@ -22,7 +22,6 @@ package se.uu.ub.cora.clientdata.converter.javatojson;
 import java.util.Map;
 
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataActionLinks;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
@@ -72,12 +71,11 @@ public final class DataRecordToJsonConverter {
 
 	private boolean recordHasActionLinks() {
 		return clientDataRecord.getActionLinks() != null
-				&& !clientDataRecord.getActionLinks().getActionLinks().isEmpty();
+				&& !clientDataRecord.getActionLinks().isEmpty();
 	}
 
 	private void addActionLinksToRecord() {
-		ClientDataActionLinks dataActionLinks = clientDataRecord.getActionLinks();
-		Map<String, ActionLink> actionLinks = dataActionLinks.getActionLinks();
+		Map<String, ActionLink> actionLinks = clientDataRecord.getActionLinks();
 
 		ActionLinksToJsonConverter actionLinkConverter = new ActionLinksToJsonConverter(
 				jsonBuilderFactory, actionLinks);

@@ -46,14 +46,6 @@ public class JsonToDataConverterFactoryTest {
 	}
 
 	@Test
-	public void testFactorOnJsonStringDataGroupAtomicChild() {
-		String json = "{\"name\":\"id\", \"children\":[{\"id2\":\"value\"}]}";
-		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonString(json);
-		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
-	}
-
-	@Test
 	public void testFactorOnJsonStringDataAtomic() {
 		String json = "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"}";
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
@@ -76,26 +68,6 @@ public class JsonToDataConverterFactoryTest {
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
-	}
-
-	@Test
-	public void testFactorOnJsonStringActionLinks() {
-		String json = "{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}}";
-		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonString(json);
-		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinksConverter);
-		assertTrue(
-				((JsonToDataActionLinksConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
-	}
-
-	@Test
-	public void testFactorOnJsonStringActionLink() {
-		String json = "{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}";
-		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
-				.createForJsonString(json);
-		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinkConverter);
-		assertTrue(
-				((JsonToDataActionLinkConverter) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)
@@ -134,5 +106,26 @@ public class JsonToDataConverterFactoryTest {
 		JsonToDataConverter jsonToDataConverter = jsonToDataConverterFactory
 				.createForJsonString(json);
 		assertTrue(jsonToDataConverter instanceof JsonToDataGroupConverter);
+	}
+
+	@Test
+	public void testFactorActionLinkConverterOnJsonStringActionLink() {
+		String json = "{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}";
+		JsonToDataActionLinkConverter jsonToDataConverter = jsonToDataConverterFactory
+				.createActionLinksConverterForJsonString(json);
+		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinkConverter);
+		assertTrue(
+				((JsonToDataActionLinkConverterImp) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+	}
+
+	@Test(expectedExceptions = JsonParseException.class)
+	public void testFactorActionLinkConverterOnJsonObjectNullJson() {
+		jsonToDataConverterFactory.createActionLinksConverterForJsonString(null);
+	}
+
+	@Test(expectedExceptions = JsonParseException.class)
+	public void testFactorActionLinkConverterOnNotAnJsonObject() {
+		String json = "[{\"id\":{\"id2\":\"value\"}}]";
+		jsonToDataConverterFactory.createActionLinksConverterForJsonString(json);
 	}
 }

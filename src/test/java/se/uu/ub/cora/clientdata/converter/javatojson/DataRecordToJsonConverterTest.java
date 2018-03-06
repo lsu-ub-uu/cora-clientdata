@@ -25,11 +25,13 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataActionLinks;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DataRecordToJsonConverterTest {
 	@Test
@@ -49,8 +51,8 @@ public class DataRecordToJsonConverterTest {
 	public void testToJsonWithDataActionLinksButNoActionLinks() {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-		ClientDataActionLinks dataActionLinks = new ClientDataActionLinks();
-		clientDataRecord.setActionLinks(dataActionLinks);
+
+		clientDataRecord.setActionLinks(new HashMap<>());
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
 		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
@@ -65,10 +67,7 @@ public class DataRecordToJsonConverterTest {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 
-		ClientDataActionLinks dataActionLinks = new ClientDataActionLinks();
-		dataActionLinks.addActionLink("read", createReadActionLink());
-		clientDataRecord.setActionLinks(dataActionLinks);
-
+		clientDataRecord.addActionLink("read", createReadActionLink());
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
 		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
 				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);

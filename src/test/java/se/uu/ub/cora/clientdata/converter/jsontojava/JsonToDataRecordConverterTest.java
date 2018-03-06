@@ -23,13 +23,15 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.ClientDataActionLinks;
+import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
+
+import java.util.Map;
 
 public class JsonToDataRecordConverterTest {
 
@@ -44,7 +46,7 @@ public class JsonToDataRecordConverterTest {
 	private ClientDataRecord createClientDataRecordForJsonString(String json) {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
-		factory = new JsonToDataConverterFactoryOnlyGroupConverterSpy();
+		factory = new JsonToDataConverterFactoryForDataRecordSpy();
 		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverter
 				.forJsonObjectUsingConverterFactory(((JsonObject) jsonValue), factory);
 		return jsonToDataConverter.toInstance();
@@ -129,7 +131,7 @@ public class JsonToDataRecordConverterTest {
 		json += "}";
 		json += "}";
 		createClientDataRecordForJsonString(json);
-		JsonToDataConverterFactoryOnlyGroupConverterSpy factorySpy = (JsonToDataConverterFactoryOnlyGroupConverterSpy) factory;
+		JsonToDataConverterFactoryForDataRecordSpy factorySpy = (JsonToDataConverterFactoryForDataRecordSpy) factory;
 		assertEquals(factorySpy.numOfTimesFactoryCalled, 2);
 
 		JsonToDataConverterSpy groupConverterSpy = factorySpy.factoredConverters.get(0);
@@ -155,13 +157,12 @@ public class JsonToDataRecordConverterTest {
 		json += "}";
 		json += "}";
 		createClientDataRecordForJsonString(json);
-		JsonToDataConverterFactoryOnlyGroupConverterSpy factorySpy = (JsonToDataConverterFactoryOnlyGroupConverterSpy) factory;
+		JsonToDataConverterFactoryForDataRecordSpy factorySpy = (JsonToDataConverterFactoryForDataRecordSpy) factory;
 		assertEquals(factorySpy.numOfTimesFactoryCalled, 2);
 
-		JsonToDataConverterSpy actionLinksConverterSpy = factorySpy.factoredConverters.get(1);
-		JsonObject jsonValueSentToConverter = actionLinksConverterSpy.jsonValue;
+		JsonToDataActionLinkConverterSpy actionLinksConverterSpy = factorySpy.factoredActionLinksConverters.get(0);
+		JsonObject readLink = actionLinksConverterSpy.jsonValue;
 
-		JsonObject readLink = jsonValueSentToConverter.getValueAsJsonObject("read");
 		assertEquals(readLink.getValueAsJsonString("requestMethod").getStringValue(), "GET");
 		assertEquals(readLink.getValueAsJsonString("rel").getStringValue(), "read");
 		assertEquals(readLink.getValueAsJsonString("url").getStringValue(),
@@ -187,15 +188,15 @@ public class JsonToDataRecordConverterTest {
 		json += "}";
 		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
 
-		JsonToDataConverterFactoryOnlyGroupConverterSpy factorySpy = (JsonToDataConverterFactoryOnlyGroupConverterSpy) factory;
+		JsonToDataConverterFactoryForDataRecordSpy factorySpy = (JsonToDataConverterFactoryForDataRecordSpy) factory;
 		JsonToDataConverterSpy groupConverterSpy = factorySpy.factoredConverters.get(0);
-		JsonToDataConverterSpy actionLinksConverterSpy = factorySpy.factoredConverters.get(1);
+		JsonToDataActionLinkConverterSpy actionLinksConverterSpy = factorySpy.factoredActionLinksConverters.get(0);
 
 		ClientDataGroup clientDataGroup = clientDataRecord.getClientDataGroup();
 		assertEquals(groupConverterSpy.returnedElement, clientDataGroup);
 
-		ClientDataActionLinks actionLinks = clientDataRecord.getActionLinks();
-		assertEquals(actionLinksConverterSpy.returnedElement, actionLinks);
+		ActionLink actionLink = clientDataRecord.getActionLinks().get("read");
+		assertEquals(actionLinksConverterSpy.returnedElement, actionLink);
 
 	}
 

@@ -19,7 +19,9 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.json.parser.JsonArray;
@@ -50,13 +52,7 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		if (isAtomicData()) {
 			return JsonToDataAtomicConverter.forJsonObject(jsonObject);
 		}
-		if (isActionLinks()) {
-			return JsonToDataActionLinksConverter.forJsonObjectUsingConverterFactory(jsonObject,
-					factory);
-		}
-		if (isActionLink()) {
-			return JsonToDataActionLinkConverter.forJsonObjectUsingFactory(jsonObject, factory);
-		}
+
 		return JsonToDataAttributeConverter.forJsonObject(jsonObject);
 	}
 
@@ -68,22 +64,35 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 	}
 
 	private boolean checkIfChildrenContainRecordLink() {
+		List<String> foundNames = collectNameInDataFromChildren();
+		return childrenNamesIndicatesRecordLink(foundNames);
+	}
+
+	private List<String> collectNameInDataFromChildren() {
 		JsonArray children = jsonObject.getValueAsJsonArray(CHILDREN_STRING);
-		boolean linkedRecordTypeExist = false;
-		boolean linkedRecordIdExist = false;
-		for (JsonValue jsonValue : children) {
-			JsonObject value = (JsonObject) jsonValue;
-			if (value.containsKey("name")) {
-				String name = value.getValueAsJsonString("name").getStringValue();
-				if ("linkedRecordType".equals(name)) {
-					linkedRecordTypeExist = true;
-				}
-				if ("linkedRecordId".equals(name)) {
-					linkedRecordIdExist = true;
-				}
-			}
+		List<String> foundNames = new ArrayList<>();
+		for (JsonValue child : children) {
+			String name = getNameInDataFromChild(child);
+			foundNames.add(name);
 		}
-		return linkedRecordIdExist && linkedRecordTypeExist;
+		return foundNames;
+	}
+
+	private String getNameInDataFromChild(JsonValue child) {
+		JsonObject value = (JsonObject)child;
+		return value.getValueAsJsonString("name").getStringValue();
+	}
+
+	private boolean childrenNamesIndicatesRecordLink(List<String> foundNames) {
+		List<String> requiredNames = getRequiredNames();
+		return foundNames.containsAll(requiredNames);
+	}
+
+	private List<String> getRequiredNames() {
+		List<String> requiredNames = new ArrayList<>();
+		requiredNames.add("linkedRecordType");
+		requiredNames.add("linkedRecordId");
+		return requiredNames;
 	}
 
 	private boolean isAtomicData() {
@@ -94,29 +103,27 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		return jsonObject.containsKey(CHILDREN_STRING);
 	}
 
-	private boolean isActionLinks() {
-		String firstKey = getFirstKeyInJsonObject();
-		return keyIsFoundInActionEnum(firstKey);
-	}
-
-	private String getFirstKeyInJsonObject() {
-		return jsonObject.keySet().iterator().next();
-	}
-
-	private boolean keyIsFoundInActionEnum(String firstKey) {
-		return Arrays.stream(Action.values())
-				.anyMatch(action -> action.name().equalsIgnoreCase(firstKey));
-	}
-
 	@Override
 	public JsonToDataConverter createForJsonString(String json) {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
-
 		return createForJsonObject(jsonValue);
 	}
 
-	public boolean isActionLink() {
-		return jsonObject.containsKey("rel");
+	@Override
+	public JsonToDataActionLinkConverter createActionLinksConverterForJsonString(String json) {
+		OrgJsonParser jsonParser = new OrgJsonParser();
+		JsonValue jsonValue = jsonParser.parseString(json);
+		return createJsonToDataActionLinkConverterForJsonObject(jsonValue);
+	}
+
+	@Override
+	public JsonToDataActionLinkConverter createJsonToDataActionLinkConverterForJsonObject(JsonValue jsonValue){
+		JsonToDataConverterFactoryImp factory = new JsonToDataConverterFactoryImp();
+		if (!(jsonValue instanceof JsonObject)) {
+			throw new JsonParseException("Json value is not an object, can not convert");
+		}
+			return JsonToDataActionLinkConverterImp.forJsonObjectUsingFactory(jsonObject, factory);
+
 	}
 }
