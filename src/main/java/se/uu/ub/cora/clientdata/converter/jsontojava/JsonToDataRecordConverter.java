@@ -55,11 +55,9 @@ public class JsonToDataRecordConverter {
 	}
 
 	private void possiblyAddActionLinks() {
-		if (hasActionLinks()) {
-			JsonObject actionLinks = jsonObjectRecord.getValueAsJsonObject(ACTION_LINKS);
-			for (Map.Entry<String, JsonValue> actionLinkEntry : actionLinks.entrySet()) {
-				convertAndAddActionLink(actionLinkEntry);
-			}
+		JsonObject actionLinks = jsonObjectRecord.getValueAsJsonObject(ACTION_LINKS);
+		for (Map.Entry<String, JsonValue> actionLinkEntry : actionLinks.entrySet()) {
+			convertAndAddActionLink(actionLinkEntry);
 		}
 	}
 
@@ -68,10 +66,6 @@ public class JsonToDataRecordConverter {
 				.createJsonToDataActionLinkConverterForJsonObject(actionLinkEntry.getValue());
 		ActionLink actionLink = (ActionLink) actionLinkConverter.toInstance();
 		clientDataRecord.addActionLink(actionLinkEntry.getKey(), actionLink);
-	}
-
-	private boolean hasActionLinks() {
-		return jsonObjectRecord.containsKey(ACTION_LINKS);
 	}
 
 	private void validateOnlyRecordKeyAtTopLevel() {
