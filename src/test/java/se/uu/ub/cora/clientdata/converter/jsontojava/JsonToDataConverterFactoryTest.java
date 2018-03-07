@@ -19,11 +19,13 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.json.parser.JsonParseException;
 
 public class JsonToDataConverterFactoryTest {
@@ -116,6 +118,22 @@ public class JsonToDataConverterFactoryTest {
 		assertTrue(jsonToDataConverter instanceof JsonToDataActionLinkConverter);
 		assertTrue(
 				((JsonToDataActionLinkConverterImp) jsonToDataConverter).factory instanceof JsonToDataConverterFactoryImp);
+	}
+
+	@Test
+	public void testCorrectDataUsedForConverterNotFromPreviousCall() {
+		String json = "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"coraText\"},{\"name\":\"linkedRecordId\",\"value\":\"linkedRecordPresentationPresentationLinkDefText\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/coraText/linkedRecordPresentationPresentationLinkDefText\",\"accept\":\"application/vnd.uub.record+json\"}},\"name\":\"defTextId\"}";
+		jsonToDataConverterFactory.createForJsonString(json);
+
+		String json2 = "{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"https://cora.epc.ub.uu.se/systemone/rest/record/presentationGroup/loginFormNewPGroup\",\"accept\":\"application/vnd.uub.record+json\"}";
+		JsonToDataActionLinkConverter actionLinkConverter = jsonToDataConverterFactory
+				.createActionLinksConverterForJsonString(json2);
+
+		assertTrue(actionLinkConverter instanceof JsonToDataActionLinkConverter);
+		assertTrue(
+				((JsonToDataActionLinkConverterImp) actionLinkConverter).factory instanceof JsonToDataConverterFactoryImp);
+		ActionLink instance = (ActionLink) actionLinkConverter.toInstance();
+		assertEquals(instance.getRequestMethod(), "GET");
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)

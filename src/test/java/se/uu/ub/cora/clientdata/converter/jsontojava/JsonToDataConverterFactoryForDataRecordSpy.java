@@ -18,15 +18,13 @@ public class JsonToDataConverterFactoryForDataRecordSpy implements JsonToDataCon
 	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
 		numOfTimesFactoryCalled++;
 		jsonObjects.add((JsonObject) jsonValue);
-		JsonToDataConverterSpy converterSpy = new JsonToDataConverterSpy(
-				(JsonObject) jsonValue);
+		JsonToDataConverterSpy converterSpy = new JsonToDataConverterSpy((JsonObject) jsonValue);
 		factoredConverters.add(converterSpy);
 		return converterSpy;
 	}
 
 	@Override
 	public JsonToDataConverter createForJsonString(String json) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -36,9 +34,11 @@ public class JsonToDataConverterFactoryForDataRecordSpy implements JsonToDataCon
 	}
 
 	@Override
-	public JsonToDataActionLinkConverter createJsonToDataActionLinkConverterForJsonObject(JsonValue jsonValue) {
+	public JsonToDataActionLinkConverter createJsonToDataActionLinkConverterForJsonObject(
+			JsonValue jsonValue) {
 		numOfTimesFactoryCalled++;
-		JsonToDataActionLinkConverterSpy actionLinkConverterSpy = new JsonToDataActionLinkConverterSpy((JsonObject) jsonValue);
+		JsonToDataActionLinkConverterSpy actionLinkConverterSpy = new JsonToDataActionLinkConverterSpy(
+				(JsonObject) jsonValue);
 		factoredActionLinksConverters.add(actionLinkConverterSpy);
 		return actionLinkConverterSpy;
 	}

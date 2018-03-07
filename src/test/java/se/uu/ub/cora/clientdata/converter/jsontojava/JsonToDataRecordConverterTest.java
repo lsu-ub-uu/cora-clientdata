@@ -31,8 +31,6 @@ import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
-import java.util.Map;
-
 public class JsonToDataRecordConverterTest {
 
 	private JsonToDataConverterFactory factory;
@@ -160,7 +158,8 @@ public class JsonToDataRecordConverterTest {
 		JsonToDataConverterFactoryForDataRecordSpy factorySpy = (JsonToDataConverterFactoryForDataRecordSpy) factory;
 		assertEquals(factorySpy.numOfTimesFactoryCalled, 2);
 
-		JsonToDataActionLinkConverterSpy actionLinksConverterSpy = factorySpy.factoredActionLinksConverters.get(0);
+		JsonToDataActionLinkConverterSpy actionLinksConverterSpy = factorySpy.factoredActionLinksConverters
+				.get(0);
 		JsonObject readLink = actionLinksConverterSpy.jsonValue;
 
 		assertEquals(readLink.getValueAsJsonString("requestMethod").getStringValue(), "GET");
@@ -190,7 +189,8 @@ public class JsonToDataRecordConverterTest {
 
 		JsonToDataConverterFactoryForDataRecordSpy factorySpy = (JsonToDataConverterFactoryForDataRecordSpy) factory;
 		JsonToDataConverterSpy groupConverterSpy = factorySpy.factoredConverters.get(0);
-		JsonToDataActionLinkConverterSpy actionLinksConverterSpy = factorySpy.factoredActionLinksConverters.get(0);
+		JsonToDataActionLinkConverterSpy actionLinksConverterSpy = factorySpy.factoredActionLinksConverters
+				.get(0);
 
 		ClientDataGroup clientDataGroup = clientDataRecord.getClientDataGroup();
 		assertEquals(groupConverterSpy.returnedElement, clientDataGroup);

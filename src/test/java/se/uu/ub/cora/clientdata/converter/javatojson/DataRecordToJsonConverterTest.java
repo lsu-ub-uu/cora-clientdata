@@ -21,6 +21,8 @@ package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.HashMap;
+
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.Action;
@@ -29,9 +31,6 @@ import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DataRecordToJsonConverterTest {
 	@Test
