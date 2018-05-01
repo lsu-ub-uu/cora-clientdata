@@ -210,4 +210,59 @@ public class ClientDataGroupTest {
 		assertEquals(value, "child value");
 	}
 
+	@Test
+	public void testGetAllChildrenWithNameInDataNoChildFound() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
+				"child value");
+		dataGroup.addChild(atomicChild);
+		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		dataGroup.addChild(groupChild);
+
+		List<ClientDataElement> childrenFound = dataGroup
+				.getAllChildrenWithNameInData("NOThildNameInData");
+		assertEquals(childrenFound.size(), 0);
+	}
+
+	@Test
+	public void testGetAllChildrenWithNameInDataOneGroup() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		dataGroup.addChild(groupChild);
+
+		List<ClientDataElement> childrenFound = dataGroup
+				.getAllChildrenWithNameInData("childNameInData");
+		assertEquals(childrenFound.size(), 1);
+		assertEquals(childrenFound.get(0), groupChild);
+	}
+
+	@Test
+	public void testGetAllChildrenWithNameInDataOneDataAtomic() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
+				"child value");
+		dataGroup.addChild(atomicChild);
+
+		List<ClientDataElement> childrenFound = dataGroup
+				.getAllChildrenWithNameInData("childNameInData");
+		assertEquals(childrenFound.size(), 1);
+		assertEquals(childrenFound.get(0), atomicChild);
+	}
+
+	@Test
+	public void testGetAllChildrenWithNameInDataOneGroupAndOneDataAtomic() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
+				"child value");
+		dataGroup.addChild(atomicChild);
+		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		dataGroup.addChild(groupChild);
+
+		List<ClientDataElement> childrenFound = dataGroup
+				.getAllChildrenWithNameInData("childNameInData");
+		assertEquals(childrenFound.size(), 2);
+		assertEquals(childrenFound.get(0), atomicChild);
+		assertEquals(childrenFound.get(1), groupChild);
+	}
+
 }

@@ -170,4 +170,12 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 				"Atomic value not found for childNameInData:" + childNameInData);
 	}
 
+	public List<ClientDataElement> getAllChildrenWithNameInData(String childNameInData) {
+		return getChildrenWithNameInDataStream(childNameInData).collect(Collectors.toList());
+	}
+
+	private Stream<ClientDataElement> getChildrenWithNameInDataStream(String childNameInData) {
+		return getChildrenStream().filter(filterByNameInData(childNameInData))
+				.map(ClientDataElement.class::cast);
+	}
 }
