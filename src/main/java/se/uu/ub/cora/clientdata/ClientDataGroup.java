@@ -20,6 +20,7 @@
 package se.uu.ub.cora.clientdata;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,4 +179,65 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		return getChildrenStream().filter(filterByNameInData(childNameInData))
 				.map(ClientDataElement.class::cast);
 	}
+
+	public Collection<ClientDataGroup> getAllGroupsWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return getGroupChildrenWithNameInDataAndAttributes(childNameInData, childAttributes)
+				.collect(Collectors.toList());
+	}
+
+	private Stream<ClientDataGroup> getGroupChildrenWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return getGroupChildrenWithNameInDataStream(childNameInData)
+				.filter(filterByAttributes(childAttributes));
+	}
+
+	private Predicate<ClientDataGroup> filterByAttributes(ClientDataAttribute... childAttributes) {
+		return dataElement -> dataElementsHasAttributes(dataElement, childAttributes);
+	}
+
+	private boolean dataElementsHasAttributes(ClientDataGroup dataElement,
+			ClientDataAttribute[] childAttributes) {
+		Map<String, String> attributesFromElement = dataElement.getAttributes();
+		if (diffrentNumberOfAttributesInRequestedAndExisting(childAttributes,
+				attributesFromElement)) {
+			return false;
+		}
+		return allRequestedAttributesMatchExistingAttributes(childAttributes,
+				attributesFromElement);
+	}
+
+	private boolean diffrentNumberOfAttributesInRequestedAndExisting(
+			ClientDataAttribute[] childAttributes, Map<String, String> attributesFromElement) {
+		return childAttributes.length != attributesFromElement.size();
+	}
+
+	private boolean allRequestedAttributesMatchExistingAttributes(
+			ClientDataAttribute[] childAttributes, Map<String, String> attributesFromElement) {
+		for (ClientDataAttribute dataAttribute : childAttributes) {
+			if (attributesDoesNotMatch(attributesFromElement, dataAttribute)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean attributesDoesNotMatch(Map<String, String> attributesFromElement,
+			ClientDataAttribute dataAttribute) {
+		return requestedAttributeDoesNotExists(attributesFromElement, dataAttribute)
+				|| requestedAttributeHasDifferentValueAsExisting(attributesFromElement,
+						dataAttribute);
+	}
+
+	private boolean requestedAttributeDoesNotExists(Map<String, String> attributesFromElement,
+			ClientDataAttribute dataAttribute) {
+		return !attributesFromElement.containsKey(dataAttribute.getNameInData());
+	}
+
+	private boolean requestedAttributeHasDifferentValueAsExisting(
+			Map<String, String> attributesFromElement, ClientDataAttribute dataAttribute) {
+		return !attributesFromElement.get(dataAttribute.getNameInData())
+				.equals(dataAttribute.getValue());
+	}
+
 }

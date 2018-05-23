@@ -32,6 +32,7 @@ import org.testng.annotations.Test;
 
 public class ClientDataGroupTest {
 	private ClientDataGroup clientDataGroup;
+	private Collection<ClientDataGroup> groupsFound;
 
 	@BeforeMethod
 	public void setUp() {
@@ -265,4 +266,132 @@ public class ClientDataGroupTest {
 		assertEquals(childrenFound.get(1), groupChild);
 	}
 
+	@Test
+	public void testGetAllGroupsWithNameInDataAndAttributesOneMatch() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+
+		groupsFound = clientDataGroup.getAllGroupsWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertNumberOfGroupsFoundIs(1);
+		assertGroupsFoundAre(child3);
+	}
+
+	private ClientDataGroup createTestGroupForAttributesReturnChildGroupWithAttribute() {
+		addAndReturnDataGroupChildWithNameInData("groupId2");
+		addAndReturnDataGroupChildWithNameInData("groupId3");
+		addAndReturnDataGroupChildWithNameInData("groupId2");
+		createDataAtomicWithNameInData("groupId2");
+		ClientDataGroup child3 = addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+		return child3;
+	}
+
+	private ClientDataGroup addAndReturnDataGroupChildWithNameInData(String nameInData) {
+		ClientDataGroup child = ClientDataGroup.withNameInData(nameInData);
+		clientDataGroup.addChild(child);
+		return child;
+	}
+
+	private ClientDataAtomic createDataAtomicWithNameInData(String nameInData) {
+		ClientDataAtomic child = ClientDataAtomic.withNameInDataAndValue(nameInData, "someValue");
+		return child;
+	}
+
+	private ClientDataGroup addAndReturnDataGroupChildWithNameInDataAndAttributes(String nameInData,
+			ClientDataAttribute... attributes) {
+		ClientDataGroup child = ClientDataGroup.withNameInData(nameInData);
+		clientDataGroup.addChild(child);
+		for (ClientDataAttribute attribute : attributes) {
+			child.addAttributeByIdWithValue(attribute.getNameInData(), attribute.getValue());
+		}
+		return child;
+	}
+
+	private void assertNumberOfGroupsFoundIs(int numberOfGroups) {
+		assertEquals(groupsFound.size(), numberOfGroups);
+	}
+
+	private void assertGroupsFoundAre(ClientDataGroup... groups) {
+		int i = 0;
+		for (ClientDataGroup groupFound : groupsFound) {
+			assertEquals(groupFound, groups[i]);
+			i++;
+		}
+	}
+
+	@Test
+	public void testGetAllGroupsWithNameInDataAndAttributesTwoMatches() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataGroup child4 = addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		groupsFound = clientDataGroup.getAllGroupsWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertNumberOfGroupsFoundIs(2);
+		assertGroupsFoundAre(child3, child4);
+	}
+
+	@Test
+	public void testGetAllGroupsWithNameInDataAndAttributesOneWrongAttributeValueTwoMatches() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataGroup child4 = addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value2"));
+
+		groupsFound = clientDataGroup.getAllGroupsWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertNumberOfGroupsFoundIs(2);
+		assertGroupsFoundAre(child3, child4);
+	}
+
+	@Test
+	public void testGetAllGroupsWithNameInDataAndAttributesOneWrongAttributeNameTwoMatches() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataGroup child4 = addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value1"));
+
+		groupsFound = clientDataGroup.getAllGroupsWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertNumberOfGroupsFoundIs(2);
+		assertGroupsFoundAre(child3, child4);
+	}
+
+	@Test
+	public void testGetAllGroupsWithNameInDataAndTwoAttributesNoMatches() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
+
+		groupsFound = clientDataGroup.getAllGroupsWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value1"));
+
+		assertNumberOfGroupsFoundIs(0);
+	}
+
+	@Test
+	public void testGetAllGroupsWithNameInDataAndTwoAttributesOneMatches() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataGroup child4 = addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData3", "value2"));
+
+		groupsFound = clientDataGroup.getAllGroupsWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
+
+		assertNumberOfGroupsFoundIs(1);
+		assertGroupsFoundAre(child4);
+	}
 }
