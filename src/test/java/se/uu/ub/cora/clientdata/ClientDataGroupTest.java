@@ -394,4 +394,85 @@ public class ClientDataGroupTest {
 		assertNumberOfGroupsFoundIs(1);
 		assertGroupsFoundAre(child4);
 	}
+
+	@Test
+	public void testGetFirstGroupsWithNameInDataAndAttributesOneMatch() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+
+		ClientDataGroup found = clientDataGroup.getFirstGroupWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(found, child3);
+	}
+
+	@Test
+	public void testGetFirstGroupWithNameInDataAndAttributesTwoMatches() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		ClientDataGroup found = clientDataGroup.getFirstGroupWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(found, child3);
+	}
+
+	@Test
+	public void testGetFirstGroupWithNameInDataAndAttributesOneWrongAttributeValueTwoMatches() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value2"));
+
+		ClientDataGroup found = clientDataGroup.getFirstGroupWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(found, child3);
+	}
+
+	@Test
+	public void testGetFirstGroupWithNameInDataAndAttributesOneWrongAttributeNameTwoMatches() {
+		ClientDataGroup child3 = createTestGroupForAttributesReturnChildGroupWithAttribute();
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value1"));
+
+		ClientDataGroup found = clientDataGroup.getFirstGroupWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(found, child3);
+	}
+
+	@Test(expectedExceptions = DataMissingException.class, expectedExceptionsMessageRegExp = ""
+			+ "Group not found for childNameInData: groupId2 "
+			+ "with attributes: nameInData:value1, nameInData2:value1")
+	public void testGetFirstGroupWithNameInDataAndTwoAttributesNoMatches() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
+
+		clientDataGroup.getFirstGroupWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value1"));
+	}
+
+	@Test
+	public void testGetFirstGroupWithNameInDataAndTwoAttributesOneMatches() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataGroup child4 = addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
+		addAndReturnDataGroupChildWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData3", "value2"));
+
+		ClientDataGroup found = clientDataGroup.getFirstGroupWithNameInDataAndAttributes("groupId2",
+				ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"),
+				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
+
+		assertEquals(found, child4);
+	}
 }

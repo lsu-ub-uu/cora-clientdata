@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -238,6 +239,35 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 			Map<String, String> attributesFromElement, ClientDataAttribute dataAttribute) {
 		return !attributesFromElement.get(dataAttribute.getNameInData())
 				.equals(dataAttribute.getValue());
+	}
+
+	public ClientDataGroup getFirstGroupWithNameInDataAndAttributes(String childNameInData,
+			ClientDataAttribute... childDataAttributes) {
+		Collection<ClientDataGroup> allGroupsWithNameInDataAndAttributes = getAllGroupsWithNameInDataAndAttributes(
+				childNameInData, childDataAttributes);
+		throwErrorIfNoGroupsFound(childNameInData, allGroupsWithNameInDataAndAttributes,
+				childDataAttributes);
+		return allGroupsWithNameInDataAndAttributes.iterator().next();
+	}
+
+	private void throwErrorIfNoGroupsFound(String childNameInData,
+			Collection<ClientDataGroup> allGroupsWithNameInDataAndAttributes,
+			ClientDataAttribute... childDataAttributes) {
+		if (allGroupsWithNameInDataAndAttributes.isEmpty()) {
+			StringJoiner attributesError = createErrorMessagesForAttributes(childDataAttributes);
+			throw new DataMissingException("Group not found for childNameInData: " + childNameInData
+					+ " with attributes: " + attributesError);
+		}
+	}
+
+	private StringJoiner createErrorMessagesForAttributes(
+			ClientDataAttribute... childDataAttributes) {
+		StringJoiner attributesError = new StringJoiner(", ");
+		for (ClientDataAttribute clientDataAttribute : childDataAttributes) {
+			attributesError.add(
+					clientDataAttribute.getNameInData() + ":" + clientDataAttribute.getValue());
+		}
+		return attributesError;
 	}
 
 }
