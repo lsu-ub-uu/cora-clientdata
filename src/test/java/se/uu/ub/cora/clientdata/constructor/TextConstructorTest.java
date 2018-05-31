@@ -50,7 +50,7 @@ public class TextConstructorTest {
 				.constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(textId, defaultSvText,
 						alternativeTexts);
 		assertEquals(createdTextGroup.getNameInData(), "text");
-		// assertEquals(createdTextGroup.getChildren().size(), 2);
+		assertEquals(createdTextGroup.getChildren().size(), 3);
 	}
 
 	@Test
