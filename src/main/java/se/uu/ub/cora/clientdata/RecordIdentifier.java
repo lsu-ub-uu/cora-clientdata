@@ -18,7 +18,7 @@
  */
 package se.uu.ub.cora.clientdata;
 
-public class RecordIdentifier {
+public final class RecordIdentifier {
 
 	public static RecordIdentifier usingTypeAndId(String type, String id) {
 		return new RecordIdentifier(type, id);

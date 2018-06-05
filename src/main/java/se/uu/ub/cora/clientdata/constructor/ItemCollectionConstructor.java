@@ -24,7 +24,7 @@ import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.RecordIdentifier;
 
-public class ItemCollectionConstructor extends DataConstructor {
+public final class ItemCollectionConstructor extends DataConstructor {
 
 	public static ItemCollectionConstructor withDataDivider(String dataDivider) {
 		return new ItemCollectionConstructor(dataDivider);
