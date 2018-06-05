@@ -47,14 +47,13 @@ public final class ItemCollectionConstructor extends DataConstructor {
 		return itemCollection;
 	}
 
-	protected ClientDataGroup createCollectionItemReferences(
-			List<RecordIdentifier> collectionItems) {
+	private ClientDataGroup createCollectionItemReferences(List<RecordIdentifier> collectionItems) {
 		ClientDataGroup itemRefs = ClientDataGroup.withNameInData("collectionItemReferences");
 		createReferenceForAllCollectionItems(collectionItems, itemRefs);
 		return itemRefs;
 	}
 
-	protected void createReferenceForAllCollectionItems(List<RecordIdentifier> collectionItems,
+	private void createReferenceForAllCollectionItems(List<RecordIdentifier> collectionItems,
 			ClientDataGroup itemRefs) {
 		int repeatId = 0;
 		for (RecordIdentifier recordIdentifier : collectionItems) {
@@ -63,7 +62,7 @@ public final class ItemCollectionConstructor extends DataConstructor {
 		}
 	}
 
-	protected void createReferenceForOneCollectionItem(ClientDataGroup itemRefs, int repeatId,
+	private void createReferenceForOneCollectionItem(ClientDataGroup itemRefs, int repeatId,
 			RecordIdentifier recordIdentifier) {
 		ClientDataGroup ref = createDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
 				"ref", recordIdentifier.type, recordIdentifier.id, String.valueOf(repeatId));
