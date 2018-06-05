@@ -24,9 +24,7 @@ import java.util.Map.Entry;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 
-public class TextConstructor {
-
-	private String dataDivider;
+public class TextConstructor extends DataConstructor {
 
 	public TextConstructor(String dataDivider) {
 		this.dataDivider = dataDivider;
@@ -55,32 +53,6 @@ public class TextConstructor {
 
 	private ClientDataAtomic createAtomicForText(String text) {
 		return ClientDataAtomic.withNameInDataAndValue("text", text);
-	}
-
-	private ClientDataGroup createRecordInfoGroupForId(String textId) {
-		ClientDataGroup recordInfo = ClientDataGroup.withNameInData("recordInfo");
-		recordInfo.addChild(createAtomicForId(textId));
-		recordInfo.addChild(createDataDivierGroup());
-		return recordInfo;
-	}
-
-	private ClientDataAtomic createAtomicForId(String textId) {
-		return ClientDataAtomic.withNameInDataAndValue("id", textId);
-	}
-
-	private ClientDataGroup createDataDivierGroup() {
-		ClientDataGroup dataDividerGroup = ClientDataGroup.withNameInData("dataDivider");
-		dataDividerGroup.addChild(createAtomicForLinkedRecordType("system"));
-		dataDividerGroup.addChild(createAtomicForLinkedRecordId(dataDivider));
-		return dataDividerGroup;
-	}
-
-	private ClientDataAtomic createAtomicForLinkedRecordType(String linkedRecordType) {
-		return ClientDataAtomic.withNameInDataAndValue("linkedRecordType", linkedRecordType);
-	}
-
-	private ClientDataAtomic createAtomicForLinkedRecordId(String dataDivider) {
-		return ClientDataAtomic.withNameInDataAndValue("linkedRecordId", dataDivider);
 	}
 
 	public ClientDataGroup constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(

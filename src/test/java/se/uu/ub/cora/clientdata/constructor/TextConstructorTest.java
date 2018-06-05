@@ -19,7 +19,6 @@
 package se.uu.ub.cora.clientdata.constructor;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,16 +56,11 @@ public class TextConstructorTest {
 	public void testCorrectRecordInfo() throws Exception {
 		ClientDataGroup createdTextGroup = textConstructor
 				.constructTextUsingTextIdAndDefaultSvText(textId, defaultSvText);
+
 		ClientDataGroup recordInfo = createdTextGroup.getFirstGroupWithNameInData("recordInfo");
-		assertNotNull(recordInfo);
-		assertEquals(recordInfo.getFirstAtomicValueWithNameInData("id"), textId);
-		ClientDataGroup dataDividerGroup = recordInfo.getFirstGroupWithNameInData("dataDivider");
-		assertNotNull(dataDividerGroup);
-		assertEquals(dataDividerGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
-				"system");
-		assertEquals(dataDividerGroup.getFirstAtomicValueWithNameInData("linkedRecordId"),
-				dataDivider);
-		assertEquals(recordInfo.getChildren().size(), 2);
+
+		DataConstructorTestHelper.assertCorrectRecordInfoUsingRecordInfoAndDataDividerAndId(
+				recordInfo, dataDivider, textId);
 	}
 
 	@Test
