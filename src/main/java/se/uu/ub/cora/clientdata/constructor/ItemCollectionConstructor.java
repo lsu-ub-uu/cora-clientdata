@@ -26,7 +26,11 @@ import se.uu.ub.cora.clientdata.RecordIdentifier;
 
 public class ItemCollectionConstructor extends DataConstructor {
 
-	public ItemCollectionConstructor(String dataDivider) {
+	public static ItemCollectionConstructor withDataDivider(String dataDivider) {
+		return new ItemCollectionConstructor(dataDivider);
+	}
+
+	private ItemCollectionConstructor(String dataDivider) {
 		this.dataDivider = dataDivider;
 	}
 

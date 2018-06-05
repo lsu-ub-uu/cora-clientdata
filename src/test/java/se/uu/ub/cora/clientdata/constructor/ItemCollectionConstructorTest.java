@@ -41,7 +41,7 @@ public class ItemCollectionConstructorTest {
 	@BeforeMethod
 	public void beforeMethod() {
 		collectionItems = new ArrayList<>();
-		itemCollectionConstructor = new ItemCollectionConstructor(dataDivider);
+		itemCollectionConstructor = ItemCollectionConstructor.withDataDivider(dataDivider);
 		itemCollection = itemCollectionConstructor
 				.constructUsingIdAndNameInDataAndCollectionItems(id, nameInData, collectionItems);
 	}
