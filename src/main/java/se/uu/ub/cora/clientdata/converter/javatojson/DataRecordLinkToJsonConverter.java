@@ -19,20 +19,20 @@
 
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
+import java.util.Map;
+
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
-import java.util.Map;
-
-public final class DataRecordLinkToJsonConverter extends DataGroupToJsonConverter {
+public class DataRecordLinkToJsonConverter extends DataGroupToJsonConverter {
 
 	private static final String LINKED_REPEAT_ID = "linkedRepeatId";
 	private ClientDataRecordLink recordLink;
 
-	private DataRecordLinkToJsonConverter(JsonBuilderFactory jsonFactory,
+	protected DataRecordLinkToJsonConverter(JsonBuilderFactory jsonFactory,
 			ClientDataRecordLink recordLink) {
 		super(jsonFactory, recordLink);
 		this.recordLink = recordLink;
@@ -45,12 +45,16 @@ public final class DataRecordLinkToJsonConverter extends DataGroupToJsonConverte
 
 	@Override
 	public JsonObjectBuilder toJsonObjectBuilder() {
-		removeEmptyLinkedRepeatId();
-		possiblyAddActionLinks();
+		handleLinkSpecifics();
 		return super.toJsonObjectBuilder();
 	}
 
-	private void removeEmptyLinkedRepeatId() {
+	protected void handleLinkSpecifics() {
+		removeEmptyLinkedRepeatId();
+		possiblyAddActionLinks();
+	}
+
+	protected void removeEmptyLinkedRepeatId() {
 		if (hasEmptyLinkedRepeatId()) {
 			clientDataGroup.removeFirstChildWithNameInData(LINKED_REPEAT_ID);
 		}
@@ -58,8 +62,8 @@ public final class DataRecordLinkToJsonConverter extends DataGroupToJsonConverte
 
 	private boolean hasEmptyLinkedRepeatId() {
 		return clientDataGroup.containsChildWithNameInData(LINKED_REPEAT_ID)
-				&& ((ClientDataAtomic) clientDataGroup.getFirstChildWithNameInData(LINKED_REPEAT_ID))
-						.getValue().equals("");
+				&& ((ClientDataAtomic) clientDataGroup
+						.getFirstChildWithNameInData(LINKED_REPEAT_ID)).getValue().equals("");
 	}
 
 	private void possiblyAddActionLinks() {

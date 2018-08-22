@@ -35,8 +35,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 		if (clientDataElement instanceof ClientDataGroup) {
 			if (clientDataElement instanceof ClientDataRecordLink) {
-				return DataRecordLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
-						(ClientDataRecordLink) clientDataElement);
+				return getDataRecordLinkToJsonConverter(factory, clientDataElement);
 			}
 			if (clientDataElement instanceof ClientDataResourceLink) {
 				return DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
@@ -51,5 +50,11 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 		}
 		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(factory,
 				(ClientDataAttribute) clientDataElement);
+	}
+
+	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,
+			ClientDataElement clientDataElement) {
+		return DataRecordLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
+				(ClientDataRecordLink) clientDataElement);
 	}
 }
