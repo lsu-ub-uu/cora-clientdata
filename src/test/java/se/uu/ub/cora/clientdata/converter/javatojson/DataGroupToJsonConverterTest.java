@@ -26,61 +26,63 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactoryImp;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataGroupToJsonConverterTest {
-	private DataToJsonConverterFactory dataToJsonConverterFactory;
 	private JsonBuilderFactory factory;
 	private ClientDataGroup clientDataGroup;
+	private DataGroupToJsonConverter dataGroupToJsonConverter;
+	private DataToJsonConverterFactorySpy dataToJsonFactory;
 
 	@BeforeMethod
 	public void beforeMethod() {
-		dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
 		factory = new OrgJsonBuilderFactoryAdapter();
 		clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
+		dataToJsonFactory = new DataToJsonConverterFactorySpy();
 	}
 
 	@Test
-	public void testToJson() {
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
-
+	public void testToJsonNoChildren() {
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 0);
 		assertEquals(json, "{\"name\":\"groupNameInData\"}");
+	}
+
+	private void initConverter() {
+		dataGroupToJsonConverter = DataGroupToJsonConverter
+				.usingJsonFactoryAndConverterFactoryForClientDataGroup(factory, clientDataGroup,
+						dataToJsonFactory);
 	}
 
 	@Test
 	public void testToJsonWithRepeatId() {
 		clientDataGroup.setRepeatId("4");
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
 
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 0);
 		assertEquals(json, "{\"repeatId\":\"4\",\"name\":\"groupNameInData\"}");
 	}
 
 	@Test
 	public void testToJsonWithEmptyRepeatId() {
 		clientDataGroup.setRepeatId("");
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
 
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 0);
 		assertEquals(json, "{\"name\":\"groupNameInData\"}");
 	}
 
 	@Test
 	public void testToJsonGroupWithAttribute() {
 		clientDataGroup.addAttributeByIdWithValue("attributeNameInData", "attributeValue");
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
 
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
-
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 0);
 		assertEquals(json,
 				"{\"name\":\"groupNameInData\",\"attributes\":{\"attributeNameInData\":\"attributeValue\"}}");
 	}
@@ -89,11 +91,10 @@ public class DataGroupToJsonConverterTest {
 	public void testToJsonGroupWithAttributes() {
 		clientDataGroup.addAttributeByIdWithValue("attributeNameInData", "attributeValue");
 		clientDataGroup.addAttributeByIdWithValue("attributeNameInData2", "attributeValue2");
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
 
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
-
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 0);
 		assertEquals(json,
 				"{\"name\":\"groupNameInData\",\"attributes\":{"
 						+ "\"attributeNameInData2\":\"attributeValue2\","
@@ -102,40 +103,33 @@ public class DataGroupToJsonConverterTest {
 
 	@Test
 	public void testToJsonGroupWithAtomicChild() {
-		clientDataGroup
-				.addChild(ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
+		clientDataGroup.addChild(
+				ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 1);
 
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
-
-		assertEquals(json,
-				"{\"children\":[{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"}],\"name\":\"groupNameInData\"}");
+		String jsonFromSpy = "{\"children\":[{\"name\":\"atomicNameInData\"}],\"name\":\"groupNameInData\"}";
+		assertEquals(json, jsonFromSpy);
 	}
 
 	@Test
 	public void testToJsonGroupWithAtomicChildAndGroupChildWithAtomicChild() {
-		clientDataGroup
-				.addChild(ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
+		clientDataGroup.addChild(
+				ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
 
 		ClientDataGroup clientDataGroup2 = ClientDataGroup.withNameInData("groupNameInData2");
 		clientDataGroup.addChild(clientDataGroup2);
 
 		clientDataGroup2.addChild(
 				ClientDataAtomic.withNameInDataAndValue("atomicNameInData2", "atomicValue2"));
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
 
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 2);
+		String jsonFomSpy = "{\"children\":[{\"name\":\"atomicNameInData\"},{\"name\":\"groupNameInData2\"}],\"name\":\"groupNameInData\"}";
 
-		String expectedJson = "{";
-		expectedJson += "\"children\":[";
-		expectedJson += "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"},";
-		expectedJson += "{\"children\":[{\"name\":\"atomicNameInData2\",\"value\":\"atomicValue2\"}]";
-		expectedJson += ",\"name\":\"groupNameInData2\"}]";
-		expectedJson += ",\"name\":\"groupNameInData\"}";
-
-		assertEquals(json, expectedJson);
+		assertEquals(json, jsonFomSpy);
 	}
 
 	@Test
@@ -153,8 +147,8 @@ public class DataGroupToJsonConverterTest {
 		recordInfo.addChild(ClientDataAtomic.withNameInDataAndValue("createdBy", "userId"));
 		clientDataGroup.addChild(recordInfo);
 
-		clientDataGroup
-				.addChild(ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
+		clientDataGroup.addChild(
+				ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
 
 		ClientDataGroup dataGroup2 = ClientDataGroup.withNameInData("groupNameInData2");
 		dataGroup2.addAttributeByIdWithValue("g2AttributeNameInData", "g2AttributeValue");
@@ -162,21 +156,12 @@ public class DataGroupToJsonConverterTest {
 
 		dataGroup2.addChild(
 				ClientDataAtomic.withNameInDataAndValue("atomicNameInData2", "atomicValue2"));
+		initConverter();
+		String json = dataGroupToJsonConverter.toJson();
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 3);
+		String jsonFomSpy = "{\"children\":[{\"name\":\"recordInfo\"},{\"name\":\"atomicNameInData\"},{\"name\":\"groupNameInData2\"}],\"name\":\"groupNameInData\",\"attributes\":{\"attributeNameInData2\":\"attributeValue2\",\"attributeNameInData\":\"attributeValue\"}}";
 
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataGroup);
-		String json = dataToJsonConverter.toJson();
-		String expectedJson = "{\"children\":[{\"children\":[{\"name\":\"id\",\"value\":\"place:0001\"},"
-				+ "{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"recordType\"},"
-				+ "{\"name\":\"linkedRecordId\",\"value\":\"place\"}],\"name\":\"type\"},"
-				+ "{\"name\":\"createdBy\",\"value\":\"userId\"}],\"name\":\"recordInfo\"},"
-				+ "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\"},{\"children\":["
-				+ "{\"name\":\"atomicNameInData2\",\"value\":\"atomicValue2\"}],"
-				+ "\"name\":\"groupNameInData2\",\"attributes\":{\"g2AttributeNameInData\":\"g2AttributeValue\"}}],"
-				+ "\"name\":\"groupNameInData\",\"attributes\":{\"attributeNameInData2\":\"attributeValue2\","
-				+ "\"attributeNameInData\":\"attributeValue\"}}";
-
-		assertEquals(json, expectedJson);
+		assertEquals(json, jsonFomSpy);
 	}
 
 }

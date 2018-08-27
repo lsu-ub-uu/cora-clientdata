@@ -34,7 +34,8 @@ import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 	private ClientDataRecordLink recordLink;
-	private DataRecordLinkToJsonWithoutActionLinkConverter converter;
+	private DataRecordLinkToJsonConverter converter;
+	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
 
 	@BeforeMethod
 	public void setUp() {
@@ -49,9 +50,10 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 		recordLink.addChild(linkedRecordId);
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-
+		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
 		converter = DataRecordLinkToJsonWithoutActionLinkConverter
-				.usingJsonFactoryForClientDataLink(jsonFactory, recordLink);
+				.usingJsonFactoryForClientDataLink(jsonFactory, recordLink,
+						dataToJsonConverterFactory);
 
 	}
 
@@ -59,45 +61,35 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 	public void testToJson() {
 		String jsonString = converter.toJson();
 
-		assertEquals(jsonString,
-				"{\"children\":[" + "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"},"
-						+ "{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}]"
-						+ ",\"name\":\"nameInData\"}");
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"}],\"name\":\"nameInData\"}";
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
 	public void testToJsonGroupWithAttribute() {
 		recordLink.addAttributeByIdWithValue("attributeNameInData", "attributeValue");
 		String jsonString = converter.toJson();
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"}],\"name\":\"nameInData\",\"attributes\":{\"attributeNameInData\":\"attributeValue\"}}";
 
-		assertEquals(jsonString,
-				"{\"children\":[" + "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"},"
-						+ "{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}]"
-						+ ",\"name\":\"nameInData\","
-						+ "\"attributes\":{\"attributeNameInData\":\"attributeValue\"}}");
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
 	public void testToJsonWithRepeatId() {
 		recordLink.setRepeatId("22");
 		String jsonString = converter.toJson();
+		String jsonFromSpy = "{\"repeatId\":\"22\",\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"}],\"name\":\"nameInData\"}";
 
-		assertEquals(jsonString,
-				"{\"repeatId\":\"22\",\"children\":["
-						+ "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"}"
-						+ ",{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}"
-						+ "],\"name\":\"nameInData\"}");
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
 	public void testToJsonWithEmptyRepeatId() {
 		recordLink.setRepeatId("");
 		String jsonString = converter.toJson();
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"}],\"name\":\"nameInData\"}";
 
-		assertEquals(jsonString,
-				"{\"children\":[" + "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"}"
-						+ ",{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}"
-						+ "],\"name\":\"nameInData\"}");
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
@@ -106,12 +98,9 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 				"linkedOne");
 		recordLink.addChild(linkedRepeatId);
 		String jsonString = converter.toJson();
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"},{\"name\":\"linkedRepeatId\"}],\"name\":\"nameInData\"}";
 
-		assertEquals(jsonString,
-				"{\"children\":[" + "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"}"
-						+ ",{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}"
-						+ ",{\"name\":\"linkedRepeatId\",\"value\":\"linkedOne\"}"
-						+ "],\"name\":\"nameInData\"}");
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
@@ -120,11 +109,9 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 				"");
 		recordLink.addChild(linkedRepeatId);
 		String jsonString = converter.toJson();
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"}],\"name\":\"nameInData\"}";
 
-		assertEquals(jsonString,
-				"{\"children\":[" + "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"}"
-						+ ",{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}"
-						+ "],\"name\":\"nameInData\"}");
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
@@ -132,11 +119,9 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 		ClientDataGroup linkedPathDataGroup = ClientDataGroup.withNameInData("linkedPath");
 		recordLink.addChild(linkedPathDataGroup);
 		String jsonString = converter.toJson();
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"},{\"name\":\"linkedPath\"}],\"name\":\"nameInData\"}";
 
-		assertEquals(jsonString,
-				"{\"children\":[" + "{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"}"
-						+ ",{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}"
-						+ ",{\"name\":\"linkedPath\"}" + "],\"name\":\"nameInData\"}");
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
@@ -144,8 +129,8 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 		recordLink.addActionLink("read", createReadActionLink());
 
 		String jsonString = converter.toJson();
-		assertEquals(jsonString,
-				"{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"aRecordType\"},{\"name\":\"linkedRecordId\",\"value\":\"aRecordId\"}],\"name\":\"nameInData\"}");
+		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"}],\"name\":\"nameInData\"}";
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	private ActionLink createReadActionLink() {

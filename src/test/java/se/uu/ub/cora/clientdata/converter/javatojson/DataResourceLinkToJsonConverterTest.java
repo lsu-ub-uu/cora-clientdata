@@ -28,14 +28,13 @@ import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataResourceLinkToJsonConverter;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataResourceLinkToJsonConverterTest {
 	private ClientDataResourceLink resourceLink;
 	private DataResourceLinkToJsonConverter converter;
-	private String childrenJsonString;
+	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
 
 	@BeforeMethod
 	public void setUp() {
@@ -43,40 +42,36 @@ public class DataResourceLinkToJsonConverterTest {
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("streamId", "aStreamId"));
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("filename", "aFilename"));
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("filesize", "12345"));
-		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("mimeType", "application/png"));
+		resourceLink
+				.addChild(ClientDataAtomic.withNameInDataAndValue("mimeType", "application/png"));
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-
+		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
 		converter = DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(jsonFactory,
-				resourceLink);
-
-		childrenJsonString = "\"children\":[" + "{\"name\":\"streamId\",\"value\":\"aStreamId\"}"
-				+ ",{\"name\":\"filename\",\"value\":\"aFilename\"}"
-				+ ",{\"name\":\"filesize\",\"value\":\"12345\"}"
-				+ ",{\"name\":\"mimeType\",\"value\":\"application/png\"}]";
+				resourceLink, dataToJsonConverterFactory);
 	}
 
 	@Test
 	public void testToJson() {
 		String jsonString = converter.toJson();
-		assertEquals(jsonString, "{" + childrenJsonString + ",\"name\":\"nameInData\"}");
+		String jsonFromSpy = "{\"children\":[{\"name\":\"streamId\"},{\"name\":\"filename\"},{\"name\":\"filesize\"},{\"name\":\"mimeType\"}],\"name\":\"nameInData\"}";
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
 	public void testToJsonWithRepeatId() {
 		resourceLink.setRepeatId("22");
 		String jsonString = converter.toJson();
-
-		assertEquals(jsonString,
-				"{\"repeatId\":\"22\"," + childrenJsonString + ",\"name\":\"nameInData\"}");
+		String jsonFromSpy = "{\"repeatId\":\"22\",\"children\":[{\"name\":\"streamId\"},{\"name\":\"filename\"},{\"name\":\"filesize\"},{\"name\":\"mimeType\"}],\"name\":\"nameInData\"}";
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
 	public void testToJsonWithEmptyRepeatId() {
 		resourceLink.setRepeatId("");
 		String jsonString = converter.toJson();
-
-		assertEquals(jsonString, "{" + childrenJsonString + ",\"name\":\"nameInData\"}");
+		String jsonFromSpy = "{\"children\":[{\"name\":\"streamId\"},{\"name\":\"filename\"},{\"name\":\"filesize\"},{\"name\":\"mimeType\"}],\"name\":\"nameInData\"}";
+		assertEquals(jsonString, jsonFromSpy);
 	}
 
 	@Test
@@ -84,17 +79,16 @@ public class DataResourceLinkToJsonConverterTest {
 		resourceLink.addActionLink("read", createReadActionLink());
 
 		String jsonString = converter.toJson();
-		assertEquals(jsonString,
-				"{" + childrenJsonString
-						+ ",\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\""
-						+ ",\"url\":\"http://localhost:8080/theclient/client/record/image/image:0001\""
-						+ ",\"accept\":\"application/png\"}}" + ",\"name\":\"nameInData\"}");
+		String jsonFromSpy = "{\"children\":[{\"name\":\"streamId\"},{\"name\":\"filename\"},{\"name\":\"filesize\"},{\"name\":\"mimeType\"}],\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"url\":\"http://localhost:8080/theclient/client/record/image/image:0001\",\"accept\":\"application/png\"}},\"name\":\"nameInData\"}";
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 4);
+		assertEquals(jsonString, jsonFromSpy);
+		assertEquals(converter.actionLinkConverter.dataToJsonConverterFactory,
+				dataToJsonConverterFactory);
 	}
 
 	private ActionLink createReadActionLink() {
 		ActionLink actionLink = ActionLink.withAction(Action.READ);
 		actionLink.setAccept("application/png");
-		// actionLink.setContentType("application/metadata_record+json");
 		actionLink.setRequestMethod("GET");
 		actionLink.setURL("http://localhost:8080/theclient/client/record/image/image:0001");
 		return actionLink;

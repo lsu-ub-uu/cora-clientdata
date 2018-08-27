@@ -32,17 +32,19 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	@Override
 	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
 			ClientDataElement clientDataElement) {
+		DataToJsonConverterFactoryImp factoryConverterForGroup = new DataToJsonConverterFactoryImp();
 
 		if (clientDataElement instanceof ClientDataGroup) {
 			if (clientDataElement instanceof ClientDataRecordLink) {
-				return getDataRecordLinkToJsonConverter(factory, clientDataElement);
+				return getDataRecordLinkToJsonConverter(factory, clientDataElement,
+						factoryConverterForGroup);
 			}
 			if (clientDataElement instanceof ClientDataResourceLink) {
 				return DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
-						(ClientDataResourceLink) clientDataElement);
+						(ClientDataResourceLink) clientDataElement, factoryConverterForGroup);
 			}
-			return DataGroupToJsonConverter.usingJsonFactoryForClientDataGroup(factory,
-					(ClientDataGroup) clientDataElement);
+			return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
+					factory, (ClientDataGroup) clientDataElement, factoryConverterForGroup);
 		}
 		if (clientDataElement instanceof ClientDataAtomic) {
 			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(factory,
@@ -53,8 +55,9 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement) {
+			ClientDataElement clientDataElement,
+			DataToJsonConverterFactory factoryConverterForGroup) {
 		return DataRecordLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
-				(ClientDataRecordLink) clientDataElement);
+				(ClientDataRecordLink) clientDataElement, factoryConverterForGroup);
 	}
 }

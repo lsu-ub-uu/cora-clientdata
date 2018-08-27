@@ -30,17 +30,21 @@ import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 public final class DataListToJsonConverter {
 
 	public static DataListToJsonConverter usingJsonFactoryForClientDataList(
-			JsonBuilderFactory jsonFactory, ClientDataList clientRecordList) {
-		return new DataListToJsonConverter(jsonFactory, clientRecordList);
+			JsonBuilderFactory jsonFactory, ClientDataList clientRecordList,
+			DataToJsonConverterFactorySpy dataToJsonFactory) {
+		return new DataListToJsonConverter(jsonFactory, clientRecordList, dataToJsonFactory);
 	}
 
 	private JsonBuilderFactory jsonBuilderFactory;
 	private ClientDataList clientRecordList;
 	private JsonObjectBuilder recordListJsonObjectBuilder;
+	private DataToJsonConverterFactory dataToJsonFactory;
 
-	private DataListToJsonConverter(JsonBuilderFactory jsonFactory, ClientDataList clientRecordList) {
+	private DataListToJsonConverter(JsonBuilderFactory jsonFactory, ClientDataList clientRecordList,
+			DataToJsonConverterFactorySpy dataToJsonFactory) {
 		this.jsonBuilderFactory = jsonFactory;
 		this.clientRecordList = clientRecordList;
+		this.dataToJsonFactory = dataToJsonFactory;
 		recordListJsonObjectBuilder = jsonFactory.createObjectBuilder();
 	}
 
@@ -70,7 +74,8 @@ public final class DataListToJsonConverter {
 		return rootWrappingJsonObjectBuilder;
 	}
 
-	private void convertClientToJsonBuilder(JsonArrayBuilder recordsJsonBuilder, ClientData clientData) {
+	private void convertClientToJsonBuilder(JsonArrayBuilder recordsJsonBuilder,
+			ClientData clientData) {
 		if (clientData instanceof ClientDataRecord) {
 			convertClientRecordToJsonBuilder(recordsJsonBuilder, clientData);
 		} else {
@@ -81,14 +86,16 @@ public final class DataListToJsonConverter {
 	private void convertClientRecordToJsonBuilder(JsonArrayBuilder recordsJsonBuilder,
 			ClientData clientData) {
 		DataRecordToJsonConverter converter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonBuilderFactory, (ClientDataRecord) clientData);
+				.usingJsonFactoryForClientDataRecord(jsonBuilderFactory,
+						(ClientDataRecord) clientData);
 		recordsJsonBuilder.addJsonObjectBuilder(converter.toJsonObjectBuilder());
 	}
 
 	private void convertClientGroupToJsonBuilder(JsonArrayBuilder recordsJsonBuilder,
 			ClientData clientData) {
-		DataGroupToJsonConverter converter = DataGroupToJsonConverter
-				.usingJsonFactoryForClientDataGroup(jsonBuilderFactory, (ClientDataGroup) clientData);
+		DataToJsonConverter converter = dataToJsonFactory
+				.createForClientDataElement(jsonBuilderFactory, (ClientDataGroup) clientData);
+
 		recordsJsonBuilder.addJsonObjectBuilder(converter.toJsonObjectBuilder());
 	}
 

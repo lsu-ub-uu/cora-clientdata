@@ -26,11 +26,11 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataList;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataListToJsonConverter;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataListToJsonConverterTest {
+
 	@Test
 	public void testToJson() {
 		ClientDataList clientDataList = ClientDataList.withContainDataOfType("place");
@@ -42,7 +42,10 @@ public class DataListToJsonConverterTest {
 		clientDataList.setToNo("1");
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataListToJsonConverter recordListToJsonConverter = DataListToJsonConverter.usingJsonFactoryForClientDataList(jsonFactory, clientDataList);
+		DataToJsonConverterFactorySpy dataToJsonFactory = new DataToJsonConverterFactorySpy();
+		;
+		DataListToJsonConverter recordListToJsonConverter = DataListToJsonConverter
+				.usingJsonFactoryForClientDataList(jsonFactory, clientDataList, dataToJsonFactory);
 		String jsonString = recordListToJsonConverter.toJson();
 		assertEquals(jsonString,
 				"{\"dataList\":{\"fromNo\":\"0\",\""
@@ -60,7 +63,9 @@ public class DataListToJsonConverterTest {
 		clientDataList.setToNo("1");
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataListToJsonConverter recordListToJsonConverter = DataListToJsonConverter.usingJsonFactoryForClientDataList(jsonFactory, clientDataList);
+		DataToJsonConverterFactorySpy dataToJsonFactory = new DataToJsonConverterFactorySpy();
+		DataListToJsonConverter recordListToJsonConverter = DataListToJsonConverter
+				.usingJsonFactoryForClientDataList(jsonFactory, clientDataList, dataToJsonFactory);
 		String jsonString = recordListToJsonConverter.toJson();
 		assertEquals(jsonString,
 				"{\"dataList\":{\"fromNo\":\"0\",\"" + "data\":[{\"name\":\"groupId\"}],"

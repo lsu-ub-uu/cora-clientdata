@@ -33,6 +33,10 @@ import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataRecordToJsonConverterTest {
+
+	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
+	private DataRecordToJsonConverter dataRecordToJsonConverter;
+
 	@Test
 	public void testToJson() {
 		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
@@ -56,8 +60,10 @@ public class DataRecordToJsonConverterTest {
 
 	private String getRecordAsJsonString(ClientDataRecord clientDataRecord) {
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataRecordToJsonConverter dataRecordToJsonConverter = DataRecordToJsonConverter
-				.usingJsonFactoryForClientDataRecord(jsonFactory, clientDataRecord);
+		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
+
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
 		return dataRecordToJsonConverter.toJson();
 	}
 
@@ -86,6 +92,8 @@ public class DataRecordToJsonConverterTest {
 				+ "\"contentType\":\"application/metadata_record+json\","
 				+ "\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\","
 				+ "\"accept\":\"application/metadata_record+json\"}" + "}}}");
+		assertEquals(dataRecordToJsonConverter.actionLinkConverter.dataToJsonConverterFactory,
+				dataToJsonConverterFactory);
 	}
 
 	private ActionLink createReadActionLink() {

@@ -19,23 +19,26 @@
 
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
-
-import java.util.Map;
-import java.util.Map.Entry;
 
 public class ActionLinksToJsonConverter extends DataToJsonConverter {
 
 	private Map<String, ActionLink> actionLinks;
 	private JsonBuilderFactory jsonBuilderFactory;
 	private JsonObjectBuilder actionLinksObject;
+	DataToJsonConverterFactory dataToJsonConverterFactory;
 
 	public ActionLinksToJsonConverter(JsonBuilderFactory jsonBuilderFactory,
-			Map<String, ActionLink> actionLinks) {
+			Map<String, ActionLink> actionLinks,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
 		this.jsonBuilderFactory = jsonBuilderFactory;
 		this.actionLinks = actionLinks;
+		this.dataToJsonConverterFactory = dataToJsonConverterFactory;
 		actionLinksObject = jsonBuilderFactory.createObjectBuilder();
 	}
 
@@ -62,11 +65,15 @@ public class ActionLinksToJsonConverter extends DataToJsonConverter {
 		}
 	}
 
-	private void possiblyAddBodyToBuilder(ActionLink actionLink, JsonObjectBuilder internalLinkBuilder) {
-		if(actionLinkHasBody(actionLink)) {
-            DataGroupToJsonConverter dataGroupToJsonConverter = DataGroupToJsonConverter.usingJsonFactoryForClientDataGroup(jsonBuilderFactory, actionLink.getBody());
-            internalLinkBuilder.addKeyJsonObjectBuilder("body", dataGroupToJsonConverter.toJsonObjectBuilder());
-        }
+	private void possiblyAddBodyToBuilder(ActionLink actionLink,
+			JsonObjectBuilder internalLinkBuilder) {
+		if (actionLinkHasBody(actionLink)) {
+			DataGroupToJsonConverter dataGroupToJsonConverter = DataGroupToJsonConverter
+					.usingJsonFactoryAndConverterFactoryForClientDataGroup(jsonBuilderFactory,
+							actionLink.getBody(), dataToJsonConverterFactory);
+			internalLinkBuilder.addKeyJsonObjectBuilder("body",
+					dataGroupToJsonConverter.toJsonObjectBuilder());
+		}
 	}
 
 	private boolean actionLinkHasBody(ActionLink actionLink) {

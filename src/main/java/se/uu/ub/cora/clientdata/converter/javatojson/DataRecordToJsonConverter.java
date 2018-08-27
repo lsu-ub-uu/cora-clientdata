@@ -31,17 +31,23 @@ public final class DataRecordToJsonConverter {
 	private JsonBuilderFactory jsonBuilderFactory;
 	private ClientDataRecord clientDataRecord;
 	private JsonObjectBuilder recordJsonObjectBuilder;
+	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
+	ActionLinksToJsonConverter actionLinkConverter;
 
 	private DataRecordToJsonConverter(JsonBuilderFactory jsonFactory,
-			ClientDataRecord clientDataRecord) {
+			ClientDataRecord clientDataRecord,
+			DataToJsonConverterFactorySpy dataToJsonConverterFactory) {
 		this.jsonBuilderFactory = jsonFactory;
 		this.clientDataRecord = clientDataRecord;
+		this.dataToJsonConverterFactory = dataToJsonConverterFactory;
 		recordJsonObjectBuilder = jsonFactory.createObjectBuilder();
 	}
 
 	public static DataRecordToJsonConverter usingJsonFactoryForClientDataRecord(
-			JsonBuilderFactory jsonFactory, ClientDataRecord clientDataRecord) {
-		return new DataRecordToJsonConverter(jsonFactory, clientDataRecord);
+			JsonBuilderFactory jsonFactory, ClientDataRecord clientDataRecord,
+			DataToJsonConverterFactorySpy dataToJsonConverterFactory) {
+		return new DataRecordToJsonConverter(jsonFactory, clientDataRecord,
+				dataToJsonConverterFactory);
 	}
 
 	public String toJson() {
@@ -55,8 +61,8 @@ public final class DataRecordToJsonConverter {
 	}
 
 	private void convertMainClientDataGroup() {
-		DataToJsonConverterFactory dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+		DataToJsonConverterFactory dataToJsonConverterFactory2 = new DataToJsonConverterFactoryImp();
+		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory2
 				.createForClientDataElement(jsonBuilderFactory,
 						clientDataRecord.getClientDataGroup());
 		JsonObjectBuilder jsonDataGroupObjectBuilder = dataToJsonConverter.toJsonObjectBuilder();
@@ -77,8 +83,8 @@ public final class DataRecordToJsonConverter {
 	private void addActionLinksToRecord() {
 		Map<String, ActionLink> actionLinks = clientDataRecord.getActionLinks();
 
-		ActionLinksToJsonConverter actionLinkConverter = new ActionLinksToJsonConverter(
-				jsonBuilderFactory, actionLinks);
+		actionLinkConverter = new ActionLinksToJsonConverter(jsonBuilderFactory, actionLinks,
+				dataToJsonConverterFactory);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		recordJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);
 	}

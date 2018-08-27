@@ -29,7 +29,6 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
-import se.uu.ub.cora.clientdata.converter.javatojson.ActionLinksToJsonConverter;
 import se.uu.ub.cora.clientdata.testdata.ClientDataCreator;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
@@ -42,14 +41,14 @@ public class ActionLinksToJsonConverterTest {
 		actionLinks.put("read", actionLink);
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-
+		DataToJsonConverterFactory dataToJsonFactory = new DataToJsonConverterFactorySpy();
 		ActionLinksToJsonConverter converter = new ActionLinksToJsonConverter(jsonFactory,
-				actionLinks);
-		assertEquals(converter.toJson(),
-				"{" + "\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\","
-						+ "\"contentType\":\"application/metadata_record+json\","
-						+ "\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\","
-						+ "\"accept\":\"application/metadata_record+json\"}" + "}");
+				actionLinks, dataToJsonFactory);
+		assertEquals(converter.toJson(), "{"
+				+ "\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\","
+				+ "\"contentType\":\"application/metadata_record+json\","
+				+ "\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\","
+				+ "\"accept\":\"application/metadata_record+json\"}" + "}");
 	}
 
 	private ActionLink createReadActionLink() {
@@ -70,10 +69,12 @@ public class ActionLinksToJsonConverterTest {
 		actionLink.setBody(workOrder);
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
+		DataToJsonConverterFactorySpy dataToJsonFactory = new DataToJsonConverterFactorySpy();
 
 		ActionLinksToJsonConverter converter = new ActionLinksToJsonConverter(jsonFactory,
-				actionLinks);
-		assertEquals(converter.toJson(),
-				"{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"body\":{\"children\":[{\"children\":[{\"name\":\"linkedRecordType\",\"value\":\"recordType\"},{\"name\":\"linkedRecordId\",\"value\":\"person\"}],\"name\":\"recordType\"},{\"name\":\"recordId\",\"value\":\"personOne\"},{\"name\":\"type\",\"value\":\"index\"}],\"name\":\"workOrder\"},\"contentType\":\"application/metadata_record+json\",\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\",\"accept\":\"application/metadata_record+json\"}}");
+				actionLinks, dataToJsonFactory);
+		String jsonFromSpy = "{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"body\":{\"children\":[{\"name\":\"recordType\"},{\"name\":\"recordId\"},{\"name\":\"type\"}],\"name\":\"workOrder\"},\"contentType\":\"application/metadata_record+json\",\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\",\"accept\":\"application/metadata_record+json\"}}";
+		assertEquals(converter.toJson(), jsonFromSpy);
+		assertEquals(dataToJsonFactory.calledNumOfTimes, 3);
 	}
 }

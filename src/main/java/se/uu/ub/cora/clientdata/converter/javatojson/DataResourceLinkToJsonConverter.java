@@ -29,16 +29,20 @@ import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 public final class DataResourceLinkToJsonConverter extends DataGroupToJsonConverter {
 
 	private ClientDataResourceLink resourceLink;
+	ActionLinksToJsonConverter actionLinkConverter;
 
 	private DataResourceLinkToJsonConverter(JsonBuilderFactory jsonFactory,
-			ClientDataResourceLink resourceLink) {
-		super(jsonFactory, resourceLink);
+			ClientDataResourceLink resourceLink,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
+		super(jsonFactory, resourceLink, dataToJsonConverterFactory);
 		this.resourceLink = resourceLink;
 	}
 
 	public static DataResourceLinkToJsonConverter usingJsonFactoryForClientDataLink(
-			JsonBuilderFactory jsonFactory, ClientDataResourceLink resourceLink) {
-		return new DataResourceLinkToJsonConverter(jsonFactory, resourceLink);
+			JsonBuilderFactory jsonFactory, ClientDataResourceLink resourceLink,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
+		return new DataResourceLinkToJsonConverter(jsonFactory, resourceLink,
+				dataToJsonConverterFactory);
 	}
 
 	@Override
@@ -59,8 +63,8 @@ public final class DataResourceLinkToJsonConverter extends DataGroupToJsonConver
 
 	private void addActionLinksToRecordLink() {
 		Map<String, ActionLink> actionLinks = resourceLink.getActionLinks();
-		ActionLinksToJsonConverter actionLinkConverter = new ActionLinksToJsonConverter(
-				jsonBuilderFactory, actionLinks);
+		actionLinkConverter = new ActionLinksToJsonConverter(jsonBuilderFactory, actionLinks,
+				dataToJsonConverterFactory);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		dataGroupJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);
 	}

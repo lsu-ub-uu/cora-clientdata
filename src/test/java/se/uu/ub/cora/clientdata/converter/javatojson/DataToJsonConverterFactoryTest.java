@@ -30,14 +30,6 @@ import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataAtomicToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataAttributeToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataGroupToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataRecordLinkToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataResourceLinkToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactoryImp;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
@@ -59,12 +51,15 @@ public class DataToJsonConverterFactoryTest {
 				.createForClientDataElement(factory, clientDataElement);
 
 		assertTrue(dataToJsonConverter instanceof DataGroupToJsonConverter);
+		DataGroupToJsonConverter dataGroupConverter = (DataGroupToJsonConverter) dataToJsonConverter;
+		assertTrue(
+				dataGroupConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
 	}
 
 	@Test
 	public void testJsonCreatorFactoryDataAtomic() {
-		ClientDataElement clientDataElement = ClientDataAtomic.withNameInDataAndValue("atomicNameInData",
-				"atomicValue");
+		ClientDataElement clientDataElement = ClientDataAtomic
+				.withNameInDataAndValue("atomicNameInData", "atomicValue");
 
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(factory, clientDataElement);
@@ -85,9 +80,10 @@ public class DataToJsonConverterFactoryTest {
 
 	@Test
 	public void testJsonCreateFactoryDataRecordLink() {
-		ClientDataRecordLink recordLink = ClientDataRecordLink.withNameInData("recordLinkNameInData");
-		ClientDataAtomic linkedRecordType = ClientDataAtomic.withNameInDataAndValue("linkedRecordType",
-				"someRecordType");
+		ClientDataRecordLink recordLink = ClientDataRecordLink
+				.withNameInData("recordLinkNameInData");
+		ClientDataAtomic linkedRecordType = ClientDataAtomic
+				.withNameInDataAndValue("linkedRecordType", "someRecordType");
 		recordLink.addChild(linkedRecordType);
 
 		ClientDataAtomic linkedRecordId = ClientDataAtomic.withNameInDataAndValue("linkedRecordId",
@@ -97,6 +93,9 @@ public class DataToJsonConverterFactoryTest {
 				.createForClientDataElement(factory, recordLink);
 
 		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonConverter);
+		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
+		assertTrue(
+				dataLinkConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
 
 	}
 
@@ -108,7 +107,8 @@ public class DataToJsonConverterFactoryTest {
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("streamId", "someStreamId"));
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("filename", "adele1.png"));
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("filesize", "1234567"));
-		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("mimeType", "application/png"));
+		resourceLink
+				.addChild(ClientDataAtomic.withNameInDataAndValue("mimeType", "application/png"));
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(factory, resourceLink);
 

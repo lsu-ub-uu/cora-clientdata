@@ -26,13 +26,16 @@ public final class DataRecordLinkToJsonWithoutActionLinkConverter
 		extends DataRecordLinkToJsonConverter {
 
 	private DataRecordLinkToJsonWithoutActionLinkConverter(JsonBuilderFactory jsonFactory,
-			ClientDataRecordLink recordLink) {
-		super(jsonFactory, recordLink);
+			ClientDataRecordLink recordLink,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
+		super(jsonFactory, recordLink, dataToJsonConverterFactory);
 	}
 
 	public static DataRecordLinkToJsonWithoutActionLinkConverter usingJsonFactoryForClientDataLink(
-			JsonBuilderFactory jsonFactory, ClientDataRecordLink dataLink) {
-		return new DataRecordLinkToJsonWithoutActionLinkConverter(jsonFactory, dataLink);
+			JsonBuilderFactory jsonFactory, ClientDataRecordLink dataLink,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
+		return new DataRecordLinkToJsonWithoutActionLinkConverter(jsonFactory, dataLink,
+				dataToJsonConverterFactory);
 	}
 
 	@Override

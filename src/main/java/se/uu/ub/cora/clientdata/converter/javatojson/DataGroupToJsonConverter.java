@@ -32,16 +32,20 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 	protected ClientDataGroup clientDataGroup;
 	protected JsonObjectBuilder dataGroupJsonObjectBuilder;
 	protected JsonBuilderFactory jsonBuilderFactory;
+	DataToJsonConverterFactory dataToJsonConverterFactory;
 
-	protected DataGroupToJsonConverter(JsonBuilderFactory factory, ClientDataGroup clientDataGroup) {
+	protected DataGroupToJsonConverter(JsonBuilderFactory factory, ClientDataGroup clientDataGroup,
+			DataToJsonConverterFactory dataToJsonFactory) {
 		this.jsonBuilderFactory = factory;
 		this.clientDataGroup = clientDataGroup;
+		this.dataToJsonConverterFactory = dataToJsonFactory;
 		dataGroupJsonObjectBuilder = factory.createObjectBuilder();
 	}
 
-	public static DataGroupToJsonConverter usingJsonFactoryForClientDataGroup(
-			JsonBuilderFactory factory, ClientDataGroup clientDataGroup) {
-		return new DataGroupToJsonConverter(factory, clientDataGroup);
+	public static DataGroupToJsonConverter usingJsonFactoryAndConverterFactoryForClientDataGroup(
+			JsonBuilderFactory factory, ClientDataGroup clientDataGroup,
+			DataToJsonConverterFactory dataToJsonFactory) {
+		return new DataGroupToJsonConverter(factory, clientDataGroup, dataToJsonFactory);
 	}
 
 	@Override
@@ -84,7 +88,6 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 	}
 
 	private void addChildrenToGroup() {
-		DataToJsonConverterFactory dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
 		JsonArrayBuilder childrenArray = jsonBuilderFactory.createArrayBuilder();
 		for (ClientDataElement clientDataElement : clientDataGroup.getChildren()) {
 			childrenArray.addJsonObjectBuilder(dataToJsonConverterFactory

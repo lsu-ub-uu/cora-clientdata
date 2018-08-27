@@ -31,16 +31,19 @@ public class DataRecordLinkToJsonConverter extends DataGroupToJsonConverter {
 
 	private static final String LINKED_REPEAT_ID = "linkedRepeatId";
 	private ClientDataRecordLink recordLink;
+	ActionLinksToJsonConverter actionLinkConverter;
 
 	protected DataRecordLinkToJsonConverter(JsonBuilderFactory jsonFactory,
-			ClientDataRecordLink recordLink) {
-		super(jsonFactory, recordLink);
+			ClientDataRecordLink recordLink,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
+		super(jsonFactory, recordLink, dataToJsonConverterFactory);
 		this.recordLink = recordLink;
 	}
 
 	public static DataRecordLinkToJsonConverter usingJsonFactoryForClientDataLink(
-			JsonBuilderFactory jsonFactory, ClientDataRecordLink dataLink) {
-		return new DataRecordLinkToJsonConverter(jsonFactory, dataLink);
+			JsonBuilderFactory jsonFactory, ClientDataRecordLink dataLink,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
+		return new DataRecordLinkToJsonConverter(jsonFactory, dataLink, dataToJsonConverterFactory);
 	}
 
 	@Override
@@ -78,8 +81,8 @@ public class DataRecordLinkToJsonConverter extends DataGroupToJsonConverter {
 
 	private void addActionLinksToRecordLink() {
 		Map<String, ActionLink> actionLinks = recordLink.getActionLinks();
-		ActionLinksToJsonConverter actionLinkConverter = new ActionLinksToJsonConverter(
-				jsonBuilderFactory, actionLinks);
+		actionLinkConverter = new ActionLinksToJsonConverter(jsonBuilderFactory, actionLinks,
+				dataToJsonConverterFactory);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		dataGroupJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);
 	}
