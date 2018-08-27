@@ -29,12 +29,6 @@ import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
 public final class DataListToJsonConverter {
 
-	public static DataListToJsonConverter usingJsonFactoryForClientDataList(
-			JsonBuilderFactory jsonFactory, ClientDataList clientRecordList,
-			DataToJsonConverterFactorySpy dataToJsonFactory) {
-		return new DataListToJsonConverter(jsonFactory, clientRecordList, dataToJsonFactory);
-	}
-
 	private JsonBuilderFactory jsonBuilderFactory;
 	private ClientDataList clientRecordList;
 	private JsonObjectBuilder recordListJsonObjectBuilder;
@@ -46,6 +40,12 @@ public final class DataListToJsonConverter {
 		this.clientRecordList = clientRecordList;
 		this.dataToJsonFactory = dataToJsonFactory;
 		recordListJsonObjectBuilder = jsonFactory.createObjectBuilder();
+	}
+
+	public static DataListToJsonConverter usingJsonFactoryForClientDataList(
+			JsonBuilderFactory jsonFactory, ClientDataList clientRecordList,
+			DataToJsonConverterFactorySpy dataToJsonFactory) {
+		return new DataListToJsonConverter(jsonFactory, clientRecordList, dataToJsonFactory);
 	}
 
 	public String toJson() {
@@ -87,7 +87,7 @@ public final class DataListToJsonConverter {
 			ClientData clientData) {
 		DataRecordToJsonConverter converter = DataRecordToJsonConverter
 				.usingJsonFactoryForClientDataRecord(jsonBuilderFactory,
-						(ClientDataRecord) clientData);
+						(ClientDataRecord) clientData, dataToJsonFactory);
 		recordsJsonBuilder.addJsonObjectBuilder(converter.toJsonObjectBuilder());
 	}
 

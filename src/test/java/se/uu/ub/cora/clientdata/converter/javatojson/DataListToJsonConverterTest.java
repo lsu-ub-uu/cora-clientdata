@@ -42,15 +42,17 @@ public class DataListToJsonConverterTest {
 		clientDataList.setToNo("1");
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataToJsonConverterFactorySpy dataToJsonFactory = new DataToJsonConverterFactorySpy();
+		DataToJsonConverterFactorySpy dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
 		;
 		DataListToJsonConverter recordListToJsonConverter = DataListToJsonConverter
-				.usingJsonFactoryForClientDataList(jsonFactory, clientDataList, dataToJsonFactory);
+				.usingJsonFactoryForClientDataList(jsonFactory, clientDataList,
+						dataToJsonConverterFactory);
 		String jsonString = recordListToJsonConverter.toJson();
 		assertEquals(jsonString,
 				"{\"dataList\":{\"fromNo\":\"0\",\""
 						+ "data\":[{\"record\":{\"data\":{\"name\":\"groupId\"}}}],"
 						+ "\"totalNo\":\"1\",\"containDataOfType\":\"place\",\"toNo\":\"1\"}}");
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 
 	@Test
@@ -63,12 +65,14 @@ public class DataListToJsonConverterTest {
 		clientDataList.setToNo("1");
 
 		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		DataToJsonConverterFactorySpy dataToJsonFactory = new DataToJsonConverterFactorySpy();
+		DataToJsonConverterFactorySpy dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
 		DataListToJsonConverter recordListToJsonConverter = DataListToJsonConverter
-				.usingJsonFactoryForClientDataList(jsonFactory, clientDataList, dataToJsonFactory);
+				.usingJsonFactoryForClientDataList(jsonFactory, clientDataList,
+						dataToJsonConverterFactory);
 		String jsonString = recordListToJsonConverter.toJson();
 		assertEquals(jsonString,
 				"{\"dataList\":{\"fromNo\":\"0\",\"" + "data\":[{\"name\":\"groupId\"}],"
 						+ "\"totalNo\":\"1\",\"containDataOfType\":\"place\",\"toNo\":\"1\"}}");
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 }

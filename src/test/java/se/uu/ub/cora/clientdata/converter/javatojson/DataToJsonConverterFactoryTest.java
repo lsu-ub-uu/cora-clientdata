@@ -34,7 +34,7 @@ import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataToJsonConverterFactoryTest {
-	private DataToJsonConverterFactory dataToJsonConverterFactory;
+	private DataToJsonConverterFactoryImp dataToJsonConverterFactory;
 	private JsonBuilderFactory factory;
 
 	@BeforeMethod
@@ -113,6 +113,15 @@ public class DataToJsonConverterFactoryTest {
 				.createForClientDataElement(factory, resourceLink);
 
 		assertTrue(dataToJsonConverter instanceof DataResourceLinkToJsonConverter);
+
+	}
+
+	@Test
+	public void testGetConverterFactory() {
+		DataToJsonConverterFactory converterFactory = dataToJsonConverterFactory
+				.getConverterFactory();
+
+		assertTrue(converterFactory instanceof DataToJsonConverterFactoryImp);
 
 	}
 }

@@ -44,6 +44,7 @@ public class DataRecordToJsonConverterTest {
 
 		String jsonString = getRecordAsJsonString(clientDataRecord);
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 
 	@Test
@@ -56,6 +57,7 @@ public class DataRecordToJsonConverterTest {
 		String jsonString = getRecordAsJsonString(clientDataRecord);
 
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 
 	private String getRecordAsJsonString(ClientDataRecord clientDataRecord) {
@@ -77,6 +79,7 @@ public class DataRecordToJsonConverterTest {
 		String jsonString = getRecordAsJsonString(clientDataRecord);
 
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 
 	@Test

@@ -32,19 +32,10 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	@Override
 	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
 			ClientDataElement clientDataElement) {
-		DataToJsonConverterFactoryImp factoryConverterForGroup = new DataToJsonConverterFactoryImp();
+		DataToJsonConverterFactory converterFactory = getConverterFactory();
 
 		if (clientDataElement instanceof ClientDataGroup) {
-			if (clientDataElement instanceof ClientDataRecordLink) {
-				return getDataRecordLinkToJsonConverter(factory, clientDataElement,
-						factoryConverterForGroup);
-			}
-			if (clientDataElement instanceof ClientDataResourceLink) {
-				return DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
-						(ClientDataResourceLink) clientDataElement, factoryConverterForGroup);
-			}
-			return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
-					factory, (ClientDataGroup) clientDataElement, factoryConverterForGroup);
+			return handleClientDataGroup(factory, clientDataElement, converterFactory);
 		}
 		if (clientDataElement instanceof ClientDataAtomic) {
 			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(factory,
@@ -52,6 +43,24 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 		}
 		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(factory,
 				(ClientDataAttribute) clientDataElement);
+	}
+
+	private DataToJsonConverter handleClientDataGroup(JsonBuilderFactory factory,
+			ClientDataElement clientDataElement, DataToJsonConverterFactory converterFactory) {
+		if (clientDataElement instanceof ClientDataRecordLink) {
+			return getDataRecordLinkToJsonConverter(factory, clientDataElement,
+					converterFactory);
+		}
+		if (clientDataElement instanceof ClientDataResourceLink) {
+			return DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
+					(ClientDataResourceLink) clientDataElement, converterFactory);
+		}
+		return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
+				factory, (ClientDataGroup) clientDataElement, converterFactory);
+	}
+
+	protected DataToJsonConverterFactory getConverterFactory() {
+		return new DataToJsonConverterFactoryImp();
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,

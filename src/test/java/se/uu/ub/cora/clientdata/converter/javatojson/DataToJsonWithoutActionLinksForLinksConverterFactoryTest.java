@@ -19,6 +19,7 @@
 
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.BeforeMethod;
@@ -107,6 +108,30 @@ public class DataToJsonWithoutActionLinksForLinksConverterFactoryTest {
 				.createForClientDataElement(factory, resourceLink);
 
 		assertTrue(dataToJsonConverter instanceof DataResourceLinkToJsonConverter);
+
+	}
+
+	@Test
+	public void testGetConverterFactory() {
+		DataToJsonConverterFactory converterFactory = dataToJsonConverterFactory
+				.getConverterFactory();
+
+		assertTrue(
+				converterFactory instanceof DataToJsonWithoutActionLinksForLinksConverterFactory);
+
+	}
+
+	@Test
+	public void testGetDataRecordLinkConverter() {
+		ClientDataRecordLink recordLink = ClientDataRecordLink
+				.withNameInData("recordLinkNameInData");
+		DataToJsonConverterFactorySpy factorySpy = new DataToJsonConverterFactorySpy();
+		DataRecordLinkToJsonWithoutActionLinkConverter dataRecordLinkToJsonConverter = (DataRecordLinkToJsonWithoutActionLinkConverter) dataToJsonConverterFactory
+				.getDataRecordLinkToJsonConverter(factory, recordLink, factorySpy);
+
+		assertTrue(
+				dataRecordLinkToJsonConverter instanceof DataRecordLinkToJsonWithoutActionLinkConverter);
+		assertEquals(dataRecordLinkToJsonConverter.dataToJsonConverterFactory, factorySpy);
 
 	}
 }

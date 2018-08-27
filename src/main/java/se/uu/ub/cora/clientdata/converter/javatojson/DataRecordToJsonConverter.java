@@ -31,12 +31,12 @@ public final class DataRecordToJsonConverter {
 	private JsonBuilderFactory jsonBuilderFactory;
 	private ClientDataRecord clientDataRecord;
 	private JsonObjectBuilder recordJsonObjectBuilder;
-	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
+	private DataToJsonConverterFactory dataToJsonConverterFactory;
 	ActionLinksToJsonConverter actionLinkConverter;
 
 	private DataRecordToJsonConverter(JsonBuilderFactory jsonFactory,
 			ClientDataRecord clientDataRecord,
-			DataToJsonConverterFactorySpy dataToJsonConverterFactory) {
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
 		this.jsonBuilderFactory = jsonFactory;
 		this.clientDataRecord = clientDataRecord;
 		this.dataToJsonConverterFactory = dataToJsonConverterFactory;
@@ -45,7 +45,7 @@ public final class DataRecordToJsonConverter {
 
 	public static DataRecordToJsonConverter usingJsonFactoryForClientDataRecord(
 			JsonBuilderFactory jsonFactory, ClientDataRecord clientDataRecord,
-			DataToJsonConverterFactorySpy dataToJsonConverterFactory) {
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
 		return new DataRecordToJsonConverter(jsonFactory, clientDataRecord,
 				dataToJsonConverterFactory);
 	}
@@ -61,8 +61,7 @@ public final class DataRecordToJsonConverter {
 	}
 
 	private void convertMainClientDataGroup() {
-		DataToJsonConverterFactory dataToJsonConverterFactory2 = new DataToJsonConverterFactoryImp();
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory2
+		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(jsonBuilderFactory,
 						clientDataRecord.getClientDataGroup());
 		JsonObjectBuilder jsonDataGroupObjectBuilder = dataToJsonConverter.toJsonObjectBuilder();

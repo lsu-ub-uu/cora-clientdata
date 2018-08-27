@@ -27,9 +27,15 @@ public class DataToJsonWithoutActionLinksForLinksConverterFactory
 		extends DataToJsonConverterFactoryImp {
 
 	@Override
+	protected DataToJsonConverterFactory getConverterFactory() {
+		return new DataToJsonWithoutActionLinksForLinksConverterFactory();
+	}
+
+	@Override
 	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement) {
+			ClientDataElement clientDataElement,
+			DataToJsonConverterFactory dataToJsonConverterFactory) {
 		return DataRecordLinkToJsonWithoutActionLinkConverter.usingJsonFactoryForClientDataLink(
-				factory, (ClientDataRecordLink) clientDataElement);
+				factory, (ClientDataRecordLink) clientDataElement, dataToJsonConverterFactory);
 	}
 }
