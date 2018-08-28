@@ -52,8 +52,8 @@ public class DataGroupToJsonConverterTest {
 
 	private void initConverter() {
 		dataGroupToJsonConverter = DataGroupToJsonConverter
-				.usingJsonFactoryAndConverterFactoryForClientDataGroup(factory, clientDataGroup,
-						dataToJsonFactory);
+				.usingJsonFactoryAndConverterFactoryForClientDataGroup(factory, dataToJsonFactory,
+						clientDataGroup);
 	}
 
 	@Test

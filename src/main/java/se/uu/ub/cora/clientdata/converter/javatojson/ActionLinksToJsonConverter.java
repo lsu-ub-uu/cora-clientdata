@@ -70,7 +70,7 @@ public class ActionLinksToJsonConverter extends DataToJsonConverter {
 		if (actionLinkHasBody(actionLink)) {
 			DataGroupToJsonConverter dataGroupToJsonConverter = DataGroupToJsonConverter
 					.usingJsonFactoryAndConverterFactoryForClientDataGroup(jsonBuilderFactory,
-							actionLink.getBody(), dataToJsonConverterFactory);
+							dataToJsonConverterFactory, actionLink.getBody());
 			internalLinkBuilder.addKeyJsonObjectBuilder("body",
 					dataGroupToJsonConverter.toJsonObjectBuilder());
 		}

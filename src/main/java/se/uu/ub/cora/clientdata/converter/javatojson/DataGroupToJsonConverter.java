@@ -43,9 +43,9 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 	}
 
 	public static DataGroupToJsonConverter usingJsonFactoryAndConverterFactoryForClientDataGroup(
-			JsonBuilderFactory factory, ClientDataGroup clientDataGroup,
-			DataToJsonConverterFactory dataToJsonFactory) {
-		return new DataGroupToJsonConverter(factory, clientDataGroup, dataToJsonFactory);
+			JsonBuilderFactory factory, DataToJsonConverterFactory dataToJsonConverterFactory,
+			ClientDataGroup clientDataGroup) {
+		return new DataGroupToJsonConverter(factory, clientDataGroup, dataToJsonConverterFactory);
 	}
 
 	@Override

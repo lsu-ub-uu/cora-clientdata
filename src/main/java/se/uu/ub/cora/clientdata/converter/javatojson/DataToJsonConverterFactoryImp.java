@@ -56,7 +56,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 					(ClientDataResourceLink) clientDataElement, converterFactory);
 		}
 		return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
-				factory, (ClientDataGroup) clientDataElement, converterFactory);
+				factory, converterFactory, (ClientDataGroup) clientDataElement);
 	}
 
 	protected DataToJsonConverterFactory getConverterFactory() {
