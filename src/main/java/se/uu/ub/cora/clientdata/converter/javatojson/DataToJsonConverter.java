@@ -23,10 +23,10 @@ import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
 public abstract class DataToJsonConverter {
 
-	public String toJson(){
+	public String toJson() {
 		JsonObjectBuilder jsonObjectBuilder = toJsonObjectBuilder();
 		return jsonObjectBuilder.toJsonFormattedString();
 	}
 
-	abstract JsonObjectBuilder toJsonObjectBuilder();
+	protected abstract JsonObjectBuilder toJsonObjectBuilder();
 }

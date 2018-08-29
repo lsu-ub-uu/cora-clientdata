@@ -35,7 +35,7 @@ public final class DataListToJsonConverter {
 	private DataToJsonConverterFactory dataToJsonFactory;
 
 	private DataListToJsonConverter(JsonBuilderFactory jsonFactory, ClientDataList clientRecordList,
-			DataToJsonConverterFactorySpy dataToJsonFactory) {
+			DataToJsonConverterFactory dataToJsonFactory) {
 		this.jsonBuilderFactory = jsonFactory;
 		this.clientRecordList = clientRecordList;
 		this.dataToJsonFactory = dataToJsonFactory;
@@ -44,7 +44,7 @@ public final class DataListToJsonConverter {
 
 	public static DataListToJsonConverter usingJsonFactoryForClientDataList(
 			JsonBuilderFactory jsonFactory, ClientDataList clientRecordList,
-			DataToJsonConverterFactorySpy dataToJsonFactory) {
+			DataToJsonConverterFactory dataToJsonFactory) {
 		return new DataListToJsonConverter(jsonFactory, clientRecordList, dataToJsonFactory);
 	}
 
