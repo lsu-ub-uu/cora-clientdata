@@ -25,16 +25,16 @@
     <parent>
         <groupId>se.uu.ub.cora</groupId>
         <artifactId>cora-parent</artifactId>
-        <version>0.8-SNAPSHOT</version>
+        <version>0.8.6</version>
     </parent>
 
     <artifactId>cora-clientdata</artifactId>
     <packaging>jar</packaging>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <name>Cora client data</name>
 
     <properties>
-       <json.version>0.5-SNAPSHOT</json.version>
+       <json.version>0.5.7</json.version>
     </properties>
 
     <scm>
