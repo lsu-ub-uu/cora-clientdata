@@ -48,6 +48,14 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		return new ClientDataGroup(nameInData);
 	}
 
+	public static ClientDataGroup asLinkWithNameInDataAndTypeAndId(String nameInData, String type,
+			String id) {
+		ClientDataGroup dataGroup = new ClientDataGroup(nameInData);
+		dataGroup.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordType", type));
+		dataGroup.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordId", id));
+		return dataGroup;
+	}
+
 	@Override
 	public String getNameInData() {
 		return nameInData;

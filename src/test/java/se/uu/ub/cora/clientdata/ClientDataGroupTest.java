@@ -68,6 +68,15 @@ public class ClientDataGroupTest {
 	}
 
 	@Test
+	public void testGroupAsLink() {
+		ClientDataGroup dataGroup = ClientDataGroup.asLinkWithNameInDataAndTypeAndId("nameInData",
+				"someType", "someId");
+		assertEquals(dataGroup.getNameInData(), "nameInData");
+		assertEquals(dataGroup.getFirstAtomicValueWithNameInData("linkedRecordType"), "someType");
+		assertEquals(dataGroup.getFirstAtomicValueWithNameInData("linkedRecordId"), "someId");
+	}
+
+	@Test
 	public void testInitWithRepeatId() {
 		clientDataGroup.setRepeatId("x1");
 		assertEquals(clientDataGroup.getRepeatId(), "x1");
