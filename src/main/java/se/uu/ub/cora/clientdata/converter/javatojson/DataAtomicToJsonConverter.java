@@ -28,8 +28,8 @@ public final class DataAtomicToJsonConverter extends DataToJsonConverter {
 	private ClientDataAtomic clientDataAtomic;
 	private JsonBuilderFactory factory;
 
-	public static DataToJsonConverter usingJsonFactoryForClientDataAtomic(JsonBuilderFactory factory,
-			ClientDataAtomic dataAtomic) {
+	public static DataToJsonConverter usingJsonFactoryForClientDataAtomic(
+			JsonBuilderFactory factory, ClientDataAtomic dataAtomic) {
 		return new DataAtomicToJsonConverter(factory, dataAtomic);
 	}
 
@@ -55,6 +55,6 @@ public final class DataAtomicToJsonConverter extends DataToJsonConverter {
 	}
 
 	private boolean hasNonEmptyRepeatId() {
-		return clientDataAtomic.getRepeatId() != null && !clientDataAtomic.getRepeatId().equals("");
+		return clientDataAtomic.getRepeatId() != null && !"".equals(clientDataAtomic.getRepeatId());
 	}
 }

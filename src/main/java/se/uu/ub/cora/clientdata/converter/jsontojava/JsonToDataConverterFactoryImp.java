@@ -69,15 +69,14 @@ public class JsonToDataConverterFactoryImp implements JsonToDataConverterFactory
 		JsonArray children = jsonObject.getValueAsJsonArray(CHILDREN_STRING);
 		List<String> foundNames = new ArrayList<>();
 		for (JsonValue child : children) {
-			String name = getNameInDataFromChild(child);
+			String name = getNameInDataFromChild((JsonObject) child);
 			foundNames.add(name);
 		}
 		return foundNames;
 	}
 
-	private String getNameInDataFromChild(JsonValue child) {
-		JsonObject value = (JsonObject) child;
-		return value.getValueAsJsonString("name").getStringValue();
+	private String getNameInDataFromChild(JsonObject child) {
+		return child.getValueAsJsonString("name").getStringValue();
 	}
 
 	private boolean childrenNamesIndicatesRecordLink(List<String> foundNames) {

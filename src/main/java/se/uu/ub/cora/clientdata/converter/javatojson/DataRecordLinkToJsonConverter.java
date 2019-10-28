@@ -64,9 +64,9 @@ public class DataRecordLinkToJsonConverter extends DataGroupToJsonConverter {
 	}
 
 	private boolean hasEmptyLinkedRepeatId() {
-		return clientDataGroup.containsChildWithNameInData(LINKED_REPEAT_ID)
-				&& ((ClientDataAtomic) clientDataGroup
-						.getFirstChildWithNameInData(LINKED_REPEAT_ID)).getValue().equals("");
+		return clientDataGroup.containsChildWithNameInData(LINKED_REPEAT_ID) && "".equals(
+				((ClientDataAtomic) clientDataGroup.getFirstChildWithNameInData(LINKED_REPEAT_ID))
+						.getValue());
 	}
 
 	private void possiblyAddActionLinks() {

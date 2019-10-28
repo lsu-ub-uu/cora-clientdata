@@ -68,7 +68,7 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 	}
 
 	private boolean hasNonEmptyRepeatId() {
-		return clientDataGroup.getRepeatId() != null && !clientDataGroup.getRepeatId().equals("");
+		return clientDataGroup.getRepeatId() != null && !"".equals(clientDataGroup.getRepeatId());
 	}
 
 	private boolean hasAttributes() {

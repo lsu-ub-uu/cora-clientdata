@@ -239,7 +239,7 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	}
 
 	private boolean requestedAttributeDoesNotExists(Map<String, String> attributesFromElement,
-			ClientDataAttribute dataAttribute) {
+			ClientDataElement dataAttribute) {
 		return !attributesFromElement.containsKey(dataAttribute.getNameInData());
 	}
 
