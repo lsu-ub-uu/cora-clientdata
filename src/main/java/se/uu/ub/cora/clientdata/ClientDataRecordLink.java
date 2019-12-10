@@ -21,31 +21,41 @@ package se.uu.ub.cora.clientdata;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class ClientDataRecordLink extends ClientDataGroup{
+public final class ClientDataRecordLink extends ClientDataGroup {
 
-    private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
+	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 
-    private ClientDataRecordLink(String nameInData) {
-        super(nameInData);
-    }
+	private ClientDataRecordLink(String nameInData) {
+		super(nameInData);
+	}
 
-    public static ClientDataRecordLink withNameInData(String nameInData){
-        return new ClientDataRecordLink(nameInData);
-    }
+	public static ClientDataRecordLink withNameInData(String nameInData) {
+		return new ClientDataRecordLink(nameInData);
+	}
 
-    public void addActionLink(String key, ActionLink actionLink) {
-        actionLinks.put(key, actionLink);
-    }
+	public void addActionLink(String key, ActionLink actionLink) {
+		actionLinks.put(key, actionLink);
+	}
 
-    public ActionLink getActionLink(String key) {
-        return actionLinks.get(key);
-    }
+	public ActionLink getActionLink(String key) {
+		return actionLinks.get(key);
+	}
 
-    public Map<String, ActionLink> getActionLinks() {
-        return actionLinks;
-    }
+	public Map<String, ActionLink> getActionLinks() {
+		return actionLinks;
+	}
 
-    public void setActionLinks(Map<String, ActionLink> actionLinks) {
-        this.actionLinks = actionLinks;
-    }
+	public void setActionLinks(Map<String, ActionLink> actionLinks) {
+		this.actionLinks = actionLinks;
+	}
+
+	public static ClientDataRecordLink withNameInDataAndTypeAndId(String nameInData,
+			String linkedType, String linkedId) {
+		ClientDataRecordLink clientDataRecordLink = new ClientDataRecordLink(nameInData);
+		clientDataRecordLink
+				.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordType", linkedType));
+		clientDataRecordLink
+				.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordId", linkedId));
+		return clientDataRecordLink;
+	}
 }

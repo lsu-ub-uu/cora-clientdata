@@ -11,19 +11,14 @@ import java.util.Map;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.Action;
-import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataRecordLink;
-
 public class ClientDataRecordLinkTest {
 	private ClientDataRecordLink recordLink;
 
 	@BeforeMethod
 	public void setUp() {
 		recordLink = ClientDataRecordLink.withNameInData("aNameInData");
-		ClientDataAtomic linkedRecordType = ClientDataAtomic.withNameInDataAndValue("linkedRecordType",
-				"aLinkedRecordType");
+		ClientDataAtomic linkedRecordType = ClientDataAtomic
+				.withNameInDataAndValue("linkedRecordType", "aLinkedRecordType");
 		recordLink.addChild(linkedRecordType);
 
 		ClientDataAtomic linkedRecordId = ClientDataAtomic.withNameInDataAndValue("linkedRecordId",
@@ -36,6 +31,20 @@ public class ClientDataRecordLinkTest {
 		assertEquals(recordLink.getChildren().size(), 2);
 		assertNotNull(recordLink.getFirstChildWithNameInData("linkedRecordType"));
 		assertTrue(recordLink.containsChildWithNameInData("linkedRecordId"));
+	}
+
+	@Test
+	public void testInitWithNameInDataAndTypeAndId() throws Exception {
+		String nameInData = "someNameInData";
+		String linkedType = "someLinkedRecordType";
+		String linkedId = "someLinkedRecordId";
+		ClientDataRecordLink clientDataRecordLink = ClientDataRecordLink
+				.withNameInDataAndTypeAndId(nameInData, linkedType, linkedId);
+		assertEquals(clientDataRecordLink.getNameInData(), "someNameInData");
+		assertEquals(clientDataRecordLink.getFirstAtomicValueWithNameInData("linkedRecordType"),
+				"someLinkedRecordType");
+		assertEquals(clientDataRecordLink.getFirstAtomicValueWithNameInData("linkedRecordId"),
+				"someLinkedRecordId");
 	}
 
 	@Test
