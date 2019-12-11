@@ -27,4 +27,7 @@ public interface DataToJsonConverterFactory {
 	DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
 			ClientDataElement clientDataElement);
 
+	DataToJsonConverter createForClientDataElementIncludingActionLinks(JsonBuilderFactory factory,
+			ClientDataElement clientDataElement, boolean includeActionLinks);
+
 }

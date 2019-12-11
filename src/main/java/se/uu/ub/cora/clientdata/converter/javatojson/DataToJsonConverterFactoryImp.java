@@ -32,10 +32,16 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	@Override
 	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
 			ClientDataElement clientDataElement) {
-		DataToJsonConverterFactory converterFactory = getConverterFactory();
+		return createForClientDataElementIncludingActionLinks(factory, clientDataElement, true);
+	}
+
+	@Override
+	public DataToJsonConverter createForClientDataElementIncludingActionLinks(
+			JsonBuilderFactory factory, ClientDataElement clientDataElement,
+			boolean includeActionLinks) {
 
 		if (clientDataElement instanceof ClientDataGroup) {
-			return handleClientDataGroup(factory, clientDataElement, converterFactory);
+			return handleClientDataGroup(factory, clientDataElement, includeActionLinks);
 		}
 		if (clientDataElement instanceof ClientDataAtomic) {
 			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(factory,
@@ -46,10 +52,12 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	private DataToJsonConverter handleClientDataGroup(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement, DataToJsonConverterFactory converterFactory) {
+			ClientDataElement clientDataElement, boolean includeActionLinks) {
+
+		DataToJsonConverterFactory converterFactory = getConverterFactory();
 		if (clientDataElement instanceof ClientDataRecordLink) {
-			return getDataRecordLinkToJsonConverter(factory, clientDataElement,
-					converterFactory);
+			return handleDataRecordLink(factory, clientDataElement, converterFactory,
+					includeActionLinks);
 		}
 		if (clientDataElement instanceof ClientDataResourceLink) {
 			return DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
@@ -57,6 +65,16 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 		}
 		return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
 				factory, converterFactory, (ClientDataGroup) clientDataElement);
+	}
+
+	private DataToJsonConverter handleDataRecordLink(JsonBuilderFactory factory,
+			ClientDataElement clientDataElement, DataToJsonConverterFactory converterFactory,
+			boolean includeActionLinks) {
+		if (includeActionLinks) {
+			return getDataRecordLinkToJsonConverter(factory, clientDataElement, converterFactory);
+		}
+		return getDataRecordLinkToJsonConverterWithoutActionLinks(factory, clientDataElement,
+				converterFactory);
 	}
 
 	protected DataToJsonConverterFactory getConverterFactory() {
@@ -68,5 +86,13 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 			DataToJsonConverterFactory factoryConverterForGroup) {
 		return DataRecordLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
 				(ClientDataRecordLink) clientDataElement, factoryConverterForGroup);
+	}
+
+	protected DataToJsonConverter getDataRecordLinkToJsonConverterWithoutActionLinks(
+			JsonBuilderFactory factory, ClientDataElement clientDataElement,
+			DataToJsonConverterFactory factoryConverterForGroup) {
+
+		return DataRecordLinkToJsonWithoutActionLinkConverter.usingJsonFactoryForClientDataLink(
+				factory, (ClientDataRecordLink) clientDataElement, factoryConverterForGroup);
 	}
 }

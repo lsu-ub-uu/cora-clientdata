@@ -19,4 +19,11 @@ public class DataToJsonConverterFactorySpy implements DataToJsonConverterFactory
 		return new DataToJsonConverterSpy(clientDataElement);
 	}
 
+	@Override
+	public DataToJsonConverter createForClientDataElementIncludingActionLinks(JsonBuilderFactory factory,
+			ClientDataElement clientDataElement, boolean includeActionLinks) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

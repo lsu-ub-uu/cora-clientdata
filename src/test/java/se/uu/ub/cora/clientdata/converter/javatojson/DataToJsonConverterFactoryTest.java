@@ -79,7 +79,19 @@ public class DataToJsonConverterFactoryTest {
 	}
 
 	@Test
-	public void testJsonCreateFactoryDataRecordLink() {
+	public void testJsonCreateFactoryDataRecordLinkWithActionLinksDefaultMethod() {
+		ClientDataRecordLink recordLink = createRecordLink();
+		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+				.createForClientDataElement(factory, recordLink);
+
+		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonConverter);
+		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
+		assertTrue(
+				dataLinkConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
+
+	}
+
+	private ClientDataRecordLink createRecordLink() {
 		ClientDataRecordLink recordLink = ClientDataRecordLink
 				.withNameInData("recordLinkNameInData");
 		ClientDataAtomic linkedRecordType = ClientDataAtomic
@@ -89,8 +101,27 @@ public class DataToJsonConverterFactoryTest {
 		ClientDataAtomic linkedRecordId = ClientDataAtomic.withNameInDataAndValue("linkedRecordId",
 				"someRecordId");
 		recordLink.addChild(linkedRecordId);
+		return recordLink;
+	}
+
+	@Test
+	public void testJsonCreateFactoryDataRecordLinkWithoutActionLinks() {
+		ClientDataRecordLink recordLink = createRecordLink();
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, recordLink);
+				.createForClientDataElementIncludingActionLinks(factory, recordLink, false);
+
+		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonWithoutActionLinkConverter);
+		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
+		assertTrue(
+				dataLinkConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
+
+	}
+
+	@Test
+	public void testJsonCreateFactoryDataRecordLinkWithActionLinks() {
+		ClientDataRecordLink recordLink = createRecordLink();
+		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+				.createForClientDataElementIncludingActionLinks(factory, recordLink, true);
 
 		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonConverter);
 		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
