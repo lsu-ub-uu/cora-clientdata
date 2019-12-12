@@ -29,10 +29,13 @@ import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 
 public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory {
 
+	private boolean includeActionLinks = true;
+
 	@Override
 	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
 			ClientDataElement clientDataElement) {
-		return createForClientDataElementIncludingActionLinks(factory, clientDataElement, true);
+		return createForClientDataElementIncludingActionLinks(factory, clientDataElement,
+				includeActionLinks);
 	}
 
 	@Override
@@ -53,6 +56,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 	private DataToJsonConverter handleClientDataGroup(JsonBuilderFactory factory,
 			ClientDataElement clientDataElement, boolean includeActionLinks) {
+		this.includeActionLinks = includeActionLinks;
 
 		DataToJsonConverterFactory converterFactory = getConverterFactory();
 		if (clientDataElement instanceof ClientDataRecordLink) {
@@ -78,7 +82,10 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	protected DataToJsonConverterFactory getConverterFactory() {
-		return new DataToJsonConverterFactoryImp();
+		DataToJsonConverterFactoryImp converterFactoryForChildren = new DataToJsonConverterFactoryImp();
+		converterFactoryForChildren.setIncludeActionLinks(includeActionLinks);
+		return converterFactoryForChildren;
+
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,
@@ -94,5 +101,14 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 		return DataRecordLinkToJsonWithoutActionLinkConverter.usingJsonFactoryForClientDataLink(
 				factory, (ClientDataRecordLink) clientDataElement, factoryConverterForGroup);
+	}
+
+	public boolean getIncludeActionLinks() {
+		return includeActionLinks;
+	}
+
+	public void setIncludeActionLinks(boolean includeActionLinks) {
+		this.includeActionLinks = includeActionLinks;
+
 	}
 }
