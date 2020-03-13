@@ -16,13 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata.converter.jsontojava;
+package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ClientData;
-import se.uu.ub.cora.json.parser.JsonObject;
+public interface DataRecord {
 
-public interface JsonToDataRecordConverter {
-
-	ClientData toInstance(JsonObject jsonObject);
+	ClientDataGroup getClientDataGroup();
 
 }

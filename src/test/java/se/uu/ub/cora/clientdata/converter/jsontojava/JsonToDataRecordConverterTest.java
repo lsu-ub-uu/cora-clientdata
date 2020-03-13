@@ -45,9 +45,9 @@ public class JsonToDataRecordConverterTest {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
 		factory = new JsonToDataConverterFactoryForDataRecordSpy();
-		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverter
-				.forJsonObjectUsingConverterFactory(((JsonObject) jsonValue), factory);
-		return jsonToDataConverter.toInstance();
+		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverterImp
+				.forJsonObjectUsingConverterFactory(factory);
+		return (ClientDataRecord) jsonToDataConverter.toInstance(((JsonObject) jsonValue));
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
