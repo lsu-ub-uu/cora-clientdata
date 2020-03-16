@@ -28,7 +28,7 @@
 
     <artifactId>cora-clientdata</artifactId>
     <packaging>jar</packaging>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.4-SNAPSHOT</version>
     <name>Cora client data</name>
 
     <properties>

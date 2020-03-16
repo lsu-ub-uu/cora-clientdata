@@ -19,6 +19,7 @@
 
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.BeforeMethod;
@@ -153,6 +154,38 @@ public class DataToJsonConverterFactoryTest {
 				.getConverterFactory();
 
 		assertTrue(converterFactory instanceof DataToJsonConverterFactoryImp);
+	}
+
+	@Test
+	public void testDefaultIncludeActionLinks() {
+		assertTrue(dataToJsonConverterFactory.getIncludeActionLinks());
+	}
+
+	@Test
+	public void testSetIncludeActionLinks() {
+		dataToJsonConverterFactory.setIncludeActionLinks(false);
+		assertFalse(dataToJsonConverterFactory.getIncludeActionLinks());
+	}
+
+	@Test
+	public void testCreateForClientDataElementUsesBooleanIncludeActionLinks() {
+		ClientDataRecordLink recordLink = createRecordLink();
+		dataToJsonConverterFactory.setIncludeActionLinks(false);
+		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+				.createForClientDataElement(factory, recordLink);
+		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonWithoutActionLinkConverter);
+	}
+
+	@Test
+	public void testCreateForClientDataElementIncludingActionLinksSetsBooleanIncludeActionLinks() {
+		dataToJsonConverterFactory.setIncludeActionLinks(true);
+		assertTrue(dataToJsonConverterFactory.getIncludeActionLinks());
+
+		ClientDataRecordLink recordLink = createRecordLink();
+		dataToJsonConverterFactory.createForClientDataElementIncludingActionLinks(factory,
+				recordLink, false);
+
+		assertFalse(dataToJsonConverterFactory.getIncludeActionLinks());
 
 	}
 }

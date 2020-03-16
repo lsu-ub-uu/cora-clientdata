@@ -20,6 +20,7 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertSame;
 
 import org.testng.annotations.Test;
 
@@ -34,6 +35,14 @@ import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 public class JsonToDataRecordConverterTest {
 
 	private JsonToDataConverterFactory factory;
+
+	@Test
+	public void testGetConverterFactory() {
+		factory = new JsonToDataConverterFactoryForDataRecordSpy();
+		JsonToDataRecordConverterImp jsonToDataConverter = JsonToDataRecordConverterImp
+				.forJsonObjectUsingConverterFactory(factory);
+		assertSame(jsonToDataConverter.getConverterFactory(), factory);
+	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
 			+ "Error parsing jsonRecord: Record data must contain key: record")
