@@ -22,7 +22,7 @@ package se.uu.ub.cora.clientdata;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class ClientDataRecord implements ClientData {
+public final class ClientDataRecord implements DataRecord, ClientData {
 	private ClientDataGroup clientDataGroup;
 	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 
@@ -34,6 +34,7 @@ public final class ClientDataRecord implements ClientData {
 		return new ClientDataRecord(clientDataGroup);
 	}
 
+	@Override
 	public ClientDataGroup getClientDataGroup() {
 		return clientDataGroup;
 	}

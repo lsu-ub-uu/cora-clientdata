@@ -20,6 +20,7 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertSame;
 
 import org.testng.annotations.Test;
 
@@ -35,6 +36,14 @@ public class JsonToDataRecordConverterTest {
 
 	private JsonToDataConverterFactory factory;
 
+	@Test
+	public void testGetConverterFactory() {
+		factory = new JsonToDataConverterFactoryForDataRecordSpy();
+		JsonToDataRecordConverterImp jsonToDataConverter = JsonToDataRecordConverterImp
+				.forJsonObjectUsingConverterFactory(factory);
+		assertSame(jsonToDataConverter.getConverterFactory(), factory);
+	}
+
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
 			+ "Error parsing jsonRecord: Record data must contain key: record")
 	public void testNotARecordString() throws Exception {
@@ -45,9 +54,9 @@ public class JsonToDataRecordConverterTest {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
 		factory = new JsonToDataConverterFactoryForDataRecordSpy();
-		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverter
-				.forJsonObjectUsingConverterFactory(((JsonObject) jsonValue), factory);
-		return jsonToDataConverter.toInstance();
+		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverterImp
+				.forJsonObjectUsingConverterFactory(factory);
+		return (ClientDataRecord) jsonToDataConverter.toInstance(((JsonObject) jsonValue));
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
