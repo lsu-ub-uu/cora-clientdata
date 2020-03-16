@@ -92,4 +92,9 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 		}
 	}
 
+	public JsonToDataConverterFactory getConverterFactory() {
+		// needed for test
+		return factory;
+	}
+
 }
