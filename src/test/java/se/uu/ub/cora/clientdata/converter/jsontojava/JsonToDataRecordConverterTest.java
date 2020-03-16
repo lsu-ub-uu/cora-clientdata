@@ -40,7 +40,7 @@ public class JsonToDataRecordConverterTest {
 	public void testGetConverterFactory() {
 		factory = new JsonToDataConverterFactoryForDataRecordSpy();
 		JsonToDataRecordConverterImp jsonToDataConverter = JsonToDataRecordConverterImp
-				.forJsonObjectUsingConverterFactory(factory);
+				.usingConverterFactory(factory);
 		assertSame(jsonToDataConverter.getConverterFactory(), factory);
 	}
 
@@ -55,7 +55,7 @@ public class JsonToDataRecordConverterTest {
 		JsonValue jsonValue = jsonParser.parseString(json);
 		factory = new JsonToDataConverterFactoryForDataRecordSpy();
 		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverterImp
-				.forJsonObjectUsingConverterFactory(factory);
+				.usingConverterFactory(factory);
 		return (ClientDataRecord) jsonToDataConverter.toInstance(((JsonObject) jsonValue));
 	}
 

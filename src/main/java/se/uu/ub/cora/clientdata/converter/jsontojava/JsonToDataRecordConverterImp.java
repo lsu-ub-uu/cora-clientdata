@@ -22,7 +22,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 		this.factory = factory;
 	}
 
-	public static JsonToDataRecordConverterImp forJsonObjectUsingConverterFactory(
+	public static JsonToDataRecordConverterImp usingConverterFactory(
 			JsonToDataConverterFactory factory) {
 		return new JsonToDataRecordConverterImp(factory);
 	}
