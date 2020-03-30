@@ -18,11 +18,11 @@
  */
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import se.uu.ub.cora.clientdata.ClientData;
+import se.uu.ub.cora.clientdata.DataRecord;
 import se.uu.ub.cora.json.parser.JsonObject;
 
 public interface JsonToDataRecordConverter {
 
-	ClientData toInstance(JsonObject jsonObject);
+	DataRecord toInstance(JsonObject jsonObject);
 
 }
