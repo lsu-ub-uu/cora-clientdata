@@ -5,6 +5,7 @@ import java.util.Map;
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
+import se.uu.ub.cora.clientdata.DataRecord;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -28,7 +29,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 	}
 
 	@Override
-	public ClientDataRecord toInstance(JsonObject jsonObject) {
+	public DataRecord toInstance(JsonObject jsonObject) {
 		try {
 			this.jsonObject = jsonObject;
 			return tryToInstanciate();
