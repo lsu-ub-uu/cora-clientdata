@@ -110,13 +110,14 @@ public class JsonToDataRecordConverterTest {
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
-			+ "Error parsing jsonRecord: Record data must contain only keys: data and actionLinks")
+			+ "Error parsing jsonRecord: Record data must contain only keys: data and actionLinks and permissions")
 	public void testRecordExtraKeyOnSecondLevel() throws Exception {
 		String json = "{\"record\":{";
 		json += "\"data\":{";
 		json += "\"name\":\"groupNameInData\", \"children\":[]";
 		json += "}";
 		json += ",\"actionLinks\":\"noActionLink\"";
+		json += ",\"permissions\":\"noPermissions\"";
 		json += ",\"someExtraKey\":\"someExtraData\"";
 		json += "}}";
 		createClientDataRecordForJsonString(json);
@@ -192,6 +193,7 @@ public class JsonToDataRecordConverterTest {
 		json += " \"accept\":\"application/vnd.uub.record+json\"";
 		json += "}";
 		json += "}";
+		json += ", \"permissions\":{}";
 		json += "}";
 		json += "}";
 		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);

@@ -80,6 +80,11 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 	}
 
 	private void validateOnlyCorrectKeysAtSecondLevel() {
+		int numOfAllowedKeys = NUM_OF_ALLOWED_KEYS;
+
+		if (jsonObjectRecord.containsKey("permissions")) {
+			numOfAllowedKeys = 3;
+		}
 
 		if (!jsonObjectRecord.containsKey("data")) {
 			throw new JsonParseException("Record data must contain child with key: data");
@@ -87,9 +92,9 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 		if (!jsonObjectRecord.containsKey(ACTION_LINKS)) {
 			throw new JsonParseException("Record data must contain child with key: actionLinks");
 		}
-		if (jsonObjectRecord.keySet().size() != NUM_OF_ALLOWED_KEYS) {
+		if (jsonObjectRecord.keySet().size() != numOfAllowedKeys) {
 			throw new JsonParseException(
-					"Record data must contain only keys: data and actionLinks");
+					"Record data must contain only keys: data and actionLinks and permissions");
 		}
 	}
 
