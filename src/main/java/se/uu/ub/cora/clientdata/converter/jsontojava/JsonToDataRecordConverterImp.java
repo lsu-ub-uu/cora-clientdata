@@ -14,6 +14,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 
 	private static final String ACTION_LINKS = "actionLinks";
 	private static final int NUM_OF_ALLOWED_KEYS = 2;
+	private static final int NUM_OF_ALLOWED_KEYS_AND_PERMISSIONS = 3;
 	private JsonObject jsonObject;
 	private JsonObject jsonObjectRecord;
 	private JsonToDataConverterFactory factory;
@@ -83,7 +84,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 		int numOfAllowedKeys = NUM_OF_ALLOWED_KEYS;
 
 		if (jsonObjectRecord.containsKey("permissions")) {
-			numOfAllowedKeys = 3;
+			numOfAllowedKeys = NUM_OF_ALLOWED_KEYS_AND_PERMISSIONS;
 		}
 
 		if (!jsonObjectRecord.containsKey("data")) {
