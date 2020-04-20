@@ -20,11 +20,15 @@
 package se.uu.ub.cora.clientdata;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class ClientDataRecord implements DataRecord, ClientData {
 	private ClientDataGroup clientDataGroup;
 	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
+	private Set<String> readPermissions = new LinkedHashSet<>();
+	private Set<String> writePermissions = new LinkedHashSet<>();
 
 	private ClientDataRecord(ClientDataGroup clientDataGroup) {
 		this.clientDataGroup = clientDataGroup;
@@ -53,6 +57,23 @@ public final class ClientDataRecord implements DataRecord, ClientData {
 
 	public void setActionLinks(Map<String, ActionLink> actionLinks) {
 		this.actionLinks = actionLinks;
+	}
+
+	public void addReadPermission(String readPermission) {
+		readPermissions.add(readPermission);
+	}
+
+	public Set<String> getReadPermissions() {
+		return readPermissions;
+	}
+
+	public void addWritePermission(String writePermission) {
+		writePermissions.add(writePermission);
+
+	}
+
+	public Set<String> getWritePermissions() {
+		return writePermissions;
 	}
 
 }
