@@ -21,6 +21,7 @@ package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -214,22 +215,26 @@ public class JsonToDataRecordConverterTest {
 	}
 
 	@Test
-	public void testCheckReadPermissions() throws Exception {
+	public void testCheckReadPermissions() {
 		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"read\":[\"librisId\", \"topLevel\"]}}}";
 		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
 
 		Set<String> readPermissions = clientDataRecord.getReadPermissions();
 		assertEquals(readPermissions.size(), 2);
+		assertTrue(readPermissions.contains("librisId"));
+		assertTrue(readPermissions.contains("topLevel"));
 
 	}
 
 	@Test
-	public void testCheckWritePermissions() throws Exception {
+	public void testCheckWritePermissions() {
 		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"write\":[\"rating\",\"parentId\"]}}}";
 		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
 
 		Set<String> writePermissions = clientDataRecord.getWritePermissions();
 		assertEquals(writePermissions.size(), 2);
+		assertTrue(writePermissions.contains("rating"));
+		assertTrue(writePermissions.contains("parentId"));
 
 	}
 
