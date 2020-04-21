@@ -23,6 +23,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.HashMap;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.Action;
@@ -36,37 +37,37 @@ public class DataRecordToJsonConverterTest {
 
 	private DataToJsonConverterFactorySpy dataToJsonConverterFactory;
 	private DataRecordToJsonConverter dataRecordToJsonConverter;
+	private ClientDataRecord clientDataRecord;
+	private JsonBuilderFactory jsonFactory;
+
+	@BeforeMethod
+	public void setUp() {
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
+		clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
+		jsonFactory = new OrgJsonBuilderFactoryAdapter();
+		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
+
+	}
 
 	@Test
 	public void testToJson() {
-		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
-		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-
-		String jsonString = getRecordAsJsonString(clientDataRecord);
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
+		String jsonString = dataRecordToJsonConverter.toJson();
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
 		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 
 	@Test
 	public void testToJsonWithDataActionLinksIsNull() {
-		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
-		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-
 		clientDataRecord.setActionLinks(null);
-
-		String jsonString = getRecordAsJsonString(clientDataRecord);
-
-		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
-		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
-	}
-
-	private String getRecordAsJsonString(ClientDataRecord clientDataRecord) {
-		JsonBuilderFactory jsonFactory = new OrgJsonBuilderFactoryAdapter();
-		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
 
 		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
 				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
-		return dataRecordToJsonConverter.toJson();
+		String jsonString = dataRecordToJsonConverter.toJson();
+
+		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
+		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
 	}
 
 	@Test
@@ -76,7 +77,9 @@ public class DataRecordToJsonConverterTest {
 
 		clientDataRecord.setActionLinks(new HashMap<>());
 
-		String jsonString = getRecordAsJsonString(clientDataRecord);
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
+		String jsonString = dataRecordToJsonConverter.toJson();
 
 		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}}}");
 		assertEquals(dataToJsonConverterFactory.calledNumOfTimes, 1);
@@ -84,17 +87,13 @@ public class DataRecordToJsonConverterTest {
 
 	@Test
 	public void testToJsonWithActionLinks() {
-		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
-		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
-
 		clientDataRecord.addActionLink("read", createReadActionLink());
-		String jsonString = getRecordAsJsonString(clientDataRecord);
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
+		String jsonString = dataRecordToJsonConverter.toJson();
 
-		assertEquals(jsonString, "{\"record\":{\"data\":{\"name\":\"groupNameInData\"}"
-				+ ",\"actionLinks\":{" + "\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\","
-				+ "\"contentType\":\"application/metadata_record+json\","
-				+ "\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\","
-				+ "\"accept\":\"application/metadata_record+json\"}" + "}}}");
+		assertEquals(jsonString,
+				"{\"record\":{\"data\":{\"name\":\"groupNameInData\"},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\",\"contentType\":\"application/metadata_record+json\",\"url\":\"http://localhost:8080/theclient/client/record/place/place:0001\",\"accept\":\"application/metadata_record+json\"}}}}");
 		assertEquals(dataRecordToJsonConverter.actionLinkConverter.dataToJsonConverterFactory,
 				dataToJsonConverterFactory);
 	}
@@ -106,6 +105,44 @@ public class DataRecordToJsonConverterTest {
 		actionLink.setRequestMethod("GET");
 		actionLink.setURL("http://localhost:8080/theclient/client/record/place/place:0001");
 		return actionLink;
+	}
+
+	@Test
+	public void testToJsonWithReadPermissions() {
+		clientDataRecord.addReadPermission("readPermissionOne");
+		clientDataRecord.addReadPermission("readPermissionTwo");
+
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
+		String jsonString = dataRecordToJsonConverter.toJson();
+		assertEquals(jsonString,
+				"{\"record\":{\"data\":{\"name\":\"groupNameInData\"},\"permissions\":{\"read\":[\"readPermissionOne\",\"readPermissionTwo\"]}}}");
+	}
+
+	@Test
+	public void testToJsonWithWritePermissions() {
+		clientDataRecord.addWritePermission("writePermissionOne");
+		clientDataRecord.addWritePermission("writePermissionTwo");
+
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
+		String jsonString = dataRecordToJsonConverter.toJson();
+		assertEquals(jsonString,
+				"{\"record\":{\"data\":{\"name\":\"groupNameInData\"},\"permissions\":{\"write\":[\"writePermissionOne\",\"writePermissionTwo\"]}}}");
+	}
+
+	@Test
+	public void testToJsonWithReadAndWritePermissions() {
+		clientDataRecord.addReadPermission("readPermissionOne");
+		clientDataRecord.addReadPermission("readPermissionTwo");
+		clientDataRecord.addWritePermission("writePermissionOne");
+		clientDataRecord.addWritePermission("writePermissionTwo");
+
+		dataRecordToJsonConverter = DataRecordToJsonConverter.usingJsonFactoryForClientDataRecord(
+				jsonFactory, clientDataRecord, dataToJsonConverterFactory);
+		String jsonString = dataRecordToJsonConverter.toJson();
+		assertEquals(jsonString,
+				"{\"record\":{\"data\":{\"name\":\"groupNameInData\"},\"permissions\":{\"read\":[\"readPermissionOne\",\"readPermissionTwo\"],\"write\":[\"writePermissionOne\",\"writePermissionTwo\"]}}}");
 	}
 
 }
