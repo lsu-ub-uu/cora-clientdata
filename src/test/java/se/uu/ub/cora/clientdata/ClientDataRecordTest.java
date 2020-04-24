@@ -25,6 +25,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -49,7 +50,6 @@ public class ClientDataRecordTest {
 		assertEquals(nameInData, "nameInData");
 	}
 
-
 	@Test
 	public void testWithActionLinks() {
 		ActionLink actionLink = ActionLink.withAction(Action.READ);
@@ -68,6 +68,24 @@ public class ClientDataRecordTest {
 		assertEquals(clientDataRecord.getActionLink("read"), actionLink);
 		assertEquals(clientDataRecord.getActionLinks().get("read"), actionLink);
 		assertNull(clientDataRecord.getActionLink("notAnAction"));
+	}
+
+	@Test
+	public void testGetReadPermissions() {
+		clientDataRecord.addReadPermission("rating");
+		clientDataRecord.addReadPermission("value");
+		Set<String> readPermissions = clientDataRecord.getReadPermissions();
+		assertTrue(readPermissions.contains("rating"));
+		assertTrue(readPermissions.contains("value"));
+	}
+
+	@Test
+	public void testGetWritePermissions() {
+		clientDataRecord.addWritePermission("title");
+		clientDataRecord.addWritePermission("author");
+		Set<String> writePermissions = clientDataRecord.getWritePermissions();
+		assertTrue(writePermissions.contains("title"));
+		assertTrue(writePermissions.contains("author"));
 	}
 
 }

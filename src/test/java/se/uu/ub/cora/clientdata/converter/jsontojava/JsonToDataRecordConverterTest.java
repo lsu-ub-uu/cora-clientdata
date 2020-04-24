@@ -21,6 +21,9 @@ package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertTrue;
+
+import java.util.Set;
 
 import org.testng.annotations.Test;
 
@@ -101,26 +104,26 @@ public class JsonToDataRecordConverterTest {
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
 			+ "Error parsing jsonRecord: Record data must contain child with key: actionLinks")
 	public void testRecordNoActionLinks() throws Exception {
-		String json = "{\"record\":{";
-		json += "\"data\":{";
-		json += "\"name\":\"groupNameInData\", \"children\":[]";
-		json += "}";
-		json += "}}";
+		// String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\", \"children\":[]}}}";
+		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"permissions\":{\"read\":[\"librisId\"],\"write\":[\"librisId\",\"rootOrganisation\"]}}}";
+
 		createClientDataRecordForJsonString(json);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
 			+ "Error parsing jsonRecord: Record data must contain only keys: data and actionLinks and permissions")
 	public void testRecordExtraKeyOnSecondLevel() throws Exception {
-		String json = "{\"record\":{";
-		json += "\"data\":{";
-		json += "\"name\":\"groupNameInData\", \"children\":[]";
-		json += "}";
-		json += ",\"actionLinks\":\"noActionLink\"";
-		json += ",\"permissions\":\"noPermissions\"";
-		json += ",\"someExtraKey\":\"someExtraData\"";
-		json += "}}";
+		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"read\":[\"librisId\"]},\"extraKey\":{\"name\":\"groupNameInData\"}}}";
 		createClientDataRecordForJsonString(json);
+	}
+
+	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
+			+ "Error parsing jsonRecord: Record data must contain only keys: data and actionLinks and permissions")
+	public void testMaxNumberOfKeysOnSecondLevelNoPermissions() throws Exception {
+		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"NOTpermissions\":{\"read\":[\"librisId\"]}}}";
+
+		createClientDataRecordForJsonString(json);
+
 	}
 
 	@Test
@@ -208,6 +211,30 @@ public class JsonToDataRecordConverterTest {
 
 		ActionLink actionLink = clientDataRecord.getActionLinks().get("read");
 		assertEquals(actionLinksConverterSpy.returnedElement, actionLink);
+
+	}
+
+	@Test
+	public void testCheckReadPermissions() {
+		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"read\":[\"librisId\", \"topLevel\"]}}}";
+		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
+
+		Set<String> readPermissions = clientDataRecord.getReadPermissions();
+		assertEquals(readPermissions.size(), 2);
+		assertTrue(readPermissions.contains("librisId"));
+		assertTrue(readPermissions.contains("topLevel"));
+
+	}
+
+	@Test
+	public void testCheckWritePermissions() {
+		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"write\":[\"rating\",\"parentId\"]}}}";
+		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
+
+		Set<String> writePermissions = clientDataRecord.getWritePermissions();
+		assertEquals(writePermissions.size(), 2);
+		assertTrue(writePermissions.contains("rating"));
+		assertTrue(writePermissions.contains("parentId"));
 
 	}
 
