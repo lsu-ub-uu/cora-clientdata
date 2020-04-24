@@ -18,8 +18,24 @@
  */
 package se.uu.ub.cora.clientdata;
 
+import java.util.Set;
+
 public interface DataRecord {
 
 	ClientDataGroup getClientDataGroup();
+
+	/**
+	 * Returns a set contaning the read permissions set in the DataRecord
+	 * 
+	 * @return A Set<String> containing read permissions
+	 */
+	Set<String> getReadPermissions();
+
+	/**
+	 * Returns a set contaning the write permissions set in the DataRecord
+	 * 
+	 * @return A Set<String> containing write permissions
+	 */
+	Set<String> getWritePermissions();
 
 }
