@@ -71,14 +71,13 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 
 	private void addReadPermissions(JsonArray readPermissions) {
 		for (JsonValue value : readPermissions) {
-			String permission = getJsonValueAsString(value);
+			String permission = getJsonValueAsString((JsonString) value);
 			clientDataRecord.addReadPermission(permission);
 		}
 	}
 
-	private String getJsonValueAsString(JsonValue value) {
-		JsonString object = (JsonString) value;
-		return object.getStringValue();
+	private String getJsonValueAsString(JsonString value) {
+		return value.getStringValue();
 	}
 
 	private void possiblyAddWritePermissions(JsonObject permissions) {
@@ -90,7 +89,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 
 	private void addWritePermissions(JsonArray writePermissions) {
 		for (JsonValue value : writePermissions) {
-			String permission = getJsonValueAsString(value);
+			String permission = getJsonValueAsString((JsonString) value);
 			clientDataRecord.addWritePermission(permission);
 		}
 	}
