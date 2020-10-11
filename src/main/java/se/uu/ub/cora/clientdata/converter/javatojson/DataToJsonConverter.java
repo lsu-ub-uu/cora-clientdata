@@ -28,5 +28,5 @@ public abstract class DataToJsonConverter {
 		return jsonObjectBuilder.toJsonFormattedString();
 	}
 
-	protected abstract JsonObjectBuilder toJsonObjectBuilder();
+	public abstract JsonObjectBuilder toJsonObjectBuilder();
 }

@@ -63,7 +63,7 @@ public final class DataResourceLinkToJsonConverter extends DataGroupToJsonConver
 
 	private void addActionLinksToRecordLink() {
 		Map<String, ActionLink> actionLinks = resourceLink.getActionLinks();
-		actionLinkConverter = new ActionLinksToJsonConverter(jsonBuilderFactory, actionLinks,
+		actionLinkConverter = new ActionLinksToJsonConverter(getJsonBuilderFactory(), actionLinks,
 				dataToJsonConverterFactory);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		dataGroupJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);

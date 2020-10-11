@@ -30,28 +30,31 @@ import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory {
 
 	private boolean includeActionLinks = true;
+	private JsonBuilderFactory jsonBuilderFactory;
+
+	public DataToJsonConverterFactoryImp(JsonBuilderFactory jsonBuilderFactory) {
+		this.jsonBuilderFactory = jsonBuilderFactory;
+	}
 
 	@Override
-	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement) {
-		return createForClientDataElementIncludingActionLinks(factory, clientDataElement,
+	public DataToJsonConverter createForClientDataElement(ClientDataElement clientDataElement) {
+		return createForClientDataElementIncludingActionLinks(clientDataElement,
 				includeActionLinks);
 	}
 
 	@Override
 	public DataToJsonConverter createForClientDataElementIncludingActionLinks(
-			JsonBuilderFactory factory, ClientDataElement clientDataElement,
-			boolean includeActionLinks) {
+			ClientDataElement clientDataElement, boolean includeActionLinks) {
 
 		if (clientDataElement instanceof ClientDataGroup) {
-			return handleClientDataGroup(factory, clientDataElement, includeActionLinks);
+			return handleClientDataGroup(jsonBuilderFactory, clientDataElement, includeActionLinks);
 		}
 		if (clientDataElement instanceof ClientDataAtomic) {
-			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(factory,
+			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(jsonBuilderFactory,
 					(ClientDataAtomic) clientDataElement);
 		}
-		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(factory,
-				(ClientDataAttribute) clientDataElement);
+		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(
+				jsonBuilderFactory, (ClientDataAttribute) clientDataElement);
 	}
 
 	private DataToJsonConverter handleClientDataGroup(JsonBuilderFactory factory,
@@ -82,7 +85,8 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	protected DataToJsonConverterFactory getConverterFactory() {
-		DataToJsonConverterFactoryImp converterFactoryForChildren = new DataToJsonConverterFactoryImp();
+		DataToJsonConverterFactoryImp converterFactoryForChildren = new DataToJsonConverterFactoryImp(
+				null);
 		converterFactoryForChildren.setIncludeActionLinks(includeActionLinks);
 		return converterFactoryForChildren;
 
@@ -110,5 +114,10 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	public void setIncludeActionLinks(boolean includeActionLinks) {
 		this.includeActionLinks = includeActionLinks;
 
+	}
+
+	JsonBuilderFactory getJsonBuilderFactory() {
+		// needed for test
+		return jsonBuilderFactory;
 	}
 }

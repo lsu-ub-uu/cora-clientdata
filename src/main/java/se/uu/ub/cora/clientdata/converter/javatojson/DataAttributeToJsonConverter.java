@@ -20,31 +20,42 @@
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
+import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
 public final class DataAttributeToJsonConverter extends DataToJsonConverter {
-	private JsonBuilderFactory factory;
+	private JsonBuilderFactory jsonBuilderFactory;
 	private ClientDataAttribute clientDataAttribute;
 
-	public static DataToJsonConverter usingJsonFactoryForClientDataAttribute(JsonBuilderFactory factory,
-			ClientDataAttribute dataAttribute) {
+	public static DataToJsonConverter usingJsonFactoryForClientDataAttribute(
+			JsonBuilderFactory factory, ClientDataAttribute dataAttribute) {
 		return new DataAttributeToJsonConverter(factory, dataAttribute);
 	}
 
 	private DataAttributeToJsonConverter(JsonBuilderFactory factory,
 			ClientDataAttribute dataAttribute) {
-		this.factory = factory;
+		this.jsonBuilderFactory = factory;
 		this.clientDataAttribute = dataAttribute;
 	}
 
 	@Override
 	public JsonObjectBuilder toJsonObjectBuilder() {
-		JsonObjectBuilder jsonObjectBuilder = factory.createObjectBuilder();
+		JsonObjectBuilder jsonObjectBuilder = jsonBuilderFactory.createObjectBuilder();
 
 		jsonObjectBuilder.addKeyString(clientDataAttribute.getNameInData(),
 				clientDataAttribute.getValue());
 		return jsonObjectBuilder;
+	}
+
+	JsonBuilderFactory getJsonBuilderFactory() {
+		// needed for test
+		return jsonBuilderFactory;
+	}
+
+	ClientDataElement getClientDataAttribute() {
+		// needed for test
+		return clientDataAttribute;
 	}
 
 }

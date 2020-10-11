@@ -20,14 +20,12 @@
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientDataElement;
-import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 
 public interface DataToJsonConverterFactory {
 
-	DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement);
+	DataToJsonConverter createForClientDataElement(ClientDataElement clientDataElement);
 
-	DataToJsonConverter createForClientDataElementIncludingActionLinks(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement, boolean includeActionLinks);
+	DataToJsonConverter createForClientDataElementIncludingActionLinks(ClientDataElement clientDataElement,
+			boolean includeActionLinks);
 
 }

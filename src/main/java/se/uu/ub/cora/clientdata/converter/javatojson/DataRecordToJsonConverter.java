@@ -73,8 +73,7 @@ public final class DataRecordToJsonConverter {
 
 	private void convertMainClientDataGroup() {
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(jsonBuilderFactory,
-						clientDataRecord.getClientDataGroup());
+				.createForClientDataElement(clientDataRecord.getClientDataGroup());
 		JsonObjectBuilder jsonDataGroupObjectBuilder = dataToJsonConverter.toJsonObjectBuilder();
 		recordJsonObjectBuilder.addKeyJsonObjectBuilder("data", jsonDataGroupObjectBuilder);
 	}

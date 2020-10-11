@@ -19,48 +19,37 @@
 
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
-import org.testng.Assert;
+import static org.testng.Assert.assertEquals;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataElement;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactory;
-import se.uu.ub.cora.clientdata.converter.javatojson.DataToJsonConverterFactoryImp;
-import se.uu.ub.cora.json.builder.JsonBuilderFactory;
-import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataAttributeToJsonConverterTest {
 	private DataToJsonConverterFactory dataToJsonConverterFactory;
-	private JsonBuilderFactory factory;
+	private JsonBuilderFactorySpy jsonBuilderFactory;
 
 	@BeforeMethod
 	public void beforeMethod() {
-		dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
-		factory = new OrgJsonBuilderFactoryAdapter();
+		jsonBuilderFactory = new JsonBuilderFactorySpy();
+		dataToJsonConverterFactory = new DataToJsonConverterFactoryImp(jsonBuilderFactory);
 
 	}
 
 	@Test
 	public void testToJson() {
-		ClientDataElement clientDataElement = ClientDataAttribute
+		ClientDataAttribute clientDataAttribute = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "attributeValue");
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataElement);
+				.createForClientDataElement(clientDataAttribute);
 		String json = dataToJsonConverter.toJson();
 
-		Assert.assertEquals(json, "{\"attributeNameInData\":\"attributeValue\"}");
+		JsonObjectBuilderSpy factoredJsonObjectBuilder = (JsonObjectBuilderSpy) jsonBuilderFactory.factoredJsonObjectBuilder;
+
+		assertEquals(factoredJsonObjectBuilder.key, clientDataAttribute.getNameInData());
+		assertEquals(factoredJsonObjectBuilder.value, clientDataAttribute.getValue());
+		assertEquals(json, factoredJsonObjectBuilder.jsonToReturn);
 	}
 
-	@Test
-	public void testToJsonEmptyValue() {
-		ClientDataElement clientDataElement = ClientDataAttribute
-				.withNameInDataAndValue("attributeNameInData", "");
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataElement);
-		String json = dataToJsonConverter.toJson();
-
-		Assert.assertEquals(json, "{\"attributeNameInData\":\"\"}");
-	}
 }

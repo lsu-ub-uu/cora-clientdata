@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2015, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,13 +20,14 @@
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
+import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
 public final class DataAtomicToJsonConverter extends DataToJsonConverter {
 
 	private ClientDataAtomic clientDataAtomic;
-	private JsonBuilderFactory factory;
+	private JsonBuilderFactory jsonBuilderFactory;
 
 	public static DataToJsonConverter usingJsonFactoryForClientDataAtomic(
 			JsonBuilderFactory factory, ClientDataAtomic dataAtomic) {
@@ -34,13 +35,13 @@ public final class DataAtomicToJsonConverter extends DataToJsonConverter {
 	}
 
 	private DataAtomicToJsonConverter(JsonBuilderFactory factory, ClientDataAtomic dataAtomic) {
-		this.factory = factory;
+		this.jsonBuilderFactory = factory;
 		this.clientDataAtomic = dataAtomic;
 	}
 
 	@Override
 	public JsonObjectBuilder toJsonObjectBuilder() {
-		JsonObjectBuilder jsonObjectBuilder = factory.createObjectBuilder();
+		JsonObjectBuilder jsonObjectBuilder = jsonBuilderFactory.createObjectBuilder();
 
 		jsonObjectBuilder.addKeyString("name", clientDataAtomic.getNameInData());
 		jsonObjectBuilder.addKeyString("value", clientDataAtomic.getValue());
@@ -57,4 +58,15 @@ public final class DataAtomicToJsonConverter extends DataToJsonConverter {
 	private boolean hasNonEmptyRepeatId() {
 		return clientDataAtomic.getRepeatId() != null && !"".equals(clientDataAtomic.getRepeatId());
 	}
+
+	JsonBuilderFactory getJsonBuilderFactory() {
+		// needed for test
+		return jsonBuilderFactory;
+	}
+
+	ClientDataElement getClientDataAtomic() {
+		// needed for test
+		return clientDataAtomic;
+	}
+
 }

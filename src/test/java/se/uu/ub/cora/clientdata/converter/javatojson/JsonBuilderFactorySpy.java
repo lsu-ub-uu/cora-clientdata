@@ -16,36 +16,26 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
+package se.uu.ub.cora.clientdata.converter.javatojson;
 
-import java.util.Map;
-import java.util.Set;
+import se.uu.ub.cora.json.builder.JsonArrayBuilder;
+import se.uu.ub.cora.json.builder.JsonBuilderFactory;
+import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
-public interface DataRecord {
+public class JsonBuilderFactorySpy implements JsonBuilderFactory {
 
-	ClientDataGroup getClientDataGroup();
+	public JsonObjectBuilder factoredJsonObjectBuilder;
 
-	/**
-	 * Returns a set contaning the read permissions set in the DataRecord
-	 * 
-	 * @return A Set<String> containing read permissions
-	 */
-	Set<String> getReadPermissions();
+	@Override
+	public JsonObjectBuilder createObjectBuilder() {
+		factoredJsonObjectBuilder = new JsonObjectBuilderSpy();
+		return factoredJsonObjectBuilder;
+	}
 
-	/**
-	 * Returns a set contaning the write permissions set in the DataRecord
-	 * 
-	 * @return A Set<String> containing write permissions
-	 */
-	Set<String> getWritePermissions();
-
-	/**
-	 * Returns a Map containing the Action links set in the DataRecord
-	 * 
-	 * "
-	 * 
-	 * @return A Map<String, ActionLink> containing ActionLinks
-	 */
-	Map<String, ActionLink> getActionLinks();
+	@Override
+	public JsonArrayBuilder createArrayBuilder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

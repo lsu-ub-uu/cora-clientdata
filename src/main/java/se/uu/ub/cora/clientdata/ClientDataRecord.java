@@ -51,6 +51,7 @@ public final class ClientDataRecord implements DataRecord, ClientData {
 		return actionLinks.get(key);
 	}
 
+	@Override
 	public Map<String, ActionLink> getActionLinks() {
 		return actionLinks;
 	}
@@ -63,6 +64,7 @@ public final class ClientDataRecord implements DataRecord, ClientData {
 		readPermissions.add(readPermission);
 	}
 
+	@Override
 	public Set<String> getReadPermissions() {
 		return readPermissions;
 	}
@@ -72,6 +74,7 @@ public final class ClientDataRecord implements DataRecord, ClientData {
 
 	}
 
+	@Override
 	public Set<String> getWritePermissions() {
 		return writePermissions;
 	}

@@ -31,7 +31,7 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 
 	protected ClientDataGroup clientDataGroup;
 	protected JsonObjectBuilder dataGroupJsonObjectBuilder;
-	protected JsonBuilderFactory jsonBuilderFactory;
+	private JsonBuilderFactory jsonBuilderFactory;
 	DataToJsonConverterFactory dataToJsonConverterFactory;
 
 	protected DataGroupToJsonConverter(JsonBuilderFactory factory, ClientDataGroup clientDataGroup,
@@ -91,10 +91,20 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 		JsonArrayBuilder childrenArray = jsonBuilderFactory.createArrayBuilder();
 		for (ClientDataElement clientDataElement : clientDataGroup.getChildren()) {
 			childrenArray.addJsonObjectBuilder(dataToJsonConverterFactory
-					.createForClientDataElement(jsonBuilderFactory, clientDataElement)
+					.createForClientDataElement(clientDataElement)
 					.toJsonObjectBuilder());
 		}
 		dataGroupJsonObjectBuilder.addKeyJsonArrayBuilder("children", childrenArray);
+	}
+
+	public ClientDataElement getClientDataGroup() {
+		// needed for test
+		return clientDataGroup;
+	}
+
+	public JsonBuilderFactory getJsonBuilderFactory() {
+		// needed for test
+		return jsonBuilderFactory;
 	}
 
 }
