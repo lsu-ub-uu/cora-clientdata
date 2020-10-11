@@ -69,12 +69,12 @@ public class DataToJsonConverterFactoryTest {
 		ClientDataElement clientDataElement = ClientDataAtomic
 				.withNameInDataAndValue("atomicNameInData", "atomicValue");
 
-		DataAtomicToJsonConverter dataToJsonConverter = (DataAtomicToJsonConverter) dataToJsonConverterFactory
+		DataAtomicToJsonConverter atomicConverter = (DataAtomicToJsonConverter) dataToJsonConverterFactory
 				.createForClientDataElement(clientDataElement);
 
-		assertTrue(dataToJsonConverter instanceof DataAtomicToJsonConverter);
-		assertSame(dataToJsonConverter.getClientDataAtomic(), clientDataElement);
-		assertSame(dataToJsonConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+		assertTrue(atomicConverter instanceof DataAtomicToJsonConverter);
+		assertSame(atomicConverter.getClientDataAtomic(), clientDataElement);
+		assertSame(atomicConverter.getJsonBuilderFactory(), jsonBuilderFactory);
 	}
 
 	@Test
@@ -82,23 +82,25 @@ public class DataToJsonConverterFactoryTest {
 		ClientDataElement clientDataElement = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "attributeValue");
 
-		DataAttributeToJsonConverter dataToJsonConverter = (DataAttributeToJsonConverter) dataToJsonConverterFactory
+		DataAttributeToJsonConverter attributeConverter = (DataAttributeToJsonConverter) dataToJsonConverterFactory
 				.createForClientDataElement(clientDataElement);
 
-		assertSame(dataToJsonConverter.getClientDataAttribute(), clientDataElement);
-		assertSame(dataToJsonConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+		assertSame(attributeConverter.getClientDataAttribute(), clientDataElement);
+		assertSame(attributeConverter.getJsonBuilderFactory(), jsonBuilderFactory);
 	}
 
 	@Test
 	public void testJsonCreateFactoryDataRecordLinkWithActionLinksDefaultMethod() {
 		ClientDataRecordLink recordLink = createRecordLink();
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+
+		DataRecordLinkToJsonConverter recordLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverterFactory
 				.createForClientDataElement(recordLink);
 
-		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonConverter);
-		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
-		assertTrue(
-				dataLinkConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
+		assertSame(recordLinkConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+		assertSame(recordLinkConverter.getClientDataRecordLink(), recordLink);
+
+		DataToJsonConverterFactoryImp converterSentToConverter = (DataToJsonConverterFactoryImp) recordLinkConverter.dataToJsonConverterFactory;
+		assertSame(converterSentToConverter.getJsonBuilderFactory(), jsonBuilderFactory);
 
 	}
 
@@ -118,31 +120,45 @@ public class DataToJsonConverterFactoryTest {
 	@Test
 	public void testJsonCreateFactoryDataRecordLinkWithoutActionLinks() {
 		ClientDataRecordLink recordLink = createRecordLink();
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+		DataRecordLinkToJsonWithoutActionLinkConverter recordLinkConverter = (DataRecordLinkToJsonWithoutActionLinkConverter) dataToJsonConverterFactory
 				.createForClientDataElementIncludingActionLinks(recordLink, false);
 
-		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonWithoutActionLinkConverter);
-		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
-		assertTrue(
-				dataLinkConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
+		assertSame(recordLinkConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+		assertSame(recordLinkConverter.getClientDataRecordLink(), recordLink);
+
+		DataToJsonConverterFactoryImp converterSentToConverter = (DataToJsonConverterFactoryImp) recordLinkConverter.dataToJsonConverterFactory;
+		assertSame(converterSentToConverter.getJsonBuilderFactory(), jsonBuilderFactory);
 
 	}
 
 	@Test
 	public void testJsonCreateFactoryDataRecordLinkWithActionLinks() {
 		ClientDataRecordLink recordLink = createRecordLink();
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
+		DataRecordLinkToJsonConverter recordLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverterFactory
 				.createForClientDataElementIncludingActionLinks(recordLink, true);
 
-		assertTrue(dataToJsonConverter instanceof DataRecordLinkToJsonConverter);
-		DataRecordLinkToJsonConverter dataLinkConverter = (DataRecordLinkToJsonConverter) dataToJsonConverter;
-		assertTrue(
-				dataLinkConverter.dataToJsonConverterFactory instanceof DataToJsonConverterFactoryImp);
+		assertSame(recordLinkConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+		assertSame(recordLinkConverter.getClientDataRecordLink(), recordLink);
 
+		DataToJsonConverterFactoryImp converterSentToConverter = (DataToJsonConverterFactoryImp) recordLinkConverter.dataToJsonConverterFactory;
+		assertSame(converterSentToConverter.getJsonBuilderFactory(), jsonBuilderFactory);
 	}
 
 	@Test
 	public void testJsonCreateFactoryDataResourceLink() {
+		ClientDataResourceLink resourceLink = createResourceLink();
+		DataResourceLinkToJsonConverter dataToJsonConverter = (DataResourceLinkToJsonConverter) dataToJsonConverterFactory
+				.createForClientDataElement(resourceLink);
+
+		assertSame(dataToJsonConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+		assertSame(dataToJsonConverter.getClientDataResourceLink(), resourceLink);
+
+		DataToJsonConverterFactoryImp converterSentToConverter = (DataToJsonConverterFactoryImp) dataToJsonConverter.dataToJsonConverterFactory;
+		assertSame(converterSentToConverter.getJsonBuilderFactory(), jsonBuilderFactory);
+
+	}
+
+	private ClientDataResourceLink createResourceLink() {
 		ClientDataResourceLink resourceLink = ClientDataResourceLink
 				.withNameInData("recordLinkNameInData");
 
@@ -151,11 +167,7 @@ public class DataToJsonConverterFactoryTest {
 		resourceLink.addChild(ClientDataAtomic.withNameInDataAndValue("filesize", "1234567"));
 		resourceLink
 				.addChild(ClientDataAtomic.withNameInDataAndValue("mimeType", "application/png"));
-		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(resourceLink);
-
-		assertTrue(dataToJsonConverter instanceof DataResourceLinkToJsonConverter);
-
+		return resourceLink;
 	}
 
 	@Test

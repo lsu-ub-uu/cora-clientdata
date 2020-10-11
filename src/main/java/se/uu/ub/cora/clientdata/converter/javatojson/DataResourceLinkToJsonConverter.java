@@ -22,6 +22,7 @@ package se.uu.ub.cora.clientdata.converter.javatojson;
 import java.util.Map;
 
 import se.uu.ub.cora.clientdata.ActionLink;
+import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
@@ -67,6 +68,11 @@ public final class DataResourceLinkToJsonConverter extends DataGroupToJsonConver
 				dataToJsonConverterFactory);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		dataGroupJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);
+	}
+
+	public ClientDataElement getClientDataResourceLink() {
+		// needed for test
+		return resourceLink;
 	}
 
 }

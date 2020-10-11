@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2015, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -23,6 +23,7 @@ import java.util.Map;
 
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
+import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
@@ -85,6 +86,11 @@ public class DataRecordLinkToJsonConverter extends DataGroupToJsonConverter {
 				dataToJsonConverterFactory);
 		JsonObjectBuilder actionLinksObject = actionLinkConverter.toJsonObjectBuilder();
 		dataGroupJsonObjectBuilder.addKeyJsonObjectBuilder("actionLinks", actionLinksObject);
+	}
+
+	ClientDataElement getClientDataRecordLink() {
+		// needed for test
+		return recordLink;
 	}
 
 }

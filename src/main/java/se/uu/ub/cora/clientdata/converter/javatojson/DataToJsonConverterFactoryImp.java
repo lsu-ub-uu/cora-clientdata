@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2015, 2018, 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -86,7 +86,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 	protected DataToJsonConverterFactory getConverterFactory() {
 		DataToJsonConverterFactoryImp converterFactoryForChildren = new DataToJsonConverterFactoryImp(
-				null);
+				jsonBuilderFactory);
 		converterFactoryForChildren.setIncludeActionLinks(includeActionLinks);
 		return converterFactoryForChildren;
 

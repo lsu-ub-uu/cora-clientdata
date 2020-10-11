@@ -33,9 +33,9 @@ public final class DataAttributeToJsonConverter extends DataToJsonConverter {
 		return new DataAttributeToJsonConverter(factory, dataAttribute);
 	}
 
-	private DataAttributeToJsonConverter(JsonBuilderFactory factory,
+	private DataAttributeToJsonConverter(JsonBuilderFactory jsonBuilderFactory,
 			ClientDataAttribute dataAttribute) {
-		this.jsonBuilderFactory = factory;
+		this.jsonBuilderFactory = jsonBuilderFactory;
 		this.clientDataAttribute = dataAttribute;
 	}
 
