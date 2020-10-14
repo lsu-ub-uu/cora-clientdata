@@ -41,7 +41,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 		}
 	}
 
-	private ClientDataRecord tryToInstanciate() {
+	private DataRecord tryToInstanciate() {
 		validateOnlyRecordKeyAtTopLevel();
 		jsonObjectRecord = jsonObject.getValueAsJsonObject("record");
 		validateOnlyCorrectKeysAtSecondLevel();
