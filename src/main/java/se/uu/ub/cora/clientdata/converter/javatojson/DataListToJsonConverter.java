@@ -23,6 +23,7 @@ import se.uu.ub.cora.clientdata.ClientData;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataList;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
+import se.uu.ub.cora.clientdata.DataRecord;
 import se.uu.ub.cora.json.builder.JsonArrayBuilder;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
@@ -87,7 +88,7 @@ public final class DataListToJsonConverter {
 			ClientData clientData) {
 		DataRecordToJsonConverter converter = DataRecordToJsonConverter
 				.usingJsonFactoryForClientDataRecord(jsonBuilderFactory,
-						(ClientDataRecord) clientData, dataToJsonFactory);
+						(DataRecord) clientData, dataToJsonFactory);
 		recordsJsonBuilder.addJsonObjectBuilder(converter.toJsonObjectBuilder());
 	}
 

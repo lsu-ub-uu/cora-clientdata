@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
-import se.uu.ub.cora.clientdata.ClientDataRecord;
+import se.uu.ub.cora.clientdata.DataRecord;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -53,13 +53,13 @@ public class JsonToDataRecordConverterTest {
 		createClientDataRecordForJsonString("{\"not\":\"record\"}");
 	}
 
-	private ClientDataRecord createClientDataRecordForJsonString(String json) {
+	private DataRecord createClientDataRecordForJsonString(String json) {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
 		factory = new JsonToDataConverterFactoryForDataRecordSpy();
 		JsonToDataRecordConverter jsonToDataConverter = JsonToDataRecordConverterImp
 				.usingConverterFactory(factory);
-		return (ClientDataRecord) jsonToDataConverter.toInstance(((JsonObject) jsonValue));
+		return (DataRecord) jsonToDataConverter.toInstance(((JsonObject) jsonValue));
 	}
 
 	@Test(expectedExceptions = JsonParseException.class, expectedExceptionsMessageRegExp = ""
@@ -199,7 +199,7 @@ public class JsonToDataRecordConverterTest {
 		json += ", \"permissions\":{}";
 		json += "}";
 		json += "}";
-		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
+		DataRecord clientDataRecord = createClientDataRecordForJsonString(json);
 
 		JsonToDataConverterFactoryForDataRecordSpy factorySpy = (JsonToDataConverterFactoryForDataRecordSpy) factory;
 		JsonToDataConverterSpy groupConverterSpy = factorySpy.factoredConverters.get(0);
@@ -217,7 +217,7 @@ public class JsonToDataRecordConverterTest {
 	@Test
 	public void testCheckReadPermissions() {
 		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"read\":[\"librisId\", \"topLevel\"]}}}";
-		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
+		DataRecord clientDataRecord = createClientDataRecordForJsonString(json);
 
 		Set<String> readPermissions = clientDataRecord.getReadPermissions();
 		assertEquals(readPermissions.size(), 2);
@@ -229,7 +229,7 @@ public class JsonToDataRecordConverterTest {
 	@Test
 	public void testCheckWritePermissions() {
 		String json = "{\"record\":{\"data\":{\"name\":\"groupNameInData\",\"children\":[]},\"actionLinks\":{\"read\":{\"requestMethod\":\"GET\",\"rel\":\"read\"}},\"permissions\":{\"write\":[\"rating\",\"parentId\"]}}}";
-		ClientDataRecord clientDataRecord = createClientDataRecordForJsonString(json);
+		DataRecord clientDataRecord = createClientDataRecordForJsonString(json);
 
 		Set<String> writePermissions = clientDataRecord.getWritePermissions();
 		assertEquals(writePermissions.size(), 2);

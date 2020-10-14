@@ -40,9 +40,8 @@ public interface DataRecord {
 	Set<String> getWritePermissions();
 
 	/**
+	/**
 	 * Returns a Map containing the Action links set in the DataRecord
-	 * 
-	 * "
 	 * 
 	 * @return A Map<String, ActionLink> containing ActionLinks
 	 */
