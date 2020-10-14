@@ -116,7 +116,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 	}
 
-	JsonBuilderFactory getJsonBuilderFactory() {
+	public JsonBuilderFactory getJsonBuilderFactory() {
 		// needed for test
 		return jsonBuilderFactory;
 	}
