@@ -51,6 +51,7 @@ public final class ClientDataRecord implements DataRecord, ClientData {
 		return actionLinks.get(key);
 	}
 
+	@Override
 	public Map<String, ActionLink> getActionLinks() {
 		return actionLinks;
 	}

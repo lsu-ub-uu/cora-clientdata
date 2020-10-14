@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataRecord;
+import se.uu.ub.cora.clientdata.DataRecord;
 import se.uu.ub.cora.json.builder.JsonArrayBuilder;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
@@ -31,13 +31,13 @@ import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 public final class DataRecordToJsonConverter {
 
 	private JsonBuilderFactory jsonBuilderFactory;
-	private ClientDataRecord clientDataRecord;
+	private DataRecord clientDataRecord;
 	private JsonObjectBuilder recordJsonObjectBuilder;
 	private DataToJsonConverterFactory dataToJsonConverterFactory;
 	ActionLinksToJsonConverter actionLinkConverter;
 
 	private DataRecordToJsonConverter(JsonBuilderFactory jsonFactory,
-			ClientDataRecord clientDataRecord,
+			DataRecord clientDataRecord,
 			DataToJsonConverterFactory dataToJsonConverterFactory) {
 		this.jsonBuilderFactory = jsonFactory;
 		this.clientDataRecord = clientDataRecord;
@@ -46,7 +46,7 @@ public final class DataRecordToJsonConverter {
 	}
 
 	public static DataRecordToJsonConverter usingJsonFactoryForClientDataRecord(
-			JsonBuilderFactory jsonFactory, ClientDataRecord clientDataRecord,
+			JsonBuilderFactory jsonFactory, DataRecord clientDataRecord,
 			DataToJsonConverterFactory dataToJsonConverterFactory) {
 		return new DataRecordToJsonConverter(jsonFactory, clientDataRecord,
 				dataToJsonConverterFactory);

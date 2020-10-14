@@ -18,6 +18,7 @@
  */
 package se.uu.ub.cora.clientdata;
 
+import java.util.Map;
 import java.util.Set;
 
 public interface DataRecord {
@@ -37,5 +38,12 @@ public interface DataRecord {
 	 * @return A Set<String> containing write permissions
 	 */
 	Set<String> getWritePermissions();
+
+	/**
+	 * Returns a Map containing the Action links set in the DataRecord
+	 * 
+	 * @return A Map<String, ActionLink> containing ActionLinks
+	 */
+	Map<String, ActionLink> getActionLinks();
 
 }
