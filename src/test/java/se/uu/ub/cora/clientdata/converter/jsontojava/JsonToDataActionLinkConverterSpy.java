@@ -1,6 +1,8 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import se.uu.ub.cora.clientdata.*;
+import se.uu.ub.cora.clientdata.Action;
+import se.uu.ub.cora.clientdata.ActionLink;
+import se.uu.ub.cora.clientdata.ClientData;
 import se.uu.ub.cora.json.parser.JsonObject;
 
 public class JsonToDataActionLinkConverterSpy implements JsonToDataActionLinkConverter {

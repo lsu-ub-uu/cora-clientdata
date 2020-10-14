@@ -21,8 +21,6 @@ package se.uu.ub.cora.clientdata;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.Action;
-
 public class ActionTest {
 	@Test
 	public void testAddAction() {

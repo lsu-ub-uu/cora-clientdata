@@ -25,11 +25,6 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.ClientData;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
-import se.uu.ub.cora.clientdata.ClientDataList;
-import se.uu.ub.cora.clientdata.ClientDataRecord;
-
 public class ClientDataListTest {
 	@Test
 	public void testInit() {

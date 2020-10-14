@@ -19,16 +19,19 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
+import static org.testng.Assert.assertEquals;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import se.uu.ub.cora.clientdata.*;
+
+import se.uu.ub.cora.clientdata.Action;
+import se.uu.ub.cora.clientdata.ActionLink;
+import se.uu.ub.cora.clientdata.ClientData;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonParser;
 import se.uu.ub.cora.json.parser.JsonValue;
 import se.uu.ub.cora.json.parser.org.OrgJsonParser;
-
-import static org.testng.Assert.*;
 
 public class JsonToDataActionLinkConverterTest {
 	private JsonParser jsonParser;

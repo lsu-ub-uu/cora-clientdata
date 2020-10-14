@@ -24,8 +24,6 @@ import static org.testng.Assert.assertEquals;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.ClientDataAtomic;
-
 public class ClientDataAtomicTest {
 	private ClientDataAtomic clientDataAtomic;
 
