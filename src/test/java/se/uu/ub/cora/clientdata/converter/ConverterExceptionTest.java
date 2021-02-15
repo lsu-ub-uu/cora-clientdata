@@ -23,8 +23,6 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.converter.ConverterException;
-
 public class ConverterExceptionTest {
 	@Test
 	public void testInit() {

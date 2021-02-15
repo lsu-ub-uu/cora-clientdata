@@ -25,8 +25,6 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
 import se.uu.ub.cora.clientdata.ClientDataElement;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataAttributeConverter;
-import se.uu.ub.cora.clientdata.converter.jsontojava.JsonToDataConverter;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonParser;
