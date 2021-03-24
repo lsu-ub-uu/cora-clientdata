@@ -221,6 +221,54 @@ public class ClientDataGroupTest {
 	}
 
 	@Test
+	public void testGetAllDataAtomicsNonFound() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic
+				.withNameInDataAndValue("NOTchildNameInData", "child value");
+		dataGroup.addChild(atomicChild);
+
+		List<ClientDataAtomic> atomicsFound = dataGroup
+				.getAllDataAtomicsWithNameInData("childNameInData");
+		assertEquals(atomicsFound.size(), 0);
+	}
+
+	@Test
+	public void testGetAllDataAtomicsWithNameInDataOneAtomic() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
+				"child value");
+		dataGroup.addChild(atomicChild);
+		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		dataGroup.addChild(groupChild);
+
+		List<ClientDataAtomic> atomicsFound = dataGroup
+				.getAllDataAtomicsWithNameInData("childNameInData");
+		assertEquals(atomicsFound.size(), 1);
+		assertEquals(atomicsFound.get(0), atomicChild);
+	}
+
+	@Test
+	public void testGetAllDataAtomicsWithNameInDataTwoAtomics() {
+		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
+				"child value");
+		atomicChild.setRepeatId("1");
+		dataGroup.addChild(atomicChild);
+		ClientDataAtomic atomicChild2 = ClientDataAtomic.withNameInDataAndValue("childNameInData",
+				"child value");
+		atomicChild2.setRepeatId("0");
+		dataGroup.addChild(atomicChild2);
+		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		dataGroup.addChild(groupChild);
+
+		List<ClientDataAtomic> atomicsFound = dataGroup
+				.getAllDataAtomicsWithNameInData("childNameInData");
+		assertEquals(atomicsFound.size(), 2);
+		assertEquals(atomicsFound.get(0), atomicChild);
+		assertEquals(atomicsFound.get(1), atomicChild2);
+	}
+
+	@Test
 	public void testGetAllChildrenWithNameInDataNoChildFound() {
 		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",

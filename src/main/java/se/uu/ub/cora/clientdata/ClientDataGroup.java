@@ -180,6 +180,10 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 				"Atomic value not found for childNameInData:" + childNameInData);
 	}
 
+	public List<ClientDataAtomic> getAllDataAtomicsWithNameInData(String childNameInData) {
+		return getAtomicChildrenWithNameInData(childNameInData).collect(Collectors.toList());
+	}
+
 	public List<ClientDataElement> getAllChildrenWithNameInData(String childNameInData) {
 		return getChildrenWithNameInDataStream(childNameInData).collect(Collectors.toList());
 	}
