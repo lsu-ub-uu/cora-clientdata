@@ -37,8 +37,8 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	private List<ClientDataElement> children = new ArrayList<>();
 	private String repeatId;
 
-	private Predicate<ClientDataElement> isDataGroup = dataElement -> dataElement instanceof ClientDataGroup;
-	private Predicate<ClientDataElement> isDataAtomic = dataElement -> dataElement instanceof ClientDataAtomic;
+	private Predicate<ClientDataElement> isDataGroup = ClientDataGroup.class::isInstance;
+	private Predicate<ClientDataElement> isDataAtomic = ClientDataAtomic.class::isInstance;
 
 	protected ClientDataGroup(String nameInData) {
 		this.nameInData = nameInData;
