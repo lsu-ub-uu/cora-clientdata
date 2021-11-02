@@ -32,7 +32,7 @@
     <name>Cora client data</name>
 
     <properties>
-       <json.version>2.5.0</json.version>
+       <json.version>3.0.0</json.version>
     </properties>
 
     <scm>
