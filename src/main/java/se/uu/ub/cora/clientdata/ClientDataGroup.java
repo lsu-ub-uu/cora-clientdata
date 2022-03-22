@@ -209,7 +209,7 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		return dataElement -> dataElementsHasAttributes(dataElement, childAttributes);
 	}
 
-	private boolean dataElementsHasAttributes(ClientDataGroup dataElement,
+	private boolean dataElementsHasAttributes(ClientDataElement dataElement,
 			ClientDataAttribute[] childAttributes) {
 		Map<String, String> attributesFromElement = dataElement.getAttributes();
 		if (diffrentNumberOfAttributesInRequestedAndExisting(childAttributes,
@@ -280,6 +280,19 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 					clientDataAttribute.getNameInData() + ":" + clientDataAttribute.getValue());
 		}
 		return attributesError;
+	}
+
+	public List<ClientDataElement> getAllChildrenWithNameInDataAndAttributes(String childNameInData,
+			ClientDataAttribute... childAttributes) {
+		Predicate<? super ClientDataElement> childNameInDataMatches = element -> dataElementsNameInDataAndAttributesMatch(
+				element, childNameInData, childAttributes);
+		return getChildren().stream().filter(childNameInDataMatches).toList();
+	}
+
+	private boolean dataElementsNameInDataAndAttributesMatch(ClientDataElement element,
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return dataElementsNameInDataIs(element, childNameInData)
+				&& dataElementsHasAttributes(element, childAttributes);
 	}
 
 }

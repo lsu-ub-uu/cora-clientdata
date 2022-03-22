@@ -250,13 +250,11 @@ public class ClientDataGroupTest {
 	@Test
 	public void testGetAllDataAtomicsWithNameInDataTwoAtomics() {
 		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
-		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
-				"child value");
-		atomicChild.setRepeatId("1");
+		ClientDataAtomic atomicChild = createAtomicDataWithRepeatId("childNameInData",
+				"child value", "1");
 		dataGroup.addChild(atomicChild);
-		ClientDataAtomic atomicChild2 = ClientDataAtomic.withNameInDataAndValue("childNameInData",
-				"child value");
-		atomicChild2.setRepeatId("0");
+		ClientDataAtomic atomicChild2 = createAtomicDataWithRepeatId("childNameInData",
+				"child value", "0");
 		dataGroup.addChild(atomicChild2);
 		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
@@ -266,6 +264,14 @@ public class ClientDataGroupTest {
 		assertEquals(atomicsFound.size(), 2);
 		assertEquals(atomicsFound.get(0), atomicChild);
 		assertEquals(atomicsFound.get(1), atomicChild2);
+	}
+
+	private ClientDataAtomic createAtomicDataWithRepeatId(String childNameInData, String childValue,
+			String repeatId) {
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue(childNameInData,
+				childValue);
+		atomicChild.setRepeatId(repeatId);
+		return atomicChild;
 	}
 
 	@Test
@@ -531,5 +537,25 @@ public class ClientDataGroupTest {
 				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
 
 		assertEquals(found, child4);
+	}
+
+	@Test
+	public void testGetAllChildrenWithNameInDataAndAttributesDataAtomicChild() {
+		// DataGroup childGroup = createChildGroupWithNameInDataAndRepatIdAndAttributes(
+		// "someChildNameInData", "0");
+		// defaultDataGroup.addChild(childGroup);
+
+		// CoraDataAtomic coraDataAtomic =
+		// CoraDataAtomic.withNameInDataAndValue("someChildNameInData",
+		// "someValue");
+		//
+		// defaultDataGroup.addChild(coraDataAtomic);
+		//
+		// List<DataElement> children = clientDataGroup
+		// .getAllChildrenWithNameInDataAndAttributes("someChildNameInData");
+		//
+		// assertEquals(children.size(), 1);
+		// assertSame(children.get(0), coraDataAtomic);
+
 	}
 }
