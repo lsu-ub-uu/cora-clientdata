@@ -24,9 +24,9 @@ import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 public interface DataToJsonConverterFactory {
 
 	DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
-			Convertible clientDataElement);
+			Convertible convertible);
 
 	DataToJsonConverter createForClientDataElementIncludingActionLinks(JsonBuilderFactory factory,
-			Convertible clientDataElement, boolean includeActionLinks);
+			Convertible convertible, boolean includeActionLinks);
 
 }
