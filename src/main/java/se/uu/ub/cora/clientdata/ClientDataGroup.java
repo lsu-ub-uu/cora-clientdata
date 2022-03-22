@@ -65,8 +65,8 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		return attributes;
 	}
 
-	public void addAttributeByIdWithValue(String nameInData, String value) {
-		attributes.put(nameInData, value);
+	public void addAttributeByIdWithValue(String attributeName, String attributeValue) {
+		attributes.put(attributeName, attributeValue);
 	}
 
 	public void addChild(ClientDataElement clientDataElement) {

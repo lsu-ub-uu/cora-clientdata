@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2015, 2018, 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,6 +20,9 @@
 package se.uu.ub.cora.clientdata;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import java.util.Map;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -37,6 +40,7 @@ public class ClientDataAtomicTest {
 	public void testInit() {
 		assertEquals(clientDataAtomic.getNameInData(), "nameInData");
 		assertEquals(clientDataAtomic.getValue(), "value");
+		assertTrue(clientDataAtomic.getAttributes().isEmpty());
 	}
 
 	@Test
@@ -45,6 +49,28 @@ public class ClientDataAtomicTest {
 		assertEquals(clientDataAtomic.getNameInData(), "nameInData");
 		assertEquals(clientDataAtomic.getValue(), "value");
 		assertEquals(clientDataAtomic.getRepeatId(), "x1");
+	}
 
+	@Test
+	public void testAddAttributes() {
+		clientDataAtomic.addAttributeByIdWithValue("someAttributeName", "value");
+		clientDataAtomic.addAttributeByIdWithValue("someOtherAttributeName", "otherValue");
+		Map<String, String> attributes = clientDataAtomic.getAttributes();
+
+		assertEquals(attributes.get("someAttributeName"), "value");
+		assertEquals(attributes.get("someOtherAttributeName"), "otherValue");
+	}
+
+	@Test
+	public void testAddAttributesSameNameInDataOverwrites() {
+		clientDataAtomic.addAttributeByIdWithValue("someAttributeName", "value");
+
+		Map<String, String> attributes = clientDataAtomic.getAttributes();
+		assertEquals(attributes.get("someAttributeName"), "value");
+
+		clientDataAtomic.addAttributeByIdWithValue("someAttributeName", "otherValue");
+
+		attributes = clientDataAtomic.getAttributes();
+		assertEquals(attributes.get("someAttributeName"), "otherValue");
 	}
 }
