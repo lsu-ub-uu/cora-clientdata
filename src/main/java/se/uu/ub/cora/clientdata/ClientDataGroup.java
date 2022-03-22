@@ -30,7 +30,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ClientDataGroup implements ClientDataElement, ClientData {
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
+
+public class ClientDataGroup implements ClientDataElement, ClientData, Convertible {
 
 	private final String nameInData;
 	private Map<String, String> attributes = new HashMap<>();
@@ -61,6 +63,7 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		return nameInData;
 	}
 
+	@Override
 	public Map<String, String> getAttributes() {
 		return attributes;
 	}
@@ -205,7 +208,8 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 				.filter(filterByAttributes(childAttributes));
 	}
 
-	private Predicate<ClientDataGroup> filterByAttributes(ClientDataAttribute... childAttributes) {
+	private Predicate<ClientDataElement> filterByAttributes(
+			ClientDataAttribute... childAttributes) {
 		return dataElement -> dataElementsHasAttributes(dataElement, childAttributes);
 	}
 
@@ -243,7 +247,7 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	}
 
 	private boolean requestedAttributeDoesNotExists(Map<String, String> attributesFromElement,
-			ClientDataElement dataAttribute) {
+			ClientDataAttribute dataAttribute) {
 		return !attributesFromElement.containsKey(dataAttribute.getNameInData());
 	}
 
@@ -293,6 +297,23 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 			String childNameInData, ClientDataAttribute... childAttributes) {
 		return dataElementsNameInDataIs(element, childNameInData)
 				&& dataElementsHasAttributes(element, childAttributes);
+	}
+
+	public Collection<ClientDataAtomic> getAllDataAtomicsWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return getAtomicChildrenWithNameInDataAndAttributes(childNameInData, childAttributes)
+				.toList();
+	}
+
+	private Stream<ClientDataAtomic> getAtomicChildrenWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return getAtomicChildrenWithNameInDataStream(childNameInData)
+				.filter(filterByAttributes(childAttributes));
+	}
+
+	private Stream<ClientDataAtomic> getAtomicChildrenWithNameInDataStream(String childNameInData) {
+		return getAtomicChildrenStream().filter(filterByNameInData(childNameInData))
+				.map(ClientDataAtomic.class::cast);
 	}
 
 }

@@ -7,9 +7,9 @@ import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataToJsonConverterSpy extends DataToJsonConverter {
 
-	public ClientDataElement clientDataElement;
+	public Convertible clientDataElement;
 
-	public DataToJsonConverterSpy(ClientDataElement clientDataElement) {
+	public DataToJsonConverterSpy(Convertible clientDataElement) {
 		this.clientDataElement = clientDataElement;
 	}
 
@@ -17,7 +17,9 @@ public class DataToJsonConverterSpy extends DataToJsonConverter {
 	protected JsonObjectBuilder toJsonObjectBuilder() {
 		JsonBuilderFactory jsonBuilderFactory = new OrgJsonBuilderFactoryAdapter();
 		JsonObjectBuilder jsonObjectBuilder = jsonBuilderFactory.createObjectBuilder();
-		jsonObjectBuilder.addKeyString("name", clientDataElement.getNameInData());
+
+		jsonObjectBuilder.addKeyString("name",
+				((ClientDataElement) clientDataElement).getNameInData());
 		return jsonObjectBuilder;
 	}
 

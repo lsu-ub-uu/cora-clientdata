@@ -19,7 +19,9 @@
 
 package se.uu.ub.cora.clientdata;
 
-public final class ClientDataAttribute implements ClientDataElement {
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
+
+public final class ClientDataAttribute implements DataAttribute, Convertible {
 
 	private String nameInData;
 	private String value;

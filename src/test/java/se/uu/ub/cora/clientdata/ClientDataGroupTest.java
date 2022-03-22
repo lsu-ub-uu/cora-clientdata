@@ -22,6 +22,7 @@ package se.uu.ub.cora.clientdata;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Collection;
@@ -541,21 +542,36 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllChildrenWithNameInDataAndAttributesDataAtomicChild() {
-		// DataGroup childGroup = createChildGroupWithNameInDataAndRepatIdAndAttributes(
-		// "someChildNameInData", "0");
-		// defaultDataGroup.addChild(childGroup);
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("groupId2",
+				"someValue");
+		atomicChild.addAttributeByIdWithValue("nameInData", "value1");
+		clientDataGroup.addChild(atomicChild);
 
-		// CoraDataAtomic coraDataAtomic =
-		// CoraDataAtomic.withNameInDataAndValue("someChildNameInData",
-		// "someValue");
-		//
-		// defaultDataGroup.addChild(coraDataAtomic);
-		//
-		// List<DataElement> children = clientDataGroup
-		// .getAllChildrenWithNameInDataAndAttributes("someChildNameInData");
-		//
-		// assertEquals(children.size(), 1);
-		// assertSame(children.get(0), coraDataAtomic);
+		List<ClientDataElement> children = clientDataGroup
+				.getAllChildrenWithNameInDataAndAttributes("groupId2",
+						ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(children.size(), 2);
+		assertTrue(children.get(0) instanceof ClientDataGroup);
+		assertSame(children.get(1), atomicChild);
+
+	}
+
+	@Test
+	public void testGetAllDataAtomicsWithNameInDataAndAttributesDataAtomicChild() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("groupId2",
+				"someValue");
+		atomicChild.addAttributeByIdWithValue("nameInData", "value1");
+		clientDataGroup.addChild(atomicChild);
+
+		Collection<ClientDataAtomic> children = clientDataGroup
+				.getAllDataAtomicsWithNameInDataAndAttributes("groupId2",
+						ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(children.size(), 1);
+		assertSame(children.iterator().next(), atomicChild);
 
 	}
 }

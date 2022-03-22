@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,17 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.clientdata;
 
-package se.uu.ub.cora.clientdata.converter.javatojson;
+public interface DataAttribute {
 
-import se.uu.ub.cora.json.builder.JsonBuilderFactory;
-
-public interface DataToJsonConverterFactory {
-
-	DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
-			Convertible clientDataElement);
-
-	DataToJsonConverter createForClientDataElementIncludingActionLinks(JsonBuilderFactory factory,
-			Convertible clientDataElement, boolean includeActionLinks);
+	String getNameInData();
 
 }

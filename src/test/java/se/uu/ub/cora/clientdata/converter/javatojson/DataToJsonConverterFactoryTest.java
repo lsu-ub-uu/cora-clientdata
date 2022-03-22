@@ -27,7 +27,6 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
@@ -46,7 +45,7 @@ public class DataToJsonConverterFactoryTest {
 
 	@Test
 	public void testJsonCreatorFactoryDataGroup() {
-		ClientDataElement clientDataElement = ClientDataGroup.withNameInData("groupNameInData");
+		Convertible clientDataElement = ClientDataGroup.withNameInData("groupNameInData");
 
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(factory, clientDataElement);
@@ -59,8 +58,8 @@ public class DataToJsonConverterFactoryTest {
 
 	@Test
 	public void testJsonCreatorFactoryDataAtomic() {
-		ClientDataElement clientDataElement = ClientDataAtomic
-				.withNameInDataAndValue("atomicNameInData", "atomicValue");
+		Convertible clientDataElement = ClientDataAtomic.withNameInDataAndValue("atomicNameInData",
+				"atomicValue");
 
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(factory, clientDataElement);
@@ -70,7 +69,7 @@ public class DataToJsonConverterFactoryTest {
 
 	@Test
 	public void testJsonCreatorFactoryDataAttribute() {
-		ClientDataElement clientDataElement = ClientDataAttribute
+		Convertible clientDataElement = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "attributeValue");
 
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory

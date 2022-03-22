@@ -19,6 +19,15 @@
 
 package se.uu.ub.cora.clientdata;
 
+import java.util.Map;
+
 public interface ClientDataElement {
 	String getNameInData();
+
+	/**
+	 * getAttributes returns the attributes of the dataElement.
+	 * 
+	 * @return A Map<String, String> of this elements DataAttributes
+	 */
+	Map<String, String> getAttributes();
 }

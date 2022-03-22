@@ -19,10 +19,10 @@
 
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
-import se.uu.ub.cora.clientdata.ClientDataElement;
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 
 public interface JsonToDataConverter {
 
-	ClientDataElement toInstance();
+	Convertible toInstance();
 
 }

@@ -20,7 +20,7 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataElement;
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonString;
@@ -39,7 +39,7 @@ public final class JsonToDataAttributeConverter implements JsonToDataConverter {
 	}
 
 	@Override
-	public ClientDataElement toInstance() {
+	public Convertible toInstance() {
 		try {
 			return tryToInstantiate();
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public final class JsonToDataAttributeConverter implements JsonToDataConverter {
 		}
 	}
 
-	private ClientDataElement tryToInstantiate() {
+	private Convertible tryToInstantiate() {
 		validateJsonData();
 		String nameInData = getNameInDataFromJsonObject();
 		JsonString value = (JsonString) jsonObject.getValue(nameInData);

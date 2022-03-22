@@ -21,7 +21,6 @@ package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
@@ -33,15 +32,14 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 	@Override
 	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement) {
+			Convertible clientDataElement) {
 		return createForClientDataElementIncludingActionLinks(factory, clientDataElement,
 				includeActionLinks);
 	}
 
 	@Override
 	public DataToJsonConverter createForClientDataElementIncludingActionLinks(
-			JsonBuilderFactory factory, ClientDataElement clientDataElement,
-			boolean includeActionLinks) {
+			JsonBuilderFactory factory, Convertible clientDataElement, boolean includeActionLinks) {
 
 		if (clientDataElement instanceof ClientDataGroup) {
 			return handleClientDataGroup(factory, clientDataElement, includeActionLinks);
@@ -55,7 +53,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	private DataToJsonConverter handleClientDataGroup(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement, boolean includeActionLinks) {
+			Convertible clientDataElement, boolean includeActionLinks) {
 		this.includeActionLinks = includeActionLinks;
 
 		DataToJsonConverterFactory converterFactory = getConverterFactory();
@@ -72,7 +70,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	private DataToJsonConverter handleDataRecordLink(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement, DataToJsonConverterFactory converterFactory,
+			Convertible clientDataElement, DataToJsonConverterFactory converterFactory,
 			boolean includeActionLinks) {
 		if (includeActionLinks) {
 			return getDataRecordLinkToJsonConverter(factory, clientDataElement, converterFactory);
@@ -89,14 +87,13 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement,
-			DataToJsonConverterFactory factoryConverterForGroup) {
+			Convertible clientDataElement, DataToJsonConverterFactory factoryConverterForGroup) {
 		return DataRecordLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
 				(ClientDataRecordLink) clientDataElement, factoryConverterForGroup);
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverterWithoutActionLinks(
-			JsonBuilderFactory factory, ClientDataElement clientDataElement,
+			JsonBuilderFactory factory, Convertible clientDataElement,
 			DataToJsonConverterFactory factoryConverterForGroup) {
 
 		return DataRecordLinkToJsonWithoutActionLinkConverter.usingJsonFactoryForClientDataLink(

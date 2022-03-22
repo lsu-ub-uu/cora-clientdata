@@ -28,6 +28,7 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -51,7 +52,7 @@ public class JsonToDataGroupConverterTest {
 		factory = new JsonToDataConverterFactorySpy();
 		JsonToDataConverter jsonToDataConverter = JsonToDataGroupConverter
 				.forJsonObjectUsingConverterFactory((JsonObject) jsonValue, factory);
-		ClientDataElement clientDataElement = jsonToDataConverter.toInstance();
+		Convertible clientDataElement = jsonToDataConverter.toInstance();
 		ClientDataGroup clientDataGroup = (ClientDataGroup) clientDataElement;
 		return clientDataGroup;
 	}

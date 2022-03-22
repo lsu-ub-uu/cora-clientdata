@@ -22,7 +22,9 @@ package se.uu.ub.cora.clientdata;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class ClientDataAtomic implements ClientDataElement {
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
+
+public final class ClientDataAtomic implements ClientDataElement, Convertible {
 
 	private String nameInData;
 	private String value;
@@ -61,6 +63,7 @@ public final class ClientDataAtomic implements ClientDataElement {
 		attributes.put(attributeName, attributeValue);
 	}
 
+	@Override
 	public Map<String, String> getAttributes() {
 		return attributes;
 	}
