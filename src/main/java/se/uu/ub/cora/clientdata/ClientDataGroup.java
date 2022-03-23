@@ -247,7 +247,7 @@ public class ClientDataGroup implements ClientDataElement, ClientData, Convertib
 	}
 
 	private boolean requestedAttributeDoesNotExists(Map<String, String> attributesFromElement,
-			ClientDataAttribute dataAttribute) {
+			DataAttribute dataAttribute) {
 		return !attributesFromElement.containsKey(dataAttribute.getNameInData());
 	}
 
