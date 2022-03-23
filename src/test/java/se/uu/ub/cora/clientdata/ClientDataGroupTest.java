@@ -22,6 +22,7 @@ package se.uu.ub.cora.clientdata;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Collection;
@@ -250,13 +251,11 @@ public class ClientDataGroupTest {
 	@Test
 	public void testGetAllDataAtomicsWithNameInDataTwoAtomics() {
 		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
-		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
-				"child value");
-		atomicChild.setRepeatId("1");
+		ClientDataAtomic atomicChild = createAtomicDataWithRepeatId("childNameInData",
+				"child value", "1");
 		dataGroup.addChild(atomicChild);
-		ClientDataAtomic atomicChild2 = ClientDataAtomic.withNameInDataAndValue("childNameInData",
-				"child value");
-		atomicChild2.setRepeatId("0");
+		ClientDataAtomic atomicChild2 = createAtomicDataWithRepeatId("childNameInData",
+				"child value", "0");
 		dataGroup.addChild(atomicChild2);
 		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
@@ -266,6 +265,14 @@ public class ClientDataGroupTest {
 		assertEquals(atomicsFound.size(), 2);
 		assertEquals(atomicsFound.get(0), atomicChild);
 		assertEquals(atomicsFound.get(1), atomicChild2);
+	}
+
+	private ClientDataAtomic createAtomicDataWithRepeatId(String childNameInData, String childValue,
+			String repeatId) {
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue(childNameInData,
+				childValue);
+		atomicChild.setRepeatId(repeatId);
+		return atomicChild;
 	}
 
 	@Test
@@ -531,5 +538,40 @@ public class ClientDataGroupTest {
 				ClientDataAttribute.withNameInDataAndValue("nameInData2", "value2"));
 
 		assertEquals(found, child4);
+	}
+
+	@Test
+	public void testGetAllChildrenWithNameInDataAndAttributesDataAtomicChild() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("groupId2",
+				"someValue");
+		atomicChild.addAttributeByIdWithValue("nameInData", "value1");
+		clientDataGroup.addChild(atomicChild);
+
+		List<ClientDataElement> children = clientDataGroup
+				.getAllChildrenWithNameInDataAndAttributes("groupId2",
+						ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(children.size(), 2);
+		assertTrue(children.get(0) instanceof ClientDataGroup);
+		assertSame(children.get(1), atomicChild);
+
+	}
+
+	@Test
+	public void testGetAllDataAtomicsWithNameInDataAndAttributesDataAtomicChild() {
+		createTestGroupForAttributesReturnChildGroupWithAttribute();
+		ClientDataAtomic atomicChild = ClientDataAtomic.withNameInDataAndValue("groupId2",
+				"someValue");
+		atomicChild.addAttributeByIdWithValue("nameInData", "value1");
+		clientDataGroup.addChild(atomicChild);
+
+		Collection<ClientDataAtomic> children = clientDataGroup
+				.getAllDataAtomicsWithNameInDataAndAttributes("groupId2",
+						ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
+
+		assertEquals(children.size(), 1);
+		assertSame(children.iterator().next(), atomicChild);
+
 	}
 }

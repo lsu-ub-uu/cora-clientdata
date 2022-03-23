@@ -21,7 +21,6 @@ package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
@@ -33,51 +32,49 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 	@Override
 	public DataToJsonConverter createForClientDataElement(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement) {
-		return createForClientDataElementIncludingActionLinks(factory, clientDataElement,
+			Convertible convertible) {
+		return createForClientDataElementIncludingActionLinks(factory, convertible,
 				includeActionLinks);
 	}
 
 	@Override
 	public DataToJsonConverter createForClientDataElementIncludingActionLinks(
-			JsonBuilderFactory factory, ClientDataElement clientDataElement,
-			boolean includeActionLinks) {
+			JsonBuilderFactory factory, Convertible convertible, boolean includeActionLinks) {
 
-		if (clientDataElement instanceof ClientDataGroup) {
-			return handleClientDataGroup(factory, clientDataElement, includeActionLinks);
+		if (convertible instanceof ClientDataGroup) {
+			return handleClientDataGroup(factory, convertible, includeActionLinks);
 		}
-		if (clientDataElement instanceof ClientDataAtomic) {
+		if (convertible instanceof ClientDataAtomic dataAtomic) {
 			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(factory,
-					(ClientDataAtomic) clientDataElement);
+					dataAtomic);
 		}
 		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(factory,
-				(ClientDataAttribute) clientDataElement);
+				(ClientDataAttribute) convertible);
 	}
 
 	private DataToJsonConverter handleClientDataGroup(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement, boolean includeActionLinks) {
+			Convertible convertible, boolean includeActionLinks) {
 		this.includeActionLinks = includeActionLinks;
 
 		DataToJsonConverterFactory converterFactory = getConverterFactory();
-		if (clientDataElement instanceof ClientDataRecordLink) {
-			return handleDataRecordLink(factory, clientDataElement, converterFactory,
-					includeActionLinks);
+		if (convertible instanceof ClientDataRecordLink) {
+			return handleDataRecordLink(factory, convertible, converterFactory, includeActionLinks);
 		}
-		if (clientDataElement instanceof ClientDataResourceLink) {
+		if (convertible instanceof ClientDataResourceLink resourceLink) {
 			return DataResourceLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
-					(ClientDataResourceLink) clientDataElement, converterFactory);
+					resourceLink, converterFactory);
 		}
 		return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
-				factory, converterFactory, (ClientDataGroup) clientDataElement);
+				factory, converterFactory, (ClientDataGroup) convertible);
 	}
 
 	private DataToJsonConverter handleDataRecordLink(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement, DataToJsonConverterFactory converterFactory,
+			Convertible convertible, DataToJsonConverterFactory converterFactory,
 			boolean includeActionLinks) {
 		if (includeActionLinks) {
-			return getDataRecordLinkToJsonConverter(factory, clientDataElement, converterFactory);
+			return getDataRecordLinkToJsonConverter(factory, convertible, converterFactory);
 		}
-		return getDataRecordLinkToJsonConverterWithoutActionLinks(factory, clientDataElement,
+		return getDataRecordLinkToJsonConverterWithoutActionLinks(factory, convertible,
 				converterFactory);
 	}
 
@@ -89,14 +86,13 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverter(JsonBuilderFactory factory,
-			ClientDataElement clientDataElement,
-			DataToJsonConverterFactory factoryConverterForGroup) {
+			Convertible clientDataElement, DataToJsonConverterFactory factoryConverterForGroup) {
 		return DataRecordLinkToJsonConverter.usingJsonFactoryForClientDataLink(factory,
 				(ClientDataRecordLink) clientDataElement, factoryConverterForGroup);
 	}
 
 	protected DataToJsonConverter getDataRecordLinkToJsonConverterWithoutActionLinks(
-			JsonBuilderFactory factory, ClientDataElement clientDataElement,
+			JsonBuilderFactory factory, Convertible clientDataElement,
 			DataToJsonConverterFactory factoryConverterForGroup) {
 
 		return DataRecordLinkToJsonWithoutActionLinkConverter.usingJsonFactoryForClientDataLink(

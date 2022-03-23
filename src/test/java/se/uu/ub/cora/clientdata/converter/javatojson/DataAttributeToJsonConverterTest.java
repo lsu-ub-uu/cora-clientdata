@@ -24,7 +24,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
@@ -41,7 +40,7 @@ public class DataAttributeToJsonConverterTest {
 
 	@Test
 	public void testToJson() {
-		ClientDataElement clientDataElement = ClientDataAttribute
+		Convertible clientDataElement = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "attributeValue");
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(factory, clientDataElement);
@@ -52,7 +51,7 @@ public class DataAttributeToJsonConverterTest {
 
 	@Test
 	public void testToJsonEmptyValue() {
-		ClientDataElement clientDataElement = ClientDataAttribute
+		Convertible clientDataElement = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "");
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
 				.createForClientDataElement(factory, clientDataElement);

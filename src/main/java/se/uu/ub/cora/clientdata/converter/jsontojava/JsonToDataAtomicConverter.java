@@ -20,7 +20,7 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataElement;
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonString;
@@ -41,7 +41,7 @@ public final class JsonToDataAtomicConverter implements JsonToDataConverter {
 	}
 
 	@Override
-	public ClientDataElement toInstance() {
+	public Convertible toInstance() {
 		try {
 			return tryToInstantiate();
 		} catch (Exception e) {
@@ -49,7 +49,7 @@ public final class JsonToDataAtomicConverter implements JsonToDataConverter {
 		}
 	}
 
-	private ClientDataElement tryToInstantiate() {
+	private Convertible tryToInstantiate() {
 		validateJsonData();
 		return convertJsonToDataAtomic();
 	}
@@ -109,7 +109,8 @@ public final class JsonToDataAtomicConverter implements JsonToDataConverter {
 
 	private void addRepeatIdFromJson(ClientDataAtomic clientDataAtomic) {
 		if (jsonObject.containsKey(REPEAT_ID)) {
-			clientDataAtomic.setRepeatId(jsonObject.getValueAsJsonString(REPEAT_ID).getStringValue());
+			clientDataAtomic
+					.setRepeatId(jsonObject.getValueAsJsonString(REPEAT_ID).getStringValue());
 		}
 	}
 }

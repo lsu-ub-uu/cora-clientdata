@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Set;
 
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -28,7 +28,7 @@ public class JsonToDataRecordLinkConverter extends JsonToDataGroupConverter {
 	}
 
 	@Override
-	public ClientDataElement toInstance() {
+	public Convertible toInstance() {
 		validateOnlyCorrectKeysAtTopLevel();
 		String nameInData = getNameInDataFromJsonObject();
 		clientDataRecordLink = ClientDataRecordLink.withNameInData(nameInData);

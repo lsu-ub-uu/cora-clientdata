@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package se.uu.ub.cora.clientdata;
 
-import java.util.Map;
+public interface DataAttribute {
 
-public interface ClientDataElement {
 	String getNameInData();
 
-	/**
-	 * getAttributes returns the attributes of the dataElement.
-	 * 
-	 * @return A Map<String, String> of this elements DataAttributes
-	 */
-	Map<String, String> getAttributes();
 }

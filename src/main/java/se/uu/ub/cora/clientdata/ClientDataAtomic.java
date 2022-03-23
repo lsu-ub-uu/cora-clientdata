@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2015, 2018, 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,11 +19,17 @@
 
 package se.uu.ub.cora.clientdata;
 
-public final class ClientDataAtomic implements ClientDataElement {
+import java.util.HashMap;
+import java.util.Map;
+
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
+
+public final class ClientDataAtomic implements ClientDataElement, Convertible {
 
 	private String nameInData;
 	private String value;
 	private String repeatId;
+	private Map<String, String> attributes = new HashMap<>();
 
 	public static ClientDataAtomic withNameInDataAndValue(String nameInData, String value) {
 		return new ClientDataAtomic(nameInData, value);
@@ -51,5 +57,14 @@ public final class ClientDataAtomic implements ClientDataElement {
 
 	public void setRepeatId(String repeatId) {
 		this.repeatId = repeatId;
+	}
+
+	public void addAttributeByIdWithValue(String attributeName, String attributeValue) {
+		attributes.put(attributeName, attributeValue);
+	}
+
+	@Override
+	public Map<String, String> getAttributes() {
+		return attributes;
 	}
 }

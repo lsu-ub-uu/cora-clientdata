@@ -30,7 +30,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ClientDataGroup implements ClientDataElement, ClientData {
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
+
+public class ClientDataGroup implements ClientDataElement, ClientData, Convertible {
 
 	private final String nameInData;
 	private Map<String, String> attributes = new HashMap<>();
@@ -61,12 +63,13 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 		return nameInData;
 	}
 
+	@Override
 	public Map<String, String> getAttributes() {
 		return attributes;
 	}
 
-	public void addAttributeByIdWithValue(String nameInData, String value) {
-		attributes.put(nameInData, value);
+	public void addAttributeByIdWithValue(String attributeName, String attributeValue) {
+		attributes.put(attributeName, attributeValue);
 	}
 
 	public void addChild(ClientDataElement clientDataElement) {
@@ -205,11 +208,12 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 				.filter(filterByAttributes(childAttributes));
 	}
 
-	private Predicate<ClientDataGroup> filterByAttributes(ClientDataAttribute... childAttributes) {
+	private Predicate<ClientDataElement> filterByAttributes(
+			ClientDataAttribute... childAttributes) {
 		return dataElement -> dataElementsHasAttributes(dataElement, childAttributes);
 	}
 
-	private boolean dataElementsHasAttributes(ClientDataGroup dataElement,
+	private boolean dataElementsHasAttributes(ClientDataElement dataElement,
 			ClientDataAttribute[] childAttributes) {
 		Map<String, String> attributesFromElement = dataElement.getAttributes();
 		if (diffrentNumberOfAttributesInRequestedAndExisting(childAttributes,
@@ -243,7 +247,7 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 	}
 
 	private boolean requestedAttributeDoesNotExists(Map<String, String> attributesFromElement,
-			ClientDataElement dataAttribute) {
+			ClientDataAttribute dataAttribute) {
 		return !attributesFromElement.containsKey(dataAttribute.getNameInData());
 	}
 
@@ -280,6 +284,36 @@ public class ClientDataGroup implements ClientDataElement, ClientData {
 					clientDataAttribute.getNameInData() + ":" + clientDataAttribute.getValue());
 		}
 		return attributesError;
+	}
+
+	public List<ClientDataElement> getAllChildrenWithNameInDataAndAttributes(String childNameInData,
+			ClientDataAttribute... childAttributes) {
+		Predicate<? super ClientDataElement> childNameInDataMatches = element -> dataElementsNameInDataAndAttributesMatch(
+				element, childNameInData, childAttributes);
+		return getChildren().stream().filter(childNameInDataMatches).toList();
+	}
+
+	private boolean dataElementsNameInDataAndAttributesMatch(ClientDataElement element,
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return dataElementsNameInDataIs(element, childNameInData)
+				&& dataElementsHasAttributes(element, childAttributes);
+	}
+
+	public Collection<ClientDataAtomic> getAllDataAtomicsWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return getAtomicChildrenWithNameInDataAndAttributes(childNameInData, childAttributes)
+				.toList();
+	}
+
+	private Stream<ClientDataAtomic> getAtomicChildrenWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
+		return getAtomicChildrenWithNameInDataStream(childNameInData)
+				.filter(filterByAttributes(childAttributes));
+	}
+
+	private Stream<ClientDataAtomic> getAtomicChildrenWithNameInDataStream(String childNameInData) {
+		return getAtomicChildrenStream().filter(filterByNameInData(childNameInData))
+				.map(ClientDataAtomic.class::cast);
 	}
 
 }

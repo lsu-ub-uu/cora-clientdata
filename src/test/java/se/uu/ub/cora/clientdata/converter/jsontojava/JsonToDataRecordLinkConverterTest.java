@@ -31,6 +31,7 @@ import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataElement;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
+import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
 import se.uu.ub.cora.json.parser.JsonParseException;
 import se.uu.ub.cora.json.parser.JsonValue;
@@ -54,7 +55,7 @@ public class JsonToDataRecordLinkConverterTest {
 
 		JsonToDataRecordLinkConverter jsonToDataConverter = JsonToDataRecordLinkConverter
 				.forJsonObjectUsingConverterFactory((JsonObject) jsonValue, factory);
-		ClientDataElement clientDataElement = jsonToDataConverter.toInstance();
+		Convertible clientDataElement = jsonToDataConverter.toInstance();
 		ClientDataRecordLink clientDataRecordLink = (ClientDataRecordLink) clientDataElement;
 		return clientDataRecordLink;
 	}
@@ -99,7 +100,8 @@ public class JsonToDataRecordLinkConverterTest {
 		assertEquals(actionLinks.size(), 1);
 		assertNotNull(actionLinks.get("read"));
 		assertEquals(factory.numOfTimesFactoryCalled, 4);
-		assertEquals(factory.factoredActionLinksConverters.get(0).returnedElement, actionLinks.get("read"));
+		assertEquals(factory.factoredActionLinksConverters.get(0).returnedElement,
+				actionLinks.get("read"));
 	}
 
 	@Test

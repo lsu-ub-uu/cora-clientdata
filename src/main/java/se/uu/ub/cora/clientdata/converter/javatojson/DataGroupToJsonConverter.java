@@ -91,7 +91,7 @@ public class DataGroupToJsonConverter extends DataToJsonConverter {
 		JsonArrayBuilder childrenArray = jsonBuilderFactory.createArrayBuilder();
 		for (ClientDataElement clientDataElement : clientDataGroup.getChildren()) {
 			childrenArray.addJsonObjectBuilder(dataToJsonConverterFactory
-					.createForClientDataElement(jsonBuilderFactory, clientDataElement)
+					.createForClientDataElement(jsonBuilderFactory, (Convertible) clientDataElement)
 					.toJsonObjectBuilder());
 		}
 		dataGroupJsonObjectBuilder.addKeyJsonArrayBuilder("children", childrenArray);
