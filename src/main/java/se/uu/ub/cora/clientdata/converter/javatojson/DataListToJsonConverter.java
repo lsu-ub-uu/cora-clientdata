@@ -95,7 +95,7 @@ public final class DataListToJsonConverter {
 	private void convertClientGroupToJsonBuilder(JsonArrayBuilder recordsJsonBuilder,
 			ClientData clientData) {
 		DataToJsonConverter converter = dataToJsonFactory
-				.createForClientDataElement(jsonBuilderFactory, (ClientDataGroup) clientData);
+				.createForClientDataElement((ClientDataGroup) clientData);
 
 		recordsJsonBuilder.addJsonObjectBuilder(converter.toJsonObjectBuilder());
 	}

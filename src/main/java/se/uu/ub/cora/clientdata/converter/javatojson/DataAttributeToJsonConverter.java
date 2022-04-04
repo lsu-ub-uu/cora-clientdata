@@ -27,8 +27,8 @@ public final class DataAttributeToJsonConverter extends DataToJsonConverter {
 	private JsonBuilderFactory factory;
 	private ClientDataAttribute clientDataAttribute;
 
-	public static DataToJsonConverter usingJsonFactoryForClientDataAttribute(JsonBuilderFactory factory,
-			ClientDataAttribute dataAttribute) {
+	public static DataToJsonConverter usingJsonFactoryForClientDataAttribute(
+			JsonBuilderFactory factory, ClientDataAttribute dataAttribute) {
 		return new DataAttributeToJsonConverter(factory, dataAttribute);
 	}
 
@@ -45,6 +45,10 @@ public final class DataAttributeToJsonConverter extends DataToJsonConverter {
 		jsonObjectBuilder.addKeyString(clientDataAttribute.getNameInData(),
 				clientDataAttribute.getValue());
 		return jsonObjectBuilder;
+	}
+
+	public JsonBuilderFactory onlyForTestGetJsonBuilderFactory() {
+		return factory;
 	}
 
 }
