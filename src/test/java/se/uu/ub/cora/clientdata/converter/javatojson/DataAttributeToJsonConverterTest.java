@@ -43,7 +43,7 @@ public class DataAttributeToJsonConverterTest {
 		Convertible clientDataElement = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "attributeValue");
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataElement);
+				.createForClientDataElement(clientDataElement);
 		String json = dataToJsonConverter.toJson();
 
 		Assert.assertEquals(json, "{\"attributeNameInData\":\"attributeValue\"}");
@@ -54,7 +54,7 @@ public class DataAttributeToJsonConverterTest {
 		Convertible clientDataElement = ClientDataAttribute
 				.withNameInDataAndValue("attributeNameInData", "");
 		DataToJsonConverter dataToJsonConverter = dataToJsonConverterFactory
-				.createForClientDataElement(factory, clientDataElement);
+				.createForClientDataElement(clientDataElement);
 		String json = dataToJsonConverter.toJson();
 
 		Assert.assertEquals(json, "{\"attributeNameInData\":\"\"}");

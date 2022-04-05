@@ -57,4 +57,8 @@ public final class DataAtomicToJsonConverter extends DataToJsonConverter {
 	private boolean hasNonEmptyRepeatId() {
 		return clientDataAtomic.getRepeatId() != null && !"".equals(clientDataAtomic.getRepeatId());
 	}
+
+	public JsonBuilderFactory onlyForTestGetJsonBuilderFactory() {
+		return factory;
+	}
 }
