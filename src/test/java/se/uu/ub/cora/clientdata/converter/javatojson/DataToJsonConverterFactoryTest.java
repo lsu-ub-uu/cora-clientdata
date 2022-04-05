@@ -36,12 +36,10 @@ import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataToJsonConverterFactoryTest {
 	private DataToJsonConverterFactoryImp dataToJsonConverterFactory;
-	private JsonBuilderFactory factory;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		dataToJsonConverterFactory = new DataToJsonConverterFactoryImp();
-		factory = new OrgJsonBuilderFactoryAdapter();
 	}
 
 	@Test
@@ -194,6 +192,5 @@ public class DataToJsonConverterFactoryTest {
 				false);
 
 		assertFalse(dataToJsonConverterFactory.getIncludeActionLinks());
-
 	}
 }

@@ -44,10 +44,10 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 			return handleClientDataGroup(convertible, includeActionLinks);
 		}
 		if (convertible instanceof ClientDataAtomic) {
-			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(this.factory,
+			return DataAtomicToJsonConverter.usingJsonFactoryForClientDataAtomic(factory,
 					(ClientDataAtomic) convertible);
 		}
-		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(this.factory,
+		return DataAttributeToJsonConverter.usingJsonFactoryForClientDataAttribute(factory,
 				(ClientDataAttribute) convertible);
 	}
 
@@ -104,6 +104,5 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 
 	public void setIncludeActionLinks(boolean includeActionLinks) {
 		this.includeActionLinks = includeActionLinks;
-
 	}
 }
