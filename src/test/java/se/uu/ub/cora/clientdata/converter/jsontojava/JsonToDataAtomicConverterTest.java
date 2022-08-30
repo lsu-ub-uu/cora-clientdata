@@ -21,6 +21,8 @@ package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import static org.testng.Assert.assertEquals;
 
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
@@ -40,6 +42,22 @@ public class JsonToDataAtomicConverterTest {
 		assertEquals(clientDataAtomic.getValue(), "atomicValue");
 	}
 
+	@Test
+	public void testAtomicWithTwoAttributes() {
+		String json = "{\"name\":\"atomicNameInData\",\"value\":\"atomicValue\","
+				+ " \"attributes\": {\"exampleAttributeChoice\": \"one\","
+				+ " \"exampleAttributeChoice2\": \"two\"}}";
+
+		ClientDataAtomic clientDataAtomic = createClientDataAtomicForJsonString(json);
+
+		assertEquals(clientDataAtomic.getNameInData(), "atomicNameInData");
+		assertEquals(clientDataAtomic.getValue(), "atomicValue");
+		Map<String, String> attributes = clientDataAtomic.getAttributes();
+		assertEquals(attributes.size(), 2);
+		assertEquals(attributes.get("exampleAttributeChoice"), "one");
+		assertEquals(attributes.get("exampleAttributeChoice2"), "two");
+	}
+
 	private ClientDataAtomic createClientDataAtomicForJsonString(String json) {
 		OrgJsonParser jsonParser = new OrgJsonParser();
 		JsonValue jsonValue = jsonParser.parseString(json);
@@ -47,8 +65,7 @@ public class JsonToDataAtomicConverterTest {
 				.forJsonObject((JsonObject) jsonValue);
 		Convertible clientDataElement = jsonToDataConverter.toInstance();
 
-		ClientDataAtomic clientDataAtomic = (ClientDataAtomic) clientDataElement;
-		return clientDataAtomic;
+		return (ClientDataAtomic) clientDataElement;
 	}
 
 	@Test
@@ -83,11 +100,13 @@ public class JsonToDataAtomicConverterTest {
 	@Test(expectedExceptions = JsonParseException.class)
 	public void testToClassWrongJsonNotName() {
 		String json = "{\"nameNOT\":\"id\",\"value\":\"atomicValue\"}";
+
 		createClientDataAtomicForJsonString(json);
 	}
 
 	@Test(expectedExceptions = JsonParseException.class)
 	public void testToClassWrongJsonMissingValue() {
+
 		String json = "{\"name\":\"id\",\"valueNOT\":\"atomicValue\"}";
 		createClientDataAtomicForJsonString(json);
 	}
@@ -96,6 +115,13 @@ public class JsonToDataAtomicConverterTest {
 	public void testToClassWrongJsonExtraKey() {
 		String json = "{\"name\":\"id\",\"value\":\"atomicValue\",\"repeatId\":\"5\""
 				+ ",\"extra\":\"extra\"}";
+		createClientDataAtomicForJsonString(json);
+	}
+
+	@Test(expectedExceptions = JsonParseException.class)
+	public void testToClassWrongJsonExtraKey2() {
+		String json = "{\"name\":\"id\",\"value\":\"atomicValue\",\"repeatId\":\"5\""
+				+ ",\"extra\":\"extra\",\"extra2\":\"extra\"}";
 		createClientDataAtomicForJsonString(json);
 	}
 
