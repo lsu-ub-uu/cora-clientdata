@@ -21,7 +21,7 @@ package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
@@ -40,7 +40,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 	public DataToJsonConverter createForClientDataElementIncludingActionLinks(
 			Convertible convertible, boolean includeActionLinks) {
 
-		if (convertible instanceof ClientDataGroup) {
+		if (convertible instanceof ClientDataGroupImp) {
 			return handleClientDataGroup(convertible, includeActionLinks);
 		}
 		if (convertible instanceof ClientDataAtomic) {
@@ -64,7 +64,7 @@ public class DataToJsonConverterFactoryImp implements DataToJsonConverterFactory
 					(ClientDataResourceLink) convertible, converterFactory);
 		}
 		return DataGroupToJsonConverter.usingJsonFactoryAndConverterFactoryForClientDataGroup(
-				factory, converterFactory, (ClientDataGroup) convertible);
+				factory, converterFactory, (ClientDataGroupImp) convertible);
 	}
 
 	private DataToJsonConverter handleDataRecordLink(JsonBuilderFactory factory,

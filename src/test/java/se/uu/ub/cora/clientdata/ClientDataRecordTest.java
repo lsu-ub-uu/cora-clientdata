@@ -35,7 +35,7 @@ public class ClientDataRecordTest {
 
 	@BeforeMethod
 	public void beforeMethod() {
-		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 	}
 

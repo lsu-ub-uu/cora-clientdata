@@ -25,21 +25,21 @@ import java.util.Map;
 import java.util.Set;
 
 public final class ClientDataRecord implements DataRecord, ClientData {
-	private ClientDataGroup clientDataGroup;
+	private ClientDataGroupImp clientDataGroup;
 	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 	private Set<String> readPermissions = new LinkedHashSet<>();
 	private Set<String> writePermissions = new LinkedHashSet<>();
 
-	private ClientDataRecord(ClientDataGroup clientDataGroup) {
+	private ClientDataRecord(ClientDataGroupImp clientDataGroup) {
 		this.clientDataGroup = clientDataGroup;
 	}
 
-	public static ClientDataRecord withClientDataGroup(ClientDataGroup clientDataGroup) {
+	public static ClientDataRecord withClientDataGroup(ClientDataGroupImp clientDataGroup) {
 		return new ClientDataRecord(clientDataGroup);
 	}
 
 	@Override
-	public ClientDataGroup getClientDataGroup() {
+	public ClientDataGroupImp getClientDataGroup() {
 		return clientDataGroup;
 	}
 

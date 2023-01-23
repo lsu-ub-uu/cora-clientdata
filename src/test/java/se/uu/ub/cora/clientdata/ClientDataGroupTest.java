@@ -32,12 +32,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class ClientDataGroupTest {
-	private ClientDataGroup clientDataGroup;
-	private Collection<ClientDataGroup> groupsFound;
+	private ClientDataGroupImp clientDataGroup;
+	private Collection<ClientDataGroupImp> groupsFound;
 
 	@BeforeMethod
 	public void setUp() {
-		clientDataGroup = ClientDataGroup.withNameInData("nameInData");
+		clientDataGroup = ClientDataGroupImp.withNameInData("nameInData");
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class ClientDataGroupTest {
 		assertNotNull(clientDataGroup.getChildren(),
 				"Children should not be null for a new DataGroup");
 
-		ClientDataElement clientDataElement = ClientDataGroup.withNameInData("nameInData2");
+		ClientDataElement clientDataElement = ClientDataGroupImp.withNameInData("nameInData2");
 		clientDataGroup.addChild(clientDataElement);
 		assertEquals(clientDataGroup.getChildren().stream().findAny().get(), clientDataElement,
 				"Child should be the same as the one we added");
@@ -70,7 +70,7 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGroupAsLink() {
-		ClientDataGroup dataGroup = ClientDataGroup.asLinkWithNameInDataAndTypeAndId("nameInData",
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.asLinkWithNameInDataAndTypeAndId("nameInData",
 				"someType", "someId");
 		assertEquals(dataGroup.getNameInData(), "nameInData");
 		assertEquals(dataGroup.getFirstAtomicValueWithNameInData("linkedRecordType"), "someType");
@@ -85,21 +85,21 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testContainsChildWithNameInData() {
-		ClientDataElement clientDataElement = ClientDataGroup.withNameInData("nameInData2");
+		ClientDataElement clientDataElement = ClientDataGroupImp.withNameInData("nameInData2");
 		clientDataGroup.addChild(clientDataElement);
 		assertTrue(clientDataGroup.containsChildWithNameInData("nameInData2"));
 	}
 
 	@Test
 	public void testContainsChildWithNameInDataNotFound() {
-		ClientDataElement clientDataElement = ClientDataGroup.withNameInData("nameInData2");
+		ClientDataElement clientDataElement = ClientDataGroupImp.withNameInData("nameInData2");
 		clientDataGroup.addChild(clientDataElement);
 		assertFalse(clientDataGroup.containsChildWithNameInData("nameInData_NOT_FOUND"));
 	}
 
 	@Test
 	public void testGetFirstChildWithNameInData() {
-		ClientDataElement clientDataElement = ClientDataGroup.withNameInData("nameInData2");
+		ClientDataElement clientDataElement = ClientDataGroupImp.withNameInData("nameInData2");
 		clientDataGroup.addChild(clientDataElement);
 		assertNotNull(clientDataGroup.getFirstChildWithNameInData("nameInData2"));
 	}
@@ -111,7 +111,7 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testRemoveChild() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement child = ClientDataAtomic.withNameInDataAndValue("childId", "child value");
 		dataGroup.addChild(child);
 		dataGroup.removeFirstChildWithNameInData("childId");
@@ -120,7 +120,7 @@ public class ClientDataGroupTest {
 
 	@Test(expectedExceptions = DataMissingException.class)
 	public void testRemoveChildNotFound() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement child = ClientDataAtomic.withNameInDataAndValue("childId", "child value");
 		dataGroup.addChild(child);
 		dataGroup.removeFirstChildWithNameInData("childId_NOTFOUND");
@@ -128,11 +128,11 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetFirstGroupWithNameInData() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
 		ClientDataGroup foundGroupChild = dataGroup.getFirstGroupWithNameInData("childNameInData");
@@ -142,7 +142,7 @@ public class ClientDataGroupTest {
 
 	@Test(expectedExceptions = DataMissingException.class)
 	public void testGetFirstGroupWithNameInDataGroupNotFound() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
@@ -152,34 +152,34 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllGroupsWithNameInDataOneGroup() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
-		List<ClientDataGroup> groupsFound = dataGroup.getAllGroupsWithNameInData("childNameInData");
+		List<ClientDataGroupImp> groupsFound = dataGroup.getAllGroupsWithNameInData("childNameInData");
 		assertNumberOfGroupsFoundIs(groupsFound, 1);
 		assertEquals(groupsFound.get(0), groupChild);
 	}
 
-	private void assertNumberOfGroupsFoundIs(Collection<ClientDataGroup> groupsFound,
+	private void assertNumberOfGroupsFoundIs(Collection<ClientDataGroupImp> groupsFound,
 			int numberOfGroups) {
 		assertEquals(groupsFound.size(), numberOfGroups);
 	}
 
 	@Test
 	public void testGetAllGroupsWithNameInDataOTwoGroups() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
-		ClientDataGroup groupChild2 = ClientDataGroup.withNameInData("NOTChildNameInData");
+		ClientDataGroupImp groupChild2 = ClientDataGroupImp.withNameInData("NOTChildNameInData");
 		dataGroup.addChild(groupChild2);
-		ClientDataGroup groupChild3 = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild3 = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild3);
 
-		List<ClientDataGroup> groupsFound = dataGroup.getAllGroupsWithNameInData("childNameInData");
+		List<ClientDataGroupImp> groupsFound = dataGroup.getAllGroupsWithNameInData("childNameInData");
 		assertNumberOfGroupsFoundIs(groupsFound, 2);
 		assertEquals(groupsFound.get(0), groupChild);
 		assertEquals(groupsFound.get(1), groupChild3);
@@ -187,7 +187,7 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetFirstAtomicValueWithNameInData() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
@@ -198,15 +198,15 @@ public class ClientDataGroupTest {
 
 	@Test(expectedExceptions = DataMissingException.class)
 	public void testGetFirstAtomicValueWithNameInDataValueNotFound() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 		dataGroup.getFirstAtomicValueWithNameInData("childNameInData");
 	}
 
 	@Test
 	public void testGetFirstAtomicValueWithNameInDataThreeValuesSecondChildMatches() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChildWrongNameInData = ClientDataAtomic
 				.withNameInDataAndValue("NOTChildNameInData", "not child value");
 		dataGroup.addChild(atomicChildWrongNameInData);
@@ -223,7 +223,7 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllDataAtomicsNonFound() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic
 				.withNameInDataAndValue("NOTchildNameInData", "child value");
 		dataGroup.addChild(atomicChild);
@@ -235,11 +235,11 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllDataAtomicsWithNameInDataOneAtomic() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
 		List<ClientDataAtomic> atomicsFound = dataGroup
@@ -250,14 +250,14 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllDataAtomicsWithNameInDataTwoAtomics() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataAtomic atomicChild = createAtomicDataWithRepeatId("childNameInData",
 				"child value", "1");
 		dataGroup.addChild(atomicChild);
 		ClientDataAtomic atomicChild2 = createAtomicDataWithRepeatId("childNameInData",
 				"child value", "0");
 		dataGroup.addChild(atomicChild2);
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
 		List<ClientDataAtomic> atomicsFound = dataGroup
@@ -277,11 +277,11 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllChildrenWithNameInDataNoChildFound() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
 		List<ClientDataElement> childrenFound = dataGroup
@@ -291,8 +291,8 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllChildrenWithNameInDataOneGroup() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
 		List<ClientDataElement> childrenFound = dataGroup
@@ -303,7 +303,7 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllChildrenWithNameInDataOneDataAtomic() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
@@ -316,11 +316,11 @@ public class ClientDataGroupTest {
 
 	@Test
 	public void testGetAllChildrenWithNameInDataOneGroupAndOneDataAtomic() {
-		ClientDataGroup dataGroup = ClientDataGroup.withNameInData("nameInData");
+		ClientDataGroupImp dataGroup = ClientDataGroupImp.withNameInData("nameInData");
 		ClientDataElement atomicChild = ClientDataAtomic.withNameInDataAndValue("childNameInData",
 				"child value");
 		dataGroup.addChild(atomicChild);
-		ClientDataGroup groupChild = ClientDataGroup.withNameInData("childNameInData");
+		ClientDataGroupImp groupChild = ClientDataGroupImp.withNameInData("childNameInData");
 		dataGroup.addChild(groupChild);
 
 		List<ClientDataElement> childrenFound = dataGroup
@@ -352,7 +352,7 @@ public class ClientDataGroupTest {
 	}
 
 	private ClientDataGroup addAndReturnDataGroupChildWithNameInData(String nameInData) {
-		ClientDataGroup child = ClientDataGroup.withNameInData(nameInData);
+		ClientDataGroupImp child = ClientDataGroupImp.withNameInData(nameInData);
 		clientDataGroup.addChild(child);
 		return child;
 	}
@@ -364,7 +364,7 @@ public class ClientDataGroupTest {
 
 	private ClientDataGroup addAndReturnDataGroupChildWithNameInDataAndAttributes(String nameInData,
 			ClientDataAttribute... attributes) {
-		ClientDataGroup child = ClientDataGroup.withNameInData(nameInData);
+		ClientDataGroupImp child = ClientDataGroupImp.withNameInData(nameInData);
 		clientDataGroup.addChild(child);
 		for (ClientDataAttribute attribute : attributes) {
 			child.addAttributeByIdWithValue(attribute.getNameInData(), attribute.getValue());
@@ -553,7 +553,7 @@ public class ClientDataGroupTest {
 						ClientDataAttribute.withNameInDataAndValue("nameInData", "value1"));
 
 		assertEquals(children.size(), 2);
-		assertTrue(children.get(0) instanceof ClientDataGroup);
+		assertTrue(children.get(0) instanceof ClientDataGroupImp);
 		assertSame(children.get(1), atomicChild);
 
 	}
