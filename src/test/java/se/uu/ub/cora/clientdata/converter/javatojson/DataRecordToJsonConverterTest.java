@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
@@ -42,7 +42,7 @@ public class DataRecordToJsonConverterTest {
 
 	@BeforeMethod
 	public void setUp() {
-		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("groupNameInData");
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 		jsonFactory = new OrgJsonBuilderFactoryAdapter();
 		dataToJsonConverterFactory = new DataToJsonConverterFactorySpy();
@@ -72,7 +72,7 @@ public class DataRecordToJsonConverterTest {
 
 	@Test
 	public void testToJsonWithDataActionLinksButActionLinksIsEmpty() {
-		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("groupNameInData");
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 
 		clientDataRecord.setActionLinks(new HashMap<>());

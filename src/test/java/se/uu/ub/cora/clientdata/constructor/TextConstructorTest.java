@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 
 public class TextConstructorTest {
 	private TextConstructor textConstructor;
@@ -45,7 +45,7 @@ public class TextConstructorTest {
 
 	@Test
 	public void testConstructText() throws Exception {
-		ClientDataGroupImp createdTextGroup = textConstructor
+		ClientDataGroup createdTextGroup = textConstructor
 				.constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(textId, defaultSvText,
 						alternativeTexts);
 		assertEquals(createdTextGroup.getNameInData(), "text");
@@ -54,10 +54,10 @@ public class TextConstructorTest {
 
 	@Test
 	public void testCorrectRecordInfo() throws Exception {
-		ClientDataGroupImp createdTextGroup = textConstructor
+		ClientDataGroup createdTextGroup = textConstructor
 				.constructTextUsingTextIdAndDefaultSvText(textId, defaultSvText);
 
-		ClientDataGroupImp recordInfo = createdTextGroup.getFirstGroupWithNameInData("recordInfo");
+		ClientDataGroup recordInfo = createdTextGroup.getFirstGroupWithNameInData("recordInfo");
 
 		DataConstructorTestHelper.assertCorrectRecordInfoUsingRecordInfoAndDataDividerAndId(
 				recordInfo, dataDivider, textId);
@@ -65,15 +65,15 @@ public class TextConstructorTest {
 
 	@Test
 	public void testCorrectDefaultText() throws Exception {
-		ClientDataGroupImp createdTextGroup = textConstructor
+		ClientDataGroup createdTextGroup = textConstructor
 				.constructTextUsingTextIdAndDefaultSvText(textId, defaultSvText);
 
 		assertDefaultSvTextIsCorrect(createdTextGroup);
 		assertEquals(createdTextGroup.getChildren().size(), 2);
 	}
 
-	private void assertDefaultSvTextIsCorrect(ClientDataGroupImp createdTextGroup) {
-		ClientDataGroupImp defaultTextPart = createdTextGroup.getFirstGroupWithNameInDataAndAttributes(
+	private void assertDefaultSvTextIsCorrect(ClientDataGroup createdTextGroup) {
+		ClientDataGroup defaultTextPart = createdTextGroup.getFirstGroupWithNameInDataAndAttributes(
 				"textPart", ClientDataAttribute.withNameInDataAndValue("type", "default"),
 				ClientDataAttribute.withNameInDataAndValue("lang", "sv"));
 		String svText = defaultTextPart.getFirstAtomicValueWithNameInData("text");
@@ -82,7 +82,7 @@ public class TextConstructorTest {
 
 	@Test
 	public void testCorrectAlternativeText() throws Exception {
-		ClientDataGroupImp createdTextGroup = textConstructor
+		ClientDataGroup createdTextGroup = textConstructor
 				.constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(textId, defaultSvText,
 						alternativeTexts);
 
@@ -91,8 +91,8 @@ public class TextConstructorTest {
 		assertEquals(createdTextGroup.getChildren().size(), 3);
 	}
 
-	private void assertAlternativeEnTextIsCorrect(ClientDataGroupImp createdTextGroup) {
-		ClientDataGroupImp alternativeEnTextPart = createdTextGroup
+	private void assertAlternativeEnTextIsCorrect(ClientDataGroup createdTextGroup) {
+		ClientDataGroup alternativeEnTextPart = createdTextGroup
 				.getFirstGroupWithNameInDataAndAttributes("textPart",
 						ClientDataAttribute.withNameInDataAndValue("type", "alternative"),
 						ClientDataAttribute.withNameInDataAndValue("lang", "en"));
@@ -104,7 +104,7 @@ public class TextConstructorTest {
 	public void testCorrectTwoAlternativeTexts() throws Exception {
 		String spanishText = "spanish text";
 		alternativeTexts.put("es", spanishText);
-		ClientDataGroupImp createdTextGroup = textConstructor
+		ClientDataGroup createdTextGroup = textConstructor
 				.constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(textId, defaultSvText,
 						alternativeTexts);
 
@@ -115,8 +115,8 @@ public class TextConstructorTest {
 	}
 
 	private void assertAlternativeEsTextIsCorrect(String spanishText,
-			ClientDataGroupImp createdTextGroup) {
-		ClientDataGroupImp alternativeEsTextPart = createdTextGroup
+			ClientDataGroup createdTextGroup) {
+		ClientDataGroup alternativeEsTextPart = createdTextGroup
 				.getFirstGroupWithNameInDataAndAttributes("textPart",
 						ClientDataAttribute.withNameInDataAndValue("type", "alternative"),
 						ClientDataAttribute.withNameInDataAndValue("lang", "es"));

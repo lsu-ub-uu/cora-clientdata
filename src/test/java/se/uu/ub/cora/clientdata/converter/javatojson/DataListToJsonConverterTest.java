@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataList;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
@@ -34,7 +34,7 @@ public class DataListToJsonConverterTest {
 	@Test
 	public void testToJson() {
 		ClientDataList clientDataList = ClientDataList.withContainDataOfType("place");
-		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("groupId");
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupId");
 		ClientDataRecord clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 		clientDataList.addData(clientDataRecord);
 		clientDataList.setTotalNo("1");
@@ -58,7 +58,7 @@ public class DataListToJsonConverterTest {
 	@Test
 	public void testToJsonWithGroup() {
 		ClientDataList clientDataList = ClientDataList.withContainDataOfType("place");
-		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("groupId");
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("groupId");
 		clientDataList.addData(clientDataGroup);
 		clientDataList.setTotalNo("1");
 		clientDataList.setFromNo("0");

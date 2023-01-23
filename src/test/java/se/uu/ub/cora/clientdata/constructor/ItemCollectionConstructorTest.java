@@ -26,7 +26,7 @@ import java.util.List;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.RecordIdentifier;
 
 public class ItemCollectionConstructorTest {
@@ -36,7 +36,7 @@ public class ItemCollectionConstructorTest {
 	private List<RecordIdentifier> collectionItems;
 
 	private ItemCollectionConstructor itemCollectionConstructor;
-	ClientDataGroupImp itemCollection;
+	ClientDataGroup itemCollection;
 
 	@BeforeMethod
 	public void beforeMethod() {
@@ -60,7 +60,7 @@ public class ItemCollectionConstructorTest {
 
 	@Test
 	public void testCorrectRecordInfo() throws Exception {
-		ClientDataGroupImp recordInfo = itemCollection.getFirstGroupWithNameInData("recordInfo");
+		ClientDataGroup recordInfo = itemCollection.getFirstGroupWithNameInData("recordInfo");
 		DataConstructorTestHelper.assertCorrectRecordInfoUsingRecordInfoAndDataDividerAndId(
 				recordInfo, dataDivider, id);
 	}
@@ -74,12 +74,12 @@ public class ItemCollectionConstructorTest {
 		itemCollection = itemCollectionConstructor
 				.constructUsingIdAndNameInDataAndCollectionItems(id, nameInData, collectionItems);
 
-		ClientDataGroupImp itemRefs = itemCollection
+		ClientDataGroup itemRefs = itemCollection
 				.getFirstGroupWithNameInData("collectionItemReferences");
 
 		assertEquals(itemRefs.getAllChildrenWithNameInData("ref").size(), 1);
 
-		ClientDataGroupImp itemReference = itemRefs.getFirstGroupWithNameInData("ref");
+		ClientDataGroup itemReference = itemRefs.getFirstGroupWithNameInData("ref");
 		DataConstructorTestHelper
 				.assertCorrectDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
 						itemReference, "ref", recordType, recordId, "0");
@@ -95,10 +95,10 @@ public class ItemCollectionConstructorTest {
 		itemCollection = itemCollectionConstructor
 				.constructUsingIdAndNameInDataAndCollectionItems(id, nameInData, collectionItems);
 
-		ClientDataGroupImp itemRefs = itemCollection
+		ClientDataGroup itemRefs = itemCollection
 				.getFirstGroupWithNameInData("collectionItemReferences");
 
-		List<ClientDataGroupImp> itemRefsList = itemRefs.getAllGroupsWithNameInData("ref");
+		List<ClientDataGroup> itemRefsList = itemRefs.getAllGroupsWithNameInData("ref");
 		assertEquals(itemRefsList.size(), 2);
 
 		DataConstructorTestHelper

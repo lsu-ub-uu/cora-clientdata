@@ -21,7 +21,7 @@ package se.uu.ub.cora.clientdata.constructor;
 import java.util.List;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.RecordIdentifier;
 
 public final class ItemCollectionConstructor extends DataConstructor {
@@ -34,27 +34,27 @@ public final class ItemCollectionConstructor extends DataConstructor {
 		this.dataDivider = dataDivider;
 	}
 
-	public ClientDataGroupImp constructUsingIdAndNameInDataAndCollectionItems(String id,
+	public ClientDataGroup constructUsingIdAndNameInDataAndCollectionItems(String id,
 			String nameInData, List<RecordIdentifier> collectionItems) {
-		ClientDataGroupImp itemCollection = ClientDataGroupImp.withNameInData("metadata");
+		ClientDataGroup itemCollection = ClientDataGroup.withNameInData("metadata");
 		itemCollection.addAttributeByIdWithValue("type", "itemCollection");
 
 		itemCollection.addChild(ClientDataAtomic.withNameInDataAndValue("nameInData", nameInData));
 		itemCollection.addChild(createRecordInfoGroupForId(id));
 
-		ClientDataGroupImp itemRefs = createCollectionItemReferences(collectionItems);
+		ClientDataGroup itemRefs = createCollectionItemReferences(collectionItems);
 		itemCollection.addChild(itemRefs);
 		return itemCollection;
 	}
 
-	private ClientDataGroupImp createCollectionItemReferences(List<RecordIdentifier> collectionItems) {
-		ClientDataGroupImp itemRefs = ClientDataGroupImp.withNameInData("collectionItemReferences");
+	private ClientDataGroup createCollectionItemReferences(List<RecordIdentifier> collectionItems) {
+		ClientDataGroup itemRefs = ClientDataGroup.withNameInData("collectionItemReferences");
 		createReferenceForAllCollectionItems(collectionItems, itemRefs);
 		return itemRefs;
 	}
 
 	private void createReferenceForAllCollectionItems(List<RecordIdentifier> collectionItems,
-			ClientDataGroupImp itemRefs) {
+			ClientDataGroup itemRefs) {
 		int repeatId = 0;
 		for (RecordIdentifier recordIdentifier : collectionItems) {
 			createReferenceForOneCollectionItem(itemRefs, repeatId, recordIdentifier);
@@ -62,9 +62,9 @@ public final class ItemCollectionConstructor extends DataConstructor {
 		}
 	}
 
-	private void createReferenceForOneCollectionItem(ClientDataGroupImp itemRefs, int repeatId,
+	private void createReferenceForOneCollectionItem(ClientDataGroup itemRefs, int repeatId,
 			RecordIdentifier recordIdentifier) {
-		ClientDataGroupImp ref = createDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
+		ClientDataGroup ref = createDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
 				"ref", recordIdentifier.type, recordIdentifier.id, String.valueOf(repeatId));
 		itemRefs.addChild(ref);
 	}

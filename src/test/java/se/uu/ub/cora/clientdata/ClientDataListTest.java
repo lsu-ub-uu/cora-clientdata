@@ -36,7 +36,7 @@ public class ClientDataListTest {
 	@Test
 	public void testAddRecord() {
 		ClientDataList clientDataList = ClientDataList.withContainDataOfType("metadata");
-		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("clientDataGroupId");
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("clientDataGroupId");
 		ClientDataRecord record = ClientDataRecord.withClientDataGroup(clientDataGroup);
 		clientDataList.addData(record);
 		List<ClientData> records = clientDataList.getDataList();
@@ -46,7 +46,7 @@ public class ClientDataListTest {
 	@Test
 	public void testAddGroup() {
 		ClientDataList clientDataList = ClientDataList.withContainDataOfType("metadata");
-		ClientDataGroupImp clientDataGroup = ClientDataGroupImp.withNameInData("clientDataGroupId");
+		ClientDataGroup clientDataGroup = ClientDataGroup.withNameInData("clientDataGroupId");
 		clientDataList.addData(clientDataGroup);
 		List<ClientData> groups = clientDataList.getDataList();
 		assertEquals(groups.get(0), clientDataGroup);

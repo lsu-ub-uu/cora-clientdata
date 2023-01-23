@@ -27,7 +27,7 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.clientdata.Action;
 import se.uu.ub.cora.clientdata.ActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
@@ -116,7 +116,7 @@ public class DataRecordLinkToJsonWithoutActionLinkConverterTest {
 
 	@Test
 	public void testToJsonWithLinkedPath() {
-		ClientDataGroupImp linkedPathDataGroup = ClientDataGroupImp.withNameInData("linkedPath");
+		ClientDataGroup linkedPathDataGroup = ClientDataGroup.withNameInData("linkedPath");
 		recordLink.addChild(linkedPathDataGroup);
 		String jsonString = converter.toJson();
 		String jsonFromSpy = "{\"children\":[{\"name\":\"linkedRecordType\"},{\"name\":\"linkedRecordId\"},{\"name\":\"linkedPath\"}],\"name\":\"nameInData\"}";

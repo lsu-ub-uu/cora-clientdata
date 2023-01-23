@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
@@ -89,7 +89,7 @@ public class JsonToDataRecordLinkConverter extends JsonToDataGroupConverter {
 	}
 
 	@Override
-	protected ClientDataGroupImp getMainDataGroup() {
+	protected ClientDataGroup getMainDataGroup() {
 		return clientDataRecordLink;
 	}
 

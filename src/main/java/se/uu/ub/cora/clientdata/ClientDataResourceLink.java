@@ -21,7 +21,7 @@ package se.uu.ub.cora.clientdata;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public final class ClientDataResourceLink extends ClientDataGroupImp {
+public final class ClientDataResourceLink extends ClientDataGroup {
 
 	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
 

@@ -21,13 +21,13 @@ package se.uu.ub.cora.clientdata.constructor;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 
 public class DataConstructorTestHelper {
 	public static void assertCorrectRecordInfoUsingRecordInfoAndDataDividerAndId(
-			ClientDataGroupImp recordInfo, String dataDivider, String id) {
+			ClientDataGroup recordInfo, String dataDivider, String id) {
 		assertEquals(recordInfo.getFirstAtomicValueWithNameInData("id"), id);
-		ClientDataGroupImp dataDividerGroup = recordInfo.getFirstGroupWithNameInData("dataDivider");
+		ClientDataGroup dataDividerGroup = recordInfo.getFirstGroupWithNameInData("dataDivider");
 		assertNotNull(dataDividerGroup);
 		assertEquals(dataDividerGroup.getFirstAtomicValueWithNameInData("linkedRecordType"),
 				"system");
@@ -37,7 +37,7 @@ public class DataConstructorTestHelper {
 	}
 
 	public static void assertCorrectDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
-			ClientDataGroupImp link, String nameInData, String recordType, String recordId,
+			ClientDataGroup link, String nameInData, String recordType, String recordId,
 			String repeatId) {
 		assertEquals(link.getNameInData(), nameInData);
 		assertEquals(link.getFirstAtomicValueWithNameInData("linkedRecordType"), recordType);

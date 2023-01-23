@@ -3,7 +3,7 @@ package se.uu.ub.cora.clientdata.converter.jsontojava;
 import java.util.Map;
 
 import se.uu.ub.cora.clientdata.ActionLink;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.clientdata.DataRecord;
 import se.uu.ub.cora.json.parser.JsonArray;
@@ -46,7 +46,7 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 		jsonObjectRecord = jsonObject.getValueAsJsonObject("record");
 		validateOnlyCorrectKeysAtSecondLevel();
 
-		ClientDataGroupImp clientDataGroup = convertDataGroup();
+		ClientDataGroup clientDataGroup = convertDataGroup();
 
 		clientDataRecord = ClientDataRecord.withClientDataGroup(clientDataGroup);
 		possiblyAddActionLinks();
@@ -126,10 +126,10 @@ public class JsonToDataRecordConverterImp implements JsonToDataRecordConverter {
 				&& !jsonObjectRecord.containsKey(PERMISSIONS);
 	}
 
-	private ClientDataGroupImp convertDataGroup() {
+	private ClientDataGroup convertDataGroup() {
 		JsonObject jsonDataObject = jsonObjectRecord.getValueAsJsonObject("data");
 		JsonToDataConverter converter = factory.createForJsonObject(jsonDataObject);
-		return (ClientDataGroupImp) converter.toInstance();
+		return (ClientDataGroup) converter.toInstance();
 	}
 
 	private void possiblyAddActionLinks() {

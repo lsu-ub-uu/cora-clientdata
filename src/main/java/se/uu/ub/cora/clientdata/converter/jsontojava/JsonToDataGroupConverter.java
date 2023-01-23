@@ -22,7 +22,7 @@ package se.uu.ub.cora.clientdata.converter.jsontojava;
 import java.util.Map.Entry;
 
 import se.uu.ub.cora.clientdata.ClientDataElement;
-import se.uu.ub.cora.clientdata.ClientDataGroupImp;
+import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonArray;
 import se.uu.ub.cora.json.parser.JsonObject;
@@ -38,7 +38,7 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 	private static final String ATTRIBUTES = "attributes";
 	private static final int NUM_OF_ALLOWED_KEYS_AT_TOP_LEVEL = 4;
 	protected JsonObject jsonObject;
-	private ClientDataGroupImp clientDataGroup;
+	private ClientDataGroup clientDataGroup;
 
 	public JsonToDataGroupConverter(JsonObject jsonObject, JsonToDataConverterFactory factory) {
 		this.jsonObject = jsonObject;
@@ -114,7 +114,7 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 
 	private Convertible createDataGroupInstance() {
 		String nameInData = getNameInDataFromJsonObject();
-		clientDataGroup = ClientDataGroupImp.withNameInData(nameInData);
+		clientDataGroup = ClientDataGroup.withNameInData(nameInData);
 		possiblyAddRepeatId();
 		possiblyAddAttributes();
 		addChildrenToGroup();
@@ -131,7 +131,7 @@ public class JsonToDataGroupConverter implements JsonToDataConverter {
 		return jsonObject.containsKey(ATTRIBUTES);
 	}
 
-	protected ClientDataGroupImp getMainDataGroup() {
+	protected ClientDataGroup getMainDataGroup() {
 		return clientDataGroup;
 	}
 
