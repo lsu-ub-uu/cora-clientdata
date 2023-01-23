@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,16 +18,12 @@
  */
 package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
-
 /**
- * DataAttribute is the interface used for attributes to data.
+ * ExternallyConvertible are objects that as a unit is converted when going through the API or
+ * leaving and entering the system to external resources such as databases.
+ * <p>
+ * Currently known implementations are {@linkplain ClientDataList}, {@linkplain ClientDataRecord} and
+ * {@link ClientDataRecordGroup} found in DataRecords and DataLists
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public interface ClientExternallyConvertible {
 }

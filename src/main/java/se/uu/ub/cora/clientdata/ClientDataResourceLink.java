@@ -1,5 +1,6 @@
 /*
- * Copyright 2016, 2018 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
+ * Copyright 2022 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -18,34 +19,86 @@
  */
 package se.uu.ub.cora.clientdata;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+/**
+ * DataResourceLink contains information linking the {@link ClientDataRecord} this link is a part of to a
+ * resource such as an image. Currently are DataResourceLinks only used in record type binary or
+ * children of binary.
+ * <p>
+ * RecordTypes other than binary, links to a record with the type binary which in turn contains
+ * metainformation about the binary file, and can through ResourceLinks point to different versions
+ * of the binary data. The different versions can for instance be a thumbnail, a scaled version or
+ * the master version of an image.
+ */
+public interface ClientDataResourceLink extends ClientDataLink, ClientConvertible {
+	/**
+	 * setStreamId sets the streamId for this link.
+	 * <p>
+	 * If there is a streamId since before must it be replaced by this method so that only one
+	 * exist.
+	 */
+	void setStreamId(String streamId);
 
-public final class ClientDataResourceLink extends ClientDataGroupImp {
+	/**
+	 * getStreamId returns the streamId for this link.
+	 * <p>
+	 * This information is expected to be present, if this link does not have information about what
+	 * the streamId is, MUST a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return A String with the streamId for this link.
+	 */
+	String getStreamId();
 
-	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
+	/**
+	 * setFileName sets the fileName for this link.
+	 * <p>
+	 * If there is a fileName since before must it be replaced by this method so that only one
+	 * exist.
+	 */
+	void setFileName(String fileName);
 
-	public static ClientDataResourceLink withNameInData(String nameInData) {
-		return new ClientDataResourceLink(nameInData);
-	}
+	/**
+	 * getFileName returns the fileName for this link.
+	 * <p>
+	 * This information is expected to be present, if this link does not have information about what
+	 * the fileName is, MUST a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return A String with the fileName for this link.
+	 */
+	String getFileName();
 
-	private ClientDataResourceLink(String nameInData) {
-		super(nameInData);
-	}
+	/**
+	 * setFileSize sets the fileSize for this link.
+	 * <p>
+	 * If there is a fileSize since before must it be replaced by this method so that only one
+	 * exist.
+	 */
+	void setFileSize(String fileSize);
 
-	public void addActionLink(String key, ActionLink actionLink) {
-		actionLinks.put(key, actionLink);
-	}
+	/**
+	 * getFileSize returns the fileSize for this link.
+	 * <p>
+	 * This information is expected to be present, if this link does not have information about what
+	 * the filesize is, MUST a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return A String with the fileSize for this link.
+	 */
+	String getFileSize();
 
-	public ActionLink getActionLink(String key) {
-		return actionLinks.get(key);
-	}
+	/**
+	 * setMimeType sets the mimeType for this link.
+	 * <p>
+	 * If there is a mimeType since before must it be replaced by this method so that only one
+	 * exist.
+	 */
+	void setMimeType(String mimeType);
 
-	public Map<String, ActionLink> getActionLinks() {
-		return actionLinks;
-	}
-
-	public void setActionLinks(Map<String, ActionLink> actionLinks) {
-		this.actionLinks = actionLinks;
-	}
+	/**
+	 * getMimeType returns the mimeType for this link.
+	 * <p>
+	 * This information is expected to be present, if this link does not have information about what
+	 * the mimetype is, MUST a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return A String with the mimetype for this link.
+	 */
+	String getMimeType();
 }

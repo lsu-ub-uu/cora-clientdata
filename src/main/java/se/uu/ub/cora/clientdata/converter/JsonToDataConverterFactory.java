@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,23 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+package se.uu.ub.cora.clientdata.converter;
 
-/**
- * DataAttribute is the interface used for attributes to data.
- */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
+import se.uu.ub.cora.json.parser.JsonValue;
+
+public interface JsonToDataConverterFactory {
+
 	/**
-	 * getValue returns this DataAttributes value
+	 * createForJsonObject creates a new JsonToDataConverter for a given jsonValue. The converter
+	 * converts Json to Datagroups.
+	 * </p>
+	 * All implementations of this interface MUST be thread safe.
 	 * 
-	 * @return A String with the value of this attribute
+	 * @param jsonValue
+	 *            the JsonValue that will be converted to DataGroup.
+	 * @return A newly created JsonToDataConverter.
 	 */
-	String getValue();
+	JsonToDataConverter createForJsonObject(JsonValue jsonValue);
+
 }

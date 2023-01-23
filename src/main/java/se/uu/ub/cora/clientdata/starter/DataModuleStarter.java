@@ -1,5 +1,6 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
+ * Copyright 2022 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -16,18 +17,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
+package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+import se.uu.ub.cora.clientdata.ClientDataFactory;
 
-/**
- * DataAttribute is the interface used for attributes to data.
- */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public interface DataModuleStarter {
+
+	void startUsingDataFactoryImplementations(Iterable<ClientDataFactory> dataFactoryImplementations);
+
+	ClientDataFactory getDataFactory();
+
 }

@@ -16,18 +16,22 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
+package se.uu.ub.cora.clientdata.spy;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+import se.uu.ub.cora.clientdata.ClientDataAttribute;
 
-/**
- * DataAttribute is the interface used for attributes to data.
- */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public class DataAttributeSpy implements ClientDataAttribute {
+
+	@Override
+	public String getNameInData() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

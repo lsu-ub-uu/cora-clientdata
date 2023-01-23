@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2015, 2017, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,9 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
-
-/**
- * DataAttribute is the interface used for attributes to data.
- */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public enum ClientAction {
+	READ, UPDATE, DELETE, RESSURECT, PUBLISH, READ_INCOMING_LINKS, UNPUBLISH, CREATE, LIST, SEARCH, UPLOAD, INDEX, VALIDATE, BATCH_INDEX
 }

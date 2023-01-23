@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,64 +16,98 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package se.uu.ub.cora.clientdata;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public final class ClientDataList {
+/**
+ * DataList is a List of {@link ClientData}, normally used to send multiple Data items in response to
+ * requests from clients.
+ * <p>
+ * Implementations are expected to retain the order of the items in the list.
+ * <p>
+ * The list contains information about what part of the total data set it represents, this
+ * information can be accessed through the methods {@link #getFromNo()} and {@link #getToNo()}
+ * respectively. Sets of data can be limited in scope for a variety of reasons, such as filters,
+ * requested data types, etc. The total number of {@link ClientData} the system is aware of can be
+ * accessed through the method {@link #getTotalNumberOfTypeInStorage()}.
+ * <p>
+ * Numbering start at 1, so the first ten items in a returned list are 1-10.
+ */
+public interface ClientDataList extends ClientConvertible, ClientExternallyConvertible {
 
-	private String containDataOfType;
-	private List<ClientData> dataList = new ArrayList<>();
-	private String totalNo;
-	private String fromNo;
-	private String toNo;
+	/**
+	 * getFromNo returns the start position of the included List of {@link ClientData} in relation to the
+	 * total number of {@link ClientData} the system is aware of for the requested data.
+	 * 
+	 * @return String with the start position of included list.
+	 */
+	String getFromNo();
 
-	public static ClientDataList withContainDataOfType(String containDataOfType) {
-		return new ClientDataList(containDataOfType);
-	}
+	/**
+	 * getToNo method returns the final position of the included List of {@link ClientData} in relation to
+	 * the total number of {@link ClientData} the system is aware of for the requested data.
+	 * 
+	 * @return String with the final position of included list.
+	 */
+	String getToNo();
 
-	private ClientDataList(String containDataOfType) {
-		this.containDataOfType = containDataOfType;
-	}
+	/**
+	 * (totalNo) getTotalNumberOfTypeInStorage returns the total number of {@link ClientData} that the
+	 * system is aware of for the requested set of data. Sets of data can be limited by for a
+	 * variety of reasons, such as filters, requested data types, etc.
+	 *
+	 * @return A String that represents the total number of {@link ClientData}
+	 */
+	String getTotalNumberOfTypeInStorage();
 
-	public String getContainDataOfType() {
-		return containDataOfType;
-	}
+	/**
+	 * getContainDataOfType returns a String describing the type(s) of data that the list contains
+	 * 
+	 * @return A String describing the type(s) of {@link ClientData} included in this list
+	 */
+	String getContainDataOfType();
 
-	public void addData(ClientData data) {
-		dataList.add(data);
-	}
+	/**
+	 * getDataList returns the included list.
+	 * 
+	 * @return The included List of {@link ClientData}
+	 */
+	List<ClientData> getDataList();
 
-	public List<ClientData> getDataList() {
-		return dataList;
-	}
+	/**
+	 * addData adds an element {@link ClientData} to the internal list of {@link ClientData}
+	 * 
+	 * @param data
+	 *            A {@link ClientData} to be added to the internal list
+	 */
+	void addData(ClientData data);
 
-	public void setTotalNo(String totalNo) {
-		this.totalNo = totalNo;
-	}
+	/**
+	 * setFromNo sets the start position of the included List of {@link ClientData} in relation to the
+	 * total number of {@link ClientData} the system is aware of for the requested data.
+	 * 
+	 * @param position
+	 *            The start postion of the list
+	 */
+	void setFromNo(String position);
 
-	public String getTotalNo() {
-		return totalNo;
-	}
+	/**
+	 * setToNo sets the final position of the included List of {@link ClientData} in relation to the total
+	 * number of {@link ClientData} the system is aware of for the requested data.
+	 * 
+	 * @param position
+	 *            The final postion of the list
+	 */
+	void setToNo(String position);
 
-	public void setFromNo(String fromNo) {
-		this.fromNo = fromNo;
-
-	}
-
-	public String getFromNo() {
-		return fromNo;
-	}
-
-	public void setToNo(String toNo) {
-		this.toNo = toNo;
-
-	}
-
-	public String getToNo() {
-		return toNo;
-	}
+	/**
+	 * setTotalNo sets the total number of {@link ClientData} that the system is aware of for the
+	 * requested set of data.
+	 * 
+	 * @param totalNumber
+	 *            A String with the total number of {@link ClientData}
+	 */
+	void setTotalNo(String totalNumber);
 
 }

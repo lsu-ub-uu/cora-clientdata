@@ -16,18 +16,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+package se.uu.ub.cora.clientdata.ability;
 
 /**
- * DataAttribute is the interface used for attributes to data.
+ * DataPart defines the minimum required functionality for any part of data that the system handles.
+ * All dataParts must at least have a name.
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
+public interface ClientDataPart {
 	/**
-	 * getValue returns this DataAttributes value
+	 * getNameInData returns the name of this piece of information.
 	 * 
-	 * @return A String with the value of this attribute
+	 * @return A String with the name of this piece of data.
 	 */
-	String getValue();
+	String getNameInData();
+
 }
