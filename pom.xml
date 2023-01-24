@@ -26,9 +26,9 @@
 		<version>2.3.0</version>
 	</parent>
 
-	<artifactId>cora-clientdata</artifactId>
+	<artifactId>clientdata</artifactId>
 	<packaging>jar</packaging>
-	<version>5.7-SNAPSHOT</version>
+	<version>6.0-SNAPSHOT</version>
 	<name>Cora client data</name>
 
 	<properties>
