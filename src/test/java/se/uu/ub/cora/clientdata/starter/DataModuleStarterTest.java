@@ -32,25 +32,25 @@ import se.uu.ub.cora.clientdata.ClientDataFactory;
 import se.uu.ub.cora.clientdata.spy.DataFactorySpy;
 
 public class DataModuleStarterTest {
-	DataModuleStarterImp starter;
+	ClientDataModuleStarterImp starter;
 	List<ClientDataFactory> dataFactoryImplementations;
 	DataFactorySpy dataFactorySpy;
 
 	@BeforeMethod
 	public void beforeMethod() {
-		starter = new DataModuleStarterImp();
+		starter = new ClientDataModuleStarterImp();
 		dataFactoryImplementations = new ArrayList<>();
 		dataFactorySpy = new DataFactorySpy();
 
 	}
 
-	@Test(expectedExceptions = DataInitializationException.class, expectedExceptionsMessageRegExp = ""
+	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "No implementations found for DataFactory")
 	public void testStartModuleThrowsErrorIfNoDataFactoryImplementations() throws Exception {
 		starter.startUsingDataFactoryImplementations(dataFactoryImplementations);
 	}
 
-	@Test(expectedExceptions = DataInitializationException.class, expectedExceptionsMessageRegExp = ""
+	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "More than one implementation found for DataFactory")
 	public void testStartModuleThrowsErrorIfMoreThanOneDataFactoryImplementations()
 			throws Exception {

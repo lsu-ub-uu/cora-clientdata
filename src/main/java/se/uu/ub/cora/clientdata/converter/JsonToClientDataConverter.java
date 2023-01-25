@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,14 +16,24 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.converter.DataToJsonConverterFactoryCreator;
+package se.uu.ub.cora.clientdata.converter;
 
-public interface DataToJsonConverterModuleStarter {
+import se.uu.ub.cora.clientdata.ClientConvertible;
 
-	void startUsingConverterFactoryImplementations(
-			Iterable<DataToJsonConverterFactoryCreator> converterFactoryCreatorImplementations);
+/**
+ * JsonToDataConverter converts a json string to a DataPart object.
+ */
+public interface JsonToClientDataConverter {
 
-	DataToJsonConverterFactoryCreator getDataToJsonConverterFactoryCreator();
+	/**
+	 * toInstance method is responsible for converting a json String to a DataPart object.
+	 * <p>
+	 * If an exception occurs during conversion MUST an exception implementing
+	 * {@link ClientDataConversionException} be thrown.
+	 * 
+	 * @return a Convertible converted from the json String
+	 */
+	ClientConvertible toInstance();
+
 }

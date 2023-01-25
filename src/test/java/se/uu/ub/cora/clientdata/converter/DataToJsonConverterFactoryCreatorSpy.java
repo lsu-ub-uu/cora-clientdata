@@ -21,11 +21,11 @@ package se.uu.ub.cora.clientdata.converter;
 import se.uu.ub.cora.clientdata.starter.DataToJsonConverterFactorySpy;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 
-public class DataToJsonConverterFactoryCreatorSpy implements DataToJsonConverterFactoryCreator {
+public class DataToJsonConverterFactoryCreatorSpy implements ClientDataToJsonConverterFactoryCreator {
 	MethodCallRecorder MCR = new MethodCallRecorder();
 
 	@Override
-	public DataToJsonConverterFactory createFactory() {
+	public ClientDataToJsonConverterFactory createFactory() {
 		MCR.addCall();
 		DataToJsonConverterFactorySpy factorySpy = new DataToJsonConverterFactorySpy();
 		MCR.addReturned(factorySpy);

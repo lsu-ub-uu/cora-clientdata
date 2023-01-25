@@ -20,10 +20,10 @@
 package se.uu.ub.cora.clientdata.spy;
 
 import se.uu.ub.cora.clientdata.ClientDataFactory;
-import se.uu.ub.cora.clientdata.starter.DataModuleStarter;
+import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarter;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 
-public class DataModuleStarterSpy implements DataModuleStarter {
+public class DataModuleStarterSpy implements ClientDataModuleStarter {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
 
 	public boolean startWasCalled = false;

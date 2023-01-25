@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,15 +16,22 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata.starter;
+package se.uu.ub.cora.clientdata.converter;
 
-import se.uu.ub.cora.clientdata.converter.JsonToDataConverterFactory;
+/**
+ * ConversionException is an exception used when an exceptions occurs while converting between data
+ * formats.
+ */
+public class ClientDataConversionException extends RuntimeException {
 
-public interface JsonToDataConverterModuleStarter {
+	private static final long serialVersionUID = 1L;
 
-	void startUsingConverterFactoryImplementations(
-			Iterable<JsonToDataConverterFactory> converterFactoryImplementations);
+	public ClientDataConversionException(String message) {
+		super(message);
+	}
 
-	JsonToDataConverterFactory getJsonToDataConverterFactory();
+	public ClientDataConversionException(String message, Exception exception) {
+		super(message, exception);
+	}
 
 }

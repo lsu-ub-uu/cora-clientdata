@@ -18,24 +18,13 @@
  */
 package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.converter.JsonToDataConverterFactory;
+import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactory;
 
-public class JsonToDataConverterModuleStarterImp extends ModuleStarter
-		implements JsonToDataConverterModuleStarter {
+public interface JsonToClientDataConverterModuleStarter {
 
-	private JsonToDataConverterFactory jsonToDataConverterFactory;
+	void startUsingConverterFactoryImplementations(
+			Iterable<JsonToClientDataConverterFactory> converterFactoryImplementations);
 
-	@Override
-	public void startUsingConverterFactoryImplementations(
-			Iterable<JsonToDataConverterFactory> converterFactoryImplementations) {
-		jsonToDataConverterFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(
-				converterFactoryImplementations, "JsonToDataConverterFactory");
-
-	}
-
-	@Override
-	public JsonToDataConverterFactory getJsonToDataConverterFactory() {
-		return jsonToDataConverterFactory;
-	}
+	JsonToClientDataConverterFactory getJsonToDataConverterFactory();
 
 }

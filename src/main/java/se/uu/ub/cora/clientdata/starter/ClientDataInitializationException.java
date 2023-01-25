@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2019 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,24 +16,14 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+package se.uu.ub.cora.clientdata.starter;
 
-package se.uu.ub.cora.clientdata.converter;
+public class ClientDataInitializationException extends RuntimeException {
 
-import se.uu.ub.cora.clientdata.ClientConvertible;
+	private static final long serialVersionUID = -8255613510823742429L;
 
-/**
- * JsonToDataConverter converts a json string to a DataPart object.
- */
-public interface JsonToDataConverter {
-
-	/**
-	 * toInstance method is responsible for converting a json String to a DataPart object.
-	 * <p>
-	 * If an exception occurs during conversion MUST an exception implementing
-	 * {@link ConversionException} be thrown.
-	 * 
-	 * @return a Convertible converted from the json String
-	 */
-	ClientConvertible toInstance();
+	public ClientDataInitializationException(String message) {
+		super(message);
+	}
 
 }

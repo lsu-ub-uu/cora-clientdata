@@ -39,14 +39,14 @@ public abstract class ModuleStarter {
 
 	private void throwErrorIfNone(int noOfImplementationsFound, String interfaceClassName) {
 		if (noOfImplementationsFound == 0) {
-			throw new DataInitializationException(
+			throw new ClientDataInitializationException(
 					"No implementations found for " + interfaceClassName);
 		}
 	}
 
 	private void throwErrorIfMoreThanOne(int noOfImplementationsFound, String interfaceClassName) {
 		if (noOfImplementationsFound > 1) {
-			throw new DataInitializationException(
+			throw new ClientDataInitializationException(
 					"More than one implementation found for " + interfaceClassName);
 		}
 	}

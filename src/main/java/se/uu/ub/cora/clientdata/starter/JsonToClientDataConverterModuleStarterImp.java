@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,21 +18,24 @@
  */
 package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.ClientDataFactory;
+import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactory;
 
-public class DataModuleStarterImp extends ModuleStarter implements DataModuleStarter {
+public class JsonToClientDataConverterModuleStarterImp extends ModuleStarter
+		implements JsonToClientDataConverterModuleStarter {
 
-	private ClientDataFactory dataFactory;
+	private JsonToClientDataConverterFactory jsonToDataConverterFactory;
 
 	@Override
-	public void startUsingDataFactoryImplementations(
-			Iterable<ClientDataFactory> dataFactoryImplementations) {
-		dataFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(dataFactoryImplementations,
-				"DataFactory");
+	public void startUsingConverterFactoryImplementations(
+			Iterable<JsonToClientDataConverterFactory> converterFactoryImplementations) {
+		jsonToDataConverterFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(
+				converterFactoryImplementations, "JsonToDataConverterFactory");
+
 	}
 
 	@Override
-	public ClientDataFactory getDataFactory() {
-		return dataFactory;
+	public JsonToClientDataConverterFactory getJsonToDataConverterFactory() {
+		return jsonToDataConverterFactory;
 	}
+
 }

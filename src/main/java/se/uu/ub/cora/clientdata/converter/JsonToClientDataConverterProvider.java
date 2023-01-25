@@ -20,21 +20,21 @@ package se.uu.ub.cora.clientdata.converter;
 
 import java.util.ServiceLoader;
 
-import se.uu.ub.cora.clientdata.starter.JsonToDataConverterModuleStarter;
-import se.uu.ub.cora.clientdata.starter.JsonToDataConverterModuleStarterImp;
+import se.uu.ub.cora.clientdata.starter.JsonToClientDataConverterModuleStarter;
+import se.uu.ub.cora.clientdata.starter.JsonToClientDataConverterModuleStarterImp;
 import se.uu.ub.cora.json.parser.JsonValue;
 
-public class JsonToDataConverterProvider {
+public class JsonToClientDataConverterProvider {
 
-	private static JsonToDataConverterFactory jsonToDataConverterFactory;
-	private static JsonToDataConverterModuleStarter jsonToDataConverterModuleStarter = new JsonToDataConverterModuleStarterImp();
+	private static JsonToClientDataConverterFactory jsonToDataConverterFactory;
+	private static JsonToClientDataConverterModuleStarter jsonToDataConverterModuleStarter = new JsonToClientDataConverterModuleStarterImp();
 
-	private JsonToDataConverterProvider() {
+	private JsonToClientDataConverterProvider() {
 		// not called
 		throw new UnsupportedOperationException();
 	}
 
-	public static JsonToDataConverter getConverterUsingJsonObject(JsonValue jsonValue) {
+	public static JsonToClientDataConverter getConverterUsingJsonObject(JsonValue jsonValue) {
 		ensureConverterFactoryIsSet();
 		return jsonToDataConverterFactory.createForJsonObject(jsonValue);
 	}
@@ -46,8 +46,8 @@ public class JsonToDataConverterProvider {
 	}
 
 	private static void getConverterFactoryImpUsingModuleStarter() {
-		Iterable<JsonToDataConverterFactory> dataGroupFactoryImplementations = ServiceLoader
-				.load(JsonToDataConverterFactory.class);
+		Iterable<JsonToClientDataConverterFactory> dataGroupFactoryImplementations = ServiceLoader
+				.load(JsonToClientDataConverterFactory.class);
 		jsonToDataConverterModuleStarter
 				.startUsingConverterFactoryImplementations(dataGroupFactoryImplementations);
 		jsonToDataConverterFactory = jsonToDataConverterModuleStarter
@@ -65,16 +65,16 @@ public class JsonToDataConverterProvider {
 	 *            A JsonToDataConverterFactory to use to create jsonToDataConverters for testing
 	 */
 	public static void setJsonToDataConverterFactory(
-			JsonToDataConverterFactory jsonToDataConverterFactory) {
-		JsonToDataConverterProvider.jsonToDataConverterFactory = jsonToDataConverterFactory;
+			JsonToClientDataConverterFactory jsonToDataConverterFactory) {
+		JsonToClientDataConverterProvider.jsonToDataConverterFactory = jsonToDataConverterFactory;
 
 	}
 
-	static JsonToDataConverterModuleStarter getStarter() {
+	static JsonToClientDataConverterModuleStarter getStarter() {
 		return jsonToDataConverterModuleStarter;
 	}
 
-	static void setStarter(JsonToDataConverterModuleStarter starter) {
+	static void setStarter(JsonToClientDataConverterModuleStarter starter) {
 		jsonToDataConverterModuleStarter = starter;
 	}
 }

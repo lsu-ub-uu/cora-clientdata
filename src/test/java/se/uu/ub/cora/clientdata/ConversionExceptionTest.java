@@ -23,12 +23,12 @@ import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.converter.ConversionException;
+import se.uu.ub.cora.clientdata.converter.ClientDataConversionException;
 
 public class ConversionExceptionTest {
 	@Test
 	public void testInit() {
-		ConversionException notFound = new ConversionException("message");
+		ClientDataConversionException notFound = new ClientDataConversionException("message");
 		assertTrue(notFound instanceof RuntimeException);
 		assertEquals(notFound.getMessage(), "message");
 	}
@@ -36,7 +36,7 @@ public class ConversionExceptionTest {
 	@Test
 	public void testInitWithException() {
 		Exception exception = new Exception();
-		ConversionException notFound = new ConversionException("message", exception);
+		ClientDataConversionException notFound = new ClientDataConversionException("message", exception);
 
 		assertEquals(notFound.getMessage(), "message");
 		assertEquals(notFound.getCause(), exception);

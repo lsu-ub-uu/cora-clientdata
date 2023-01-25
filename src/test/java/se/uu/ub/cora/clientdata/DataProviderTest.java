@@ -34,9 +34,9 @@ import se.uu.ub.cora.clientdata.spy.DataFactorySpy;
 import se.uu.ub.cora.clientdata.spy.DataGroupSpy;
 import se.uu.ub.cora.clientdata.spy.DataModuleStarterSpy;
 import se.uu.ub.cora.clientdata.spy.DataRecordGroupSpy;
-import se.uu.ub.cora.clientdata.starter.DataInitializationException;
-import se.uu.ub.cora.clientdata.starter.DataModuleStarter;
-import se.uu.ub.cora.clientdata.starter.DataModuleStarterImp;
+import se.uu.ub.cora.clientdata.starter.ClientDataInitializationException;
+import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarter;
+import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarterImp;
 
 public class DataProviderTest {
 
@@ -70,24 +70,24 @@ public class DataProviderTest {
 	@Test
 	public void testInitUsesDefaultLoggerModuleStarter() throws Exception {
 		makeSureErrorIsThrownAsNoImplementationsExistInThisModule();
-		DataModuleStarter starter = ClientDataProvider.getStarter();
+		ClientDataModuleStarter starter = ClientDataProvider.getStarter();
 		assertStarterIsModuleStarter(starter);
 	}
 
 	private void makeSureErrorIsThrownAsNoImplementationsExistInThisModule() {
-		ClientDataProvider.setStarter(new DataModuleStarterImp());
+		ClientDataProvider.setStarter(new ClientDataModuleStarterImp());
 		Exception caughtException = null;
 		try {
 			ClientDataProvider.createRecordWithDataGroup(dataGroup);
 		} catch (Exception e) {
 			caughtException = e;
 		}
-		assertTrue(caughtException instanceof DataInitializationException);
+		assertTrue(caughtException instanceof ClientDataInitializationException);
 		assertEquals(caughtException.getMessage(), "No implementations found for DataFactory");
 	}
 
-	private void assertStarterIsModuleStarter(DataModuleStarter starter) {
-		assertTrue(starter instanceof DataModuleStarterImp);
+	private void assertStarterIsModuleStarter(ClientDataModuleStarter starter) {
+		assertTrue(starter instanceof ClientDataModuleStarterImp);
 	}
 
 	@Test
@@ -102,7 +102,7 @@ public class DataProviderTest {
 
 	private DataModuleStarterSpy startDataRecordModuleInitializerWithStarterSpy() {
 		ClientDataProvider.onlyForTestSetDataFactory(null);
-		DataModuleStarter starter = new DataModuleStarterSpy();
+		ClientDataModuleStarter starter = new DataModuleStarterSpy();
 		ClientDataProvider.setStarter(starter);
 		return (DataModuleStarterSpy) starter;
 	}

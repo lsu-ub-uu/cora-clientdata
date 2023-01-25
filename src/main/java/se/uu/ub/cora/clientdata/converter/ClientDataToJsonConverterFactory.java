@@ -22,7 +22,7 @@ package se.uu.ub.cora.clientdata.converter;
 import se.uu.ub.cora.clientdata.ClientConvertible;
 
 /**
- * DataToJsonConverterFactory is a factory that creates new instances of {@link DataToJsonConverter}
+ * DataToJsonConverterFactory is a factory that creates new instances of {@link ClientDataToJsonConverter}
  * for provided {@link ClientConvertible}s
  * <p>
  * By default SHOULD implementations generate converters that creates json without action links. To
@@ -31,32 +31,32 @@ import se.uu.ub.cora.clientdata.ClientConvertible;
  * links.
  */
 
-public interface DataToJsonConverterFactory {
+public interface ClientDataToJsonConverterFactory {
 
 	/**
-	 * factorUsingConvertible creates a {@link DataToJsonConverter} for the provided
+	 * factorUsingConvertible creates a {@link ClientDataToJsonConverter} for the provided
 	 * {@link ClientConvertible}
 	 * 
 	 * @param convertible
 	 *            A {@link ClientConvertible} to create a converter for
 	 * 
-	 * @return returns a {@link DataToJsonConverter} capable of converting the {@link ClientConvertible}
+	 * @return returns a {@link ClientDataToJsonConverter} capable of converting the {@link ClientConvertible}
 	 *         to a json String.
 	 */
-	DataToJsonConverter factorUsingConvertible(ClientConvertible convertible);
+	ClientDataToJsonConverter factorUsingConvertible(ClientConvertible convertible);
 
 	/**
-	 * factorUsingBaseUrlAndConvertible creates a {@link DataToJsonConverter} for the provided
+	 * factorUsingBaseUrlAndConvertible creates a {@link ClientDataToJsonConverter} for the provided
 	 * {@link ClientConvertible} using the provided baseUrl.
 	 * 
 	 * @param baseUrl
 	 * @param convertible
 	 * @return
 	 */
-	DataToJsonConverter factorUsingBaseUrlAndConvertible(String baseUrl, ClientConvertible convertible);
+	ClientDataToJsonConverter factorUsingBaseUrlAndConvertible(String baseUrl, ClientConvertible convertible);
 
 	/**
-	 * factorUsingRecordUrlAndConvertible creates a {@link DataToJsonConverter} for the provided
+	 * factorUsingRecordUrlAndConvertible creates a {@link ClientDataToJsonConverter} for the provided
 	 * {@link ClientConvertible} using the provided recordUrl when creating action links.
 	 * 
 	 * @param baseUrl
@@ -68,7 +68,7 @@ public interface DataToJsonConverterFactory {
 	 * 
 	 * @return
 	 */
-	DataToJsonConverter factorUsingBaseUrlAndRecordUrlAndConvertible(String baseUrl,
+	ClientDataToJsonConverter factorUsingBaseUrlAndRecordUrlAndConvertible(String baseUrl,
 			String recordUrl, ClientConvertible convertible);
 
 }

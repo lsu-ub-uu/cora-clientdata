@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,23 +16,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package se.uu.ub.cora.clientdata.converter;
 
-import se.uu.ub.cora.json.parser.JsonValue;
-
-public interface JsonToDataConverterFactory {
-
+/**
+ * DataToJsonConverterFactoryCreator is an inteface used by implementing projects to create
+ * factories of type {@link ClientDataToJsonConverterFactory}. {@link ClientDataToJsonConverterProvider} will
+ * use ServiceLoader to find implementations of this class to provide a means to get instances of
+ * DataToJsonConverterFactories.
+ */
+public interface ClientDataToJsonConverterFactoryCreator {
 	/**
-	 * createForJsonObject creates a new JsonToDataConverter for a given jsonValue. The converter
-	 * converts Json to Datagroups.
-	 * </p>
-	 * All implementations of this interface MUST be thread safe.
+	 * createFactory creates a new instance of {@link ClientDataToJsonConverterFactory}.
 	 * 
-	 * @param jsonValue
-	 *            the JsonValue that will be converted to DataGroup.
-	 * @return A newly created JsonToDataConverter.
+	 * @return A {@link ClientDataToJsonConverterFactory}
 	 */
-	JsonToDataConverter createForJsonObject(JsonValue jsonValue);
-
+	public ClientDataToJsonConverterFactory createFactory();
 }

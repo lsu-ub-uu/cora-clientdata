@@ -20,14 +20,14 @@ package se.uu.ub.cora.clientdata.converter;
 
 import se.uu.ub.cora.json.parser.JsonValue;
 
-public class JsonToDataConverterFactorySpy implements JsonToDataConverterFactory {
+public class JsonToDataConverterFactorySpy implements JsonToClientDataConverterFactory {
 
 	public boolean getConverterCalled = false;
 	public JsonValue jsonValue;
 	public JsonToDataConverterSpy returnedConverter;
 
 	@Override
-	public JsonToDataConverter createForJsonObject(JsonValue jsonValue) {
+	public JsonToClientDataConverter createForJsonObject(JsonValue jsonValue) {
 		this.jsonValue = jsonValue;
 		getConverterCalled = true;
 		returnedConverter = new JsonToDataConverterSpy();

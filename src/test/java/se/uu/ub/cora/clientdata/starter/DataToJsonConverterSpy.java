@@ -1,9 +1,9 @@
 package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.converter.DataToJsonConverter;
+import se.uu.ub.cora.clientdata.converter.ClientDataToJsonConverter;
 import se.uu.ub.cora.json.builder.JsonObjectBuilder;
 
-public class DataToJsonConverterSpy implements DataToJsonConverter {
+public class DataToJsonConverterSpy implements ClientDataToJsonConverter {
 
 	@Override
 	public JsonObjectBuilder toJsonObjectBuilder() {

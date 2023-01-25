@@ -19,17 +19,17 @@
 package se.uu.ub.cora.clientdata.starter;
 
 import se.uu.ub.cora.clientdata.ClientConvertible;
-import se.uu.ub.cora.clientdata.converter.DataToJsonConverter;
-import se.uu.ub.cora.clientdata.converter.DataToJsonConverterFactory;
+import se.uu.ub.cora.clientdata.converter.ClientDataToJsonConverter;
+import se.uu.ub.cora.clientdata.converter.ClientDataToJsonConverterFactory;
 
-public class DataToJsonConverterFactorySpy implements DataToJsonConverterFactory {
+public class DataToJsonConverterFactorySpy implements ClientDataToJsonConverterFactory {
 
 	public boolean getConverterCalled = false;
 	public ClientConvertible convertible;
 	public DataToJsonConverterSpy dataToJsonConverterSpy;
 
 	@Override
-	public DataToJsonConverter factorUsingConvertible(ClientConvertible convertible) {
+	public ClientDataToJsonConverter factorUsingConvertible(ClientConvertible convertible) {
 		this.convertible = convertible;
 		getConverterCalled = true;
 		dataToJsonConverterSpy = new DataToJsonConverterSpy();
@@ -37,14 +37,14 @@ public class DataToJsonConverterFactorySpy implements DataToJsonConverterFactory
 	}
 
 	@Override
-	public DataToJsonConverter factorUsingBaseUrlAndConvertible(String baseUrl,
+	public ClientDataToJsonConverter factorUsingBaseUrlAndConvertible(String baseUrl,
 			ClientConvertible convertible) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DataToJsonConverter factorUsingBaseUrlAndRecordUrlAndConvertible(String baseUrl, String recordUrl,
+	public ClientDataToJsonConverter factorUsingBaseUrlAndRecordUrlAndConvertible(String baseUrl, String recordUrl,
 			ClientConvertible convertible) {
 		// TODO Auto-generated method stub
 		return null;

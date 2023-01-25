@@ -21,8 +21,8 @@ package se.uu.ub.cora.clientdata;
 
 import java.util.ServiceLoader;
 
-import se.uu.ub.cora.clientdata.starter.DataModuleStarter;
-import se.uu.ub.cora.clientdata.starter.DataModuleStarterImp;
+import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarter;
+import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarterImp;
 
 /**
  * DataProvider provides a means for other classes in the system to create instances of different
@@ -42,7 +42,7 @@ import se.uu.ub.cora.clientdata.starter.DataModuleStarterImp;
 public class ClientDataProvider {
 
 	private static ClientDataFactory dataFactory;
-	private static DataModuleStarter dataModuleStarter = new DataModuleStarterImp();
+	private static ClientDataModuleStarter dataModuleStarter = new ClientDataModuleStarterImp();
 
 	private ClientDataProvider() {
 		// not called
@@ -71,11 +71,11 @@ public class ClientDataProvider {
 		dataFactory = dataModuleStarter.getDataFactory();
 	}
 
-	static void setStarter(DataModuleStarter starter) {
+	static void setStarter(ClientDataModuleStarter starter) {
 		dataModuleStarter = starter;
 	}
 
-	static DataModuleStarter getStarter() {
+	static ClientDataModuleStarter getStarter() {
 		return dataModuleStarter;
 	}
 

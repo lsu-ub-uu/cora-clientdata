@@ -27,29 +27,29 @@ import java.util.List;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import se.uu.ub.cora.clientdata.converter.JsonToDataConverterFactory;
+import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactory;
 import se.uu.ub.cora.clientdata.converter.JsonToDataConverterFactorySpy;
 
 public class JsonToDataConverterModuleStarterTest {
-	JsonToDataConverterModuleStarter starter;
-	List<JsonToDataConverterFactory> converterFactoryImplementations;
+	JsonToClientDataConverterModuleStarter starter;
+	List<JsonToClientDataConverterFactory> converterFactoryImplementations;
 	JsonToDataConverterFactorySpy converterFactorySpy;
 
 	@BeforeMethod
 	public void beforeMethod() {
-		starter = new JsonToDataConverterModuleStarterImp();
+		starter = new JsonToClientDataConverterModuleStarterImp();
 		converterFactoryImplementations = new ArrayList<>();
 		converterFactorySpy = new JsonToDataConverterFactorySpy();
 
 	}
 
-	@Test(expectedExceptions = DataInitializationException.class, expectedExceptionsMessageRegExp = ""
+	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "No implementations found for JsonToDataConverterFactory")
 	public void testStartModuleThrowsErrorIfNoConverterFactoryImplementations() throws Exception {
 		starter.startUsingConverterFactoryImplementations(converterFactoryImplementations);
 	}
 
-	@Test(expectedExceptions = DataInitializationException.class, expectedExceptionsMessageRegExp = ""
+	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
 			+ "More than one implementation found for JsonToDataConverterFactory")
 	public void testStartModuleThrowsErrorIfMoreThanOneConverterFactoryImplementations()
 			throws Exception {

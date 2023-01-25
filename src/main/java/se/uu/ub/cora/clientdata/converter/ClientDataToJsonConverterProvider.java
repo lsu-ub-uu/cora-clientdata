@@ -20,34 +20,34 @@ package se.uu.ub.cora.clientdata.converter;
 
 import java.util.ServiceLoader;
 
-import se.uu.ub.cora.clientdata.starter.DataToJsonConverterModuleStarter;
-import se.uu.ub.cora.clientdata.starter.DataToJsonConverterModuleStarterImp;
+import se.uu.ub.cora.clientdata.starter.ClientDataToJsonConverterModuleStarter;
+import se.uu.ub.cora.clientdata.starter.ClientDataToJsonConverterModuleStarterImp;
 
 /**
  * 
  * DataToJsonConverterProvider provides a means to get instances of a plugged in implementation of
- * {@link DataToJsonConverterFactory}. This class will with the help of ServiceLoader search for
- * implementations of {@link DataToJsonConverterFactoryCreator}s and as long as only one
+ * {@link ClientDataToJsonConverterFactory}. This class will with the help of ServiceLoader search for
+ * implementations of {@link ClientDataToJsonConverterFactoryCreator}s and as long as only one
  * implementation is found use the found implementation to create new DataToJsonConverterFactories.
  * <p>
  * New factory instances can be created using the {@link #createImplementingFactory()} method.
  */
-public class DataToJsonConverterProvider {
-	private static DataToJsonConverterModuleStarter jsonToDataConverterModuleStarter = new DataToJsonConverterModuleStarterImp();
-	private static DataToJsonConverterFactoryCreator converterFactoryCreator;
+public class ClientDataToJsonConverterProvider {
+	private static ClientDataToJsonConverterModuleStarter jsonToDataConverterModuleStarter = new ClientDataToJsonConverterModuleStarterImp();
+	private static ClientDataToJsonConverterFactoryCreator converterFactoryCreator;
 
-	private DataToJsonConverterProvider() {
+	private ClientDataToJsonConverterProvider() {
 		// not called
 		throw new UnsupportedOperationException();
 	}
 
 	/**
 	 * createImplementingFactory method provides a new factory on each call of type
-	 * {@link DataToJsonConverterFactory}
+	 * {@link ClientDataToJsonConverterFactory}
 	 * 
-	 * @return a new factory of type {@link DataToJsonConverterFactory}
+	 * @return a new factory of type {@link ClientDataToJsonConverterFactory}
 	 */
-	public static DataToJsonConverterFactory createImplementingFactory() {
+	public static ClientDataToJsonConverterFactory createImplementingFactory() {
 		ensureConverterFactoryCreatorIsSet();
 		return converterFactoryCreator.createFactory();
 	}
@@ -59,8 +59,8 @@ public class DataToJsonConverterProvider {
 	}
 
 	private static void getConverterFactoryImpUsingModuleStarter() {
-		Iterable<DataToJsonConverterFactoryCreator> dataToJsonConverterFactoryCreatorImplementations = ServiceLoader
-				.load(DataToJsonConverterFactoryCreator.class);
+		Iterable<ClientDataToJsonConverterFactoryCreator> dataToJsonConverterFactoryCreatorImplementations = ServiceLoader
+				.load(ClientDataToJsonConverterFactoryCreator.class);
 		jsonToDataConverterModuleStarter.startUsingConverterFactoryImplementations(
 				dataToJsonConverterFactoryCreatorImplementations);
 		converterFactoryCreator = jsonToDataConverterModuleStarter
@@ -79,16 +79,16 @@ public class DataToJsonConverterProvider {
 	 *            for testing
 	 */
 	public static void setDataToJsonConverterFactoryCreator(
-			DataToJsonConverterFactoryCreator converterFactoryCreator) {
-		DataToJsonConverterProvider.converterFactoryCreator = converterFactoryCreator;
+			ClientDataToJsonConverterFactoryCreator converterFactoryCreator) {
+		ClientDataToJsonConverterProvider.converterFactoryCreator = converterFactoryCreator;
 
 	}
 
-	static DataToJsonConverterModuleStarter getStarter() {
+	static ClientDataToJsonConverterModuleStarter getStarter() {
 		return jsonToDataConverterModuleStarter;
 	}
 
-	static void setStarter(DataToJsonConverterModuleStarter starter) {
+	static void setStarter(ClientDataToJsonConverterModuleStarter starter) {
 		jsonToDataConverterModuleStarter = starter;
 	}
 

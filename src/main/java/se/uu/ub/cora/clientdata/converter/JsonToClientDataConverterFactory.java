@@ -1,6 +1,5 @@
 /*
- * Copyright 2021 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2015 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -17,14 +16,23 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.ClientDataFactory;
+package se.uu.ub.cora.clientdata.converter;
 
-public interface DataModuleStarter {
+import se.uu.ub.cora.json.parser.JsonValue;
 
-	void startUsingDataFactoryImplementations(Iterable<ClientDataFactory> dataFactoryImplementations);
+public interface JsonToClientDataConverterFactory {
 
-	ClientDataFactory getDataFactory();
+	/**
+	 * createForJsonObject creates a new JsonToDataConverter for a given jsonValue. The converter
+	 * converts Json to Datagroups.
+	 * </p>
+	 * All implementations of this interface MUST be thread safe.
+	 * 
+	 * @param jsonValue
+	 *            the JsonValue that will be converted to DataGroup.
+	 * @return A newly created JsonToDataConverter.
+	 */
+	JsonToClientDataConverter createForJsonObject(JsonValue jsonValue);
 
 }

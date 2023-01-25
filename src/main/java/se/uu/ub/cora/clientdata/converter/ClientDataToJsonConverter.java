@@ -27,7 +27,7 @@ import se.uu.ub.cora.json.builder.JsonObjectBuilder;
  * DataToJsonConverter is an interface for classes that convert {@link ClientConvertible} objects to
  * String with json or {@link JsonObjectBuilder} classes.
  */
-public interface DataToJsonConverter {
+public interface ClientDataToJsonConverter {
 	/**
 	 * toJsonObjectBuilder return a {@link JsonObjectBuilder} representation of the
 	 * {@link ClientConvertible} that is to be converted.

@@ -6,6 +6,6 @@ module se.uu.ub.cora.clientdata {
 
 	uses se.uu.ub.cora.clientdata.ClientDataFactory;
 
-	uses se.uu.ub.cora.clientdata.converter.JsonToDataConverterFactory;
-	uses se.uu.ub.cora.clientdata.converter.DataToJsonConverterFactoryCreator;
+	uses se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactory;
+	uses se.uu.ub.cora.clientdata.converter.ClientDataToJsonConverterFactoryCreator;
 }

@@ -1,5 +1,6 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
+ * Copyright 2022 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -18,12 +19,21 @@
  */
 package se.uu.ub.cora.clientdata.starter;
 
-public class DataInitializationException extends RuntimeException {
+import se.uu.ub.cora.clientdata.ClientDataFactory;
 
-	private static final long serialVersionUID = -8255613510823742429L;
+public class ClientDataModuleStarterImp extends ModuleStarter implements ClientDataModuleStarter {
 
-	public DataInitializationException(String message) {
-		super(message);
+	private ClientDataFactory dataFactory;
+
+	@Override
+	public void startUsingDataFactoryImplementations(
+			Iterable<ClientDataFactory> dataFactoryImplementations) {
+		dataFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(dataFactoryImplementations,
+				"DataFactory");
 	}
 
+	@Override
+	public ClientDataFactory getDataFactory() {
+		return dataFactory;
+	}
 }
