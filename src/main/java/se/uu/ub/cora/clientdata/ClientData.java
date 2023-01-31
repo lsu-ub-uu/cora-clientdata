@@ -20,12 +20,12 @@
 package se.uu.ub.cora.clientdata;
 
 /**
- * Data defines a unit of information at the level sent to and from a cora system. This is normaly
- * information about an cora-object handled by the system. Data is used as a container of related
- * information between a cora system and its clients.
+ * ClientData defines a unit of information at the level sent to and from a cora system. This is
+ * normaly information about an cora-object handled by the system. ClientData is used as a container
+ * of related information between a cora system and its clients.
  * <p>
- * If multiple instances of {@link ClientData} needs to be sent to a client at once can they be added to a
- * {@link ClientDataList}.
+ * If multiple instances of {@link ClientData} needs to be sent to a client at once can they be
+ * added to a {@link ClientDataList}.
  */
 public interface ClientData extends ClientConvertible {
 
