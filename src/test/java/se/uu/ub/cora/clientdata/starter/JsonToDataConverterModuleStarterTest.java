@@ -28,18 +28,18 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactory;
-import se.uu.ub.cora.clientdata.converter.JsonToDataConverterFactorySpy;
+import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactorySpy;
 
 public class JsonToDataConverterModuleStarterTest {
 	JsonToClientDataConverterModuleStarter starter;
 	List<JsonToClientDataConverterFactory> converterFactoryImplementations;
-	JsonToDataConverterFactorySpy converterFactorySpy;
+	JsonToClientDataConverterFactorySpy converterFactorySpy;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		starter = new JsonToClientDataConverterModuleStarterImp();
 		converterFactoryImplementations = new ArrayList<>();
-		converterFactorySpy = new JsonToDataConverterFactorySpy();
+		converterFactorySpy = new JsonToClientDataConverterFactorySpy();
 
 	}
 
@@ -53,8 +53,8 @@ public class JsonToDataConverterModuleStarterTest {
 			+ "More than one implementation found for JsonToDataConverterFactory")
 	public void testStartModuleThrowsErrorIfMoreThanOneConverterFactoryImplementations()
 			throws Exception {
-		converterFactoryImplementations.add(new JsonToDataConverterFactorySpy());
-		converterFactoryImplementations.add(new JsonToDataConverterFactorySpy());
+		converterFactoryImplementations.add(new JsonToClientDataConverterFactorySpy());
+		converterFactoryImplementations.add(new JsonToClientDataConverterFactorySpy());
 		starter.startUsingConverterFactoryImplementations(converterFactoryImplementations);
 	}
 

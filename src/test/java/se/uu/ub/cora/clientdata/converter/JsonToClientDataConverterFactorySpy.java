@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,20 +18,23 @@
  */
 package se.uu.ub.cora.clientdata.converter;
 
-import se.uu.ub.cora.json.parser.JsonValue;
+import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
+import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
-public class JsonToDataConverterFactorySpy implements JsonToClientDataConverterFactory {
+public class JsonToClientDataConverterFactorySpy implements JsonToClientDataConverterFactory {
 
-	public boolean getConverterCalled = false;
-	public JsonValue jsonValue;
-	public JsonToDataConverterSpy returnedConverter;
+	public MethodCallRecorder MCR = new MethodCallRecorder();
+	public MethodReturnValues MRV = new MethodReturnValues();
+
+	public JsonToClientDataConverterFactorySpy() {
+		MCR.useMRV(MRV);
+
+		MRV.setDefaultReturnValuesSupplier("factor", JsonToClientDataConverterSpy::new);
+	}
 
 	@Override
-	public JsonToClientDataConverter createForJsonObject(JsonValue jsonValue) {
-		this.jsonValue = jsonValue;
-		getConverterCalled = true;
-		returnedConverter = new JsonToDataConverterSpy();
-		return returnedConverter;
+	public JsonToClientDataConverter factor(String json) {
+		return (JsonToClientDataConverter) MCR.addCallAndReturnFromMRV("json", json);
 	}
 
 }

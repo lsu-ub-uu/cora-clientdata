@@ -22,7 +22,6 @@ import java.util.ServiceLoader;
 
 import se.uu.ub.cora.clientdata.starter.JsonToClientDataConverterModuleStarter;
 import se.uu.ub.cora.clientdata.starter.JsonToClientDataConverterModuleStarterImp;
-import se.uu.ub.cora.json.parser.JsonValue;
 
 public class JsonToClientDataConverterProvider {
 
@@ -34,9 +33,9 @@ public class JsonToClientDataConverterProvider {
 		throw new UnsupportedOperationException();
 	}
 
-	public static JsonToClientDataConverter getConverterUsingJsonObject(JsonValue jsonValue) {
+	public static JsonToClientDataConverter getConverterUsingJsonObject(String json) {
 		ensureConverterFactoryIsSet();
-		return jsonToDataConverterFactory.createForJsonObject(jsonValue);
+		return jsonToDataConverterFactory.factor(json);
 	}
 
 	private static synchronized void ensureConverterFactoryIsSet() {

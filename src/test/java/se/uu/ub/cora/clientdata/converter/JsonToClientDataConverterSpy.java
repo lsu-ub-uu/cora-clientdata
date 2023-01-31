@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,21 +16,27 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package se.uu.ub.cora.clientdata.converter;
 
-public interface JsonToClientDataConverterFactory {
+import se.uu.ub.cora.clientdata.ClientConvertible;
+import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverter;
+import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
+import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
-	/**
-	 * factor factors a new JsonToDataConverter for a given json string. The converter converts Json
-	 * to Datagroups.
-	 * </p>
-	 * All implementations of this interface MUST be thread safe.
-	 * 
-	 * @param json
-	 *            a String with a Json that will be converted to DataGroup.
-	 * @return A newly created JsonToClientDataConverter.
-	 */
-	JsonToClientDataConverter factor(String json);
+public class JsonToClientDataConverterSpy implements JsonToClientDataConverter {
+
+	public MethodCallRecorder MCR = new MethodCallRecorder();
+	public MethodReturnValues MRV = new MethodReturnValues();
+
+	public JsonToClientDataConverterSpy() {
+		MCR.useMRV(MRV);
+
+		MRV.setDefaultReturnValuesSupplier("toInstance", ClientConvertibleSpy::new);
+	}
+
+	@Override
+	public ClientConvertible toInstance() {
+		return (ClientConvertible) MCR.addCallAndReturnFromMRV();
+	}
 
 }
