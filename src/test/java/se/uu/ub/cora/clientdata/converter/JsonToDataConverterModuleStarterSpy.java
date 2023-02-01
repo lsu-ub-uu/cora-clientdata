@@ -14,7 +14,7 @@ public class JsonToDataConverterModuleStarterSpy implements JsonToClientDataConv
 
 	@Override
 	public JsonToClientDataConverterFactory getJsonToDataConverterFactory() {
-		return new JsonToDataConverterFactorySpy();
+		return new JsonToClientDataConverterFactorySpy();
 	}
 
 }

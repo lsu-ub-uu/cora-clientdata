@@ -19,7 +19,6 @@
 package se.uu.ub.cora.clientdata.converter;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertSame;
 import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Constructor;
@@ -33,10 +32,10 @@ import org.testng.annotations.Test;
 import se.uu.ub.cora.clientdata.starter.ClientDataInitializationException;
 import se.uu.ub.cora.clientdata.starter.JsonToClientDataConverterModuleStarter;
 import se.uu.ub.cora.clientdata.starter.JsonToClientDataConverterModuleStarterImp;
-import se.uu.ub.cora.json.parser.JsonValue;
-import se.uu.ub.cora.json.parser.org.OrgJsonParser;
 
-public class JsonToDataConverterProviderTest {
+public class JsonToClientDataConverterProviderTest {
+
+	private static final String JSON = "{\"name\":\"groupNameInData\", \"children\":[]}";
 
 	@BeforeMethod
 	public void beforeMethod() {
@@ -61,22 +60,14 @@ public class JsonToDataConverterProviderTest {
 
 	@Test
 	public void testGetConverterUsesExistingConverterFactory() throws Exception {
-		JsonToDataConverterFactorySpy converterFactorySpy = new JsonToDataConverterFactorySpy();
+		JsonToClientDataConverterFactorySpy converterFactorySpy = new JsonToClientDataConverterFactorySpy();
 		JsonToClientDataConverterProvider.setJsonToDataConverterFactory(converterFactorySpy);
-		JsonValue jsonValue = createJsonValue();
+
 		JsonToClientDataConverter converter = JsonToClientDataConverterProvider
-				.getConverterUsingJsonObject(jsonValue);
+				.getConverterUsingJsonObject(JSON);
 
-		assertTrue(converterFactorySpy.getConverterCalled);
-		assertSame(converterFactorySpy.jsonValue, jsonValue);
-		assertSame(converter, converterFactorySpy.returnedConverter);
-	}
-
-	private JsonValue createJsonValue() {
-		OrgJsonParser jsonParser = new OrgJsonParser();
-		String json = "{\"name\":\"groupNameInData\", \"children\":[]}";
-		JsonValue jsonValue = jsonParser.parseString(json);
-		return jsonValue;
+		converterFactorySpy.MCR.assertParameters("factorUsingString", 0, JSON);
+		converterFactorySpy.MCR.assertReturn("factorUsingString", 0, converter);
 	}
 
 	@Test
@@ -89,8 +80,7 @@ public class JsonToDataConverterProviderTest {
 	@Test
 	public void testNonExceptionThrowingStartup() throws Exception {
 		JsonToDataConverterModuleStarterSpy starter = startDataGroupModuleInitializerWithStarterSpy();
-		JsonValue jsonValue = createJsonValue();
-		JsonToClientDataConverterProvider.getConverterUsingJsonObject(jsonValue);
+		JsonToClientDataConverterProvider.getConverterUsingJsonObject(JSON);
 		assertTrue(starter.startWasCalled);
 	}
 
@@ -103,14 +93,15 @@ public class JsonToDataConverterProviderTest {
 	@Test
 	public void testInitUsesDefaultLoggerModuleStarter() throws Exception {
 		makeSureErrorIsThrownAsNoImplementationsExistInThisModule();
-		JsonToClientDataConverterModuleStarter starter = JsonToClientDataConverterProvider.getStarter();
+		JsonToClientDataConverterModuleStarter starter = JsonToClientDataConverterProvider
+				.getStarter();
 		assertStarterIsDataGroupModuleStarter(starter);
 	}
 
 	private void makeSureErrorIsThrownAsNoImplementationsExistInThisModule() {
 		Exception caughtException = null;
 		try {
-			JsonToClientDataConverterProvider.getConverterUsingJsonObject(createJsonValue());
+			JsonToClientDataConverterProvider.getConverterUsingJsonObject(JSON);
 		} catch (Exception e) {
 			caughtException = e;
 		}
@@ -119,7 +110,8 @@ public class JsonToDataConverterProviderTest {
 				"No implementations found for JsonToDataConverterFactory");
 	}
 
-	private void assertStarterIsDataGroupModuleStarter(JsonToClientDataConverterModuleStarter starter) {
+	private void assertStarterIsDataGroupModuleStarter(
+			JsonToClientDataConverterModuleStarter starter) {
 		assertTrue(starter instanceof JsonToClientDataConverterModuleStarterImp);
 	}
 }

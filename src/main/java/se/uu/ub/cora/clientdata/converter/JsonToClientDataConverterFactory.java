@@ -19,20 +19,32 @@
 
 package se.uu.ub.cora.clientdata.converter;
 
-import se.uu.ub.cora.json.parser.JsonValue;
+import se.uu.ub.cora.json.parser.JsonObject;
 
 public interface JsonToClientDataConverterFactory {
 
 	/**
-	 * createForJsonObject creates a new JsonToDataConverter for a given jsonValue. The converter
+	 * factorUsingString factors a new JsonToDataConverter for a given json string. The converter
 	 * converts Json to Datagroups.
 	 * </p>
 	 * All implementations of this interface MUST be thread safe.
 	 * 
-	 * @param jsonValue
-	 *            the JsonValue that will be converted to DataGroup.
-	 * @return A newly created JsonToDataConverter.
+	 * @param json
+	 *            a String with a Json that will be converted to DataGroup in the converter.
+	 * @return A newly created JsonToClientDataConverter.
 	 */
-	JsonToClientDataConverter createForJsonObject(JsonValue jsonValue);
+	JsonToClientDataConverter factorUsingString(String json);
+
+	/**
+	 * factorUsingJsonObject factors a new JsonToDataConverter for a given json JsonObject. The
+	 * converter converts JsonObject to Datagroups.
+	 * </p>
+	 * All implementations of this interface MUST be thread safe.
+	 * 
+	 * @param json
+	 *            the JsonObject that will be converted to DataGroup in the converter.
+	 * @return A newly created JsonToClientDataConverter.
+	 */
+	JsonToClientDataConverter factorUsingJsonObject(JsonObject jsonObject);
 
 }
