@@ -19,10 +19,11 @@
 package se.uu.ub.cora.clientdata.spy;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import se.uu.ub.cora.clientdata.ClientAction;
+import se.uu.ub.cora.clientdata.ClientActionLink;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 
@@ -53,15 +54,15 @@ public class DataRecordSpy implements ClientDataRecord {
 	}
 
 	@Override
-	public List<ClientAction> getActions() {
+	public void addActionLink(ClientActionLink actionLink) {
 		// TODO Auto-generated method stub
-		return null;
+
 	}
 
 	@Override
-	public void addAction(ClientAction action) {
+	public Optional<ClientActionLink> getActionLink(ClientAction action) {
 		// TODO Auto-generated method stub
-
+		return Optional.empty();
 	}
 
 	@Override
@@ -116,12 +117,6 @@ public class DataRecordSpy implements ClientDataRecord {
 	public String getId() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean hasActions() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override

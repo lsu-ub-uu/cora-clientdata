@@ -19,7 +19,7 @@
 package se.uu.ub.cora.clientdata;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -36,7 +36,8 @@ import java.util.Set;
  * allowed to read them.
  *
  */
-public interface ClientDataRecord extends ClientData, ClientConvertible, ClientExternallyConvertible {
+public interface ClientDataRecord
+		extends ClientData, ClientConvertible, ClientExternallyConvertible {
 
 	/**
 	 * getType returns the record type for this record.
@@ -73,30 +74,25 @@ public interface ClientDataRecord extends ClientData, ClientConvertible, ClientE
 	ClientDataGroup getDataGroup();
 
 	/**
-	 * addAction adds an action to the preexistings list of actions that the User that interacted
-	 * with the record is authorized to execute
+	 * addActionLink adds an ActionLink to the to this record. ActionLinks represents possible
+	 * actions that the user that got the record from the server can take on the returned record.
 	 * 
-	 * @param action
-	 *            is the action to be added to the record.
+	 * @param actionLink
+	 *            is the ClientActionLink to be added to the record.
 	 */
-	void addAction(ClientAction action);
+	public void addActionLink(ClientActionLink actionLink);
 
 	/**
-	 * hasActions return true if true this record has at least one action.
-	 * 
-	 * @return boolean whether this record has actions or not
-	 */
-	boolean hasActions();
-
-	/**
-	 * getActions returns a list with actions that the User that interacted with the record is
-	 * authorized to execute.
+	 * getActionLink returns an Optional with an ActionLink representing the requested ClientAction
+	 * if the user that got the record from the server can execute the requested action on the
+	 * returned record. An empty optional is returned if no matching actionLink exist in the record.
 	 * <p>
-	 * If there are no actions for this record SHOULD an empty list be returned.
+	 * If there is no matching action for this record an empty Optional should be returned.
 	 * 
-	 * @return List of actions from the record.
+	 * @return An Optional that might contain a ClientActionLink that matches the requested
+	 *         ClientAction.
 	 */
-	List<ClientAction> getActions();
+	public Optional<ClientActionLink> getActionLink(ClientAction action);
 
 	/**
 	 * addReadPermission adds a permission to the preexisting read permission that the User has for
