@@ -35,7 +35,7 @@ public class JsonToClientDataConverterProvider {
 
 	public static JsonToClientDataConverter getConverterUsingJsonObject(String json) {
 		ensureConverterFactoryIsSet();
-		return jsonToDataConverterFactory.factor(json);
+		return jsonToDataConverterFactory.factorUsingString(json);
 	}
 
 	private static synchronized void ensureConverterFactoryIsSet() {

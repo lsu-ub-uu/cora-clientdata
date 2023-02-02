@@ -66,8 +66,8 @@ public class JsonToClientDataConverterProviderTest {
 		JsonToClientDataConverter converter = JsonToClientDataConverterProvider
 				.getConverterUsingJsonObject(JSON);
 
-		converterFactorySpy.MCR.assertParameters("factor", 0, JSON);
-		converterFactorySpy.MCR.assertReturn("factor", 0, converter);
+		converterFactorySpy.MCR.assertParameters("factorUsingString", 0, JSON);
+		converterFactorySpy.MCR.assertReturn("factorUsingString", 0, converter);
 	}
 
 	@Test
