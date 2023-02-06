@@ -64,7 +64,7 @@ public class JsonToClientDataConverterProviderTest {
 		JsonToClientDataConverterProvider.setJsonToDataConverterFactory(converterFactorySpy);
 
 		JsonToClientDataConverter converter = JsonToClientDataConverterProvider
-				.getConverterUsingJsonObject(JSON);
+				.getConverterUsingJsonString(JSON);
 
 		converterFactorySpy.MCR.assertParameters("factorUsingString", 0, JSON);
 		converterFactorySpy.MCR.assertReturn("factorUsingString", 0, converter);
@@ -80,7 +80,7 @@ public class JsonToClientDataConverterProviderTest {
 	@Test
 	public void testNonExceptionThrowingStartup() throws Exception {
 		JsonToDataConverterModuleStarterSpy starter = startDataGroupModuleInitializerWithStarterSpy();
-		JsonToClientDataConverterProvider.getConverterUsingJsonObject(JSON);
+		JsonToClientDataConverterProvider.getConverterUsingJsonString(JSON);
 		assertTrue(starter.startWasCalled);
 	}
 
@@ -101,7 +101,7 @@ public class JsonToClientDataConverterProviderTest {
 	private void makeSureErrorIsThrownAsNoImplementationsExistInThisModule() {
 		Exception caughtException = null;
 		try {
-			JsonToClientDataConverterProvider.getConverterUsingJsonObject(JSON);
+			JsonToClientDataConverterProvider.getConverterUsingJsonString(JSON);
 		} catch (Exception e) {
 			caughtException = e;
 		}

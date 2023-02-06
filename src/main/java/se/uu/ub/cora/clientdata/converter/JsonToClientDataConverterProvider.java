@@ -33,7 +33,7 @@ public class JsonToClientDataConverterProvider {
 		throw new UnsupportedOperationException();
 	}
 
-	public static JsonToClientDataConverter getConverterUsingJsonObject(String json) {
+	public static JsonToClientDataConverter getConverterUsingJsonString(String json) {
 		ensureConverterFactoryIsSet();
 		return jsonToDataConverterFactory.factorUsingString(json);
 	}
