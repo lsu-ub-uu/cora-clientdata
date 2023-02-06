@@ -33,7 +33,7 @@ import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 
 public class DataFactorySpy implements ClientDataFactory {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
-	public ClientDataGroup dataGroup;
+	public ClientDataRecordGroup dataRecordGroup;
 
 	@Override
 	public ClientDataList factorListUsingNameOfDataType(String nameOfDataType) {
@@ -44,9 +44,10 @@ public class DataFactorySpy implements ClientDataFactory {
 	}
 
 	@Override
-	public ClientDataRecord factorRecordUsingDataGroup(ClientDataGroup dataGroup) {
-		MCR.addCall("dataGroup", dataGroup);
-		this.dataGroup = dataGroup;
+	public ClientDataRecord factorRecordUsingDataRecordGroup(
+			ClientDataRecordGroup dataRecordGroup) {
+		MCR.addCall("dataRecordGroup", dataRecordGroup);
+		this.dataRecordGroup = dataRecordGroup;
 		ClientDataRecord dataRecordSpy = new DataRecordSpy();
 		MCR.addReturned(dataRecordSpy);
 		return dataRecordSpy;
@@ -127,7 +128,8 @@ public class DataFactorySpy implements ClientDataFactory {
 	}
 
 	@Override
-	public ClientDataAttribute factorAttributeUsingNameInDataAndValue(String nameInData, String value) {
+	public ClientDataAttribute factorAttributeUsingNameInDataAndValue(String nameInData,
+			String value) {
 		MCR.addCall("nameInData", nameInData, "value", value);
 		ClientDataAttribute dataAttribute = new DataAttributeSpy();
 		MCR.addReturned(dataAttribute);

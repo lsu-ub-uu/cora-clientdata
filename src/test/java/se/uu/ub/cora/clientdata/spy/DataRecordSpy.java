@@ -24,8 +24,8 @@ import java.util.Set;
 
 import se.uu.ub.cora.clientdata.ClientAction;
 import se.uu.ub.cora.clientdata.ClientActionLink;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
+import se.uu.ub.cora.clientdata.ClientDataRecordGroup;
 
 /*
  * Copyright 2021 Uppsala University Library
@@ -48,7 +48,7 @@ import se.uu.ub.cora.clientdata.ClientDataRecord;
 public class DataRecordSpy implements ClientDataRecord {
 
 	@Override
-	public ClientDataGroup getDataGroup() {
+	public ClientDataRecordGroup getDataRecordGroup() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -90,7 +90,7 @@ public class DataRecordSpy implements ClientDataRecord {
 	}
 
 	@Override
-	public void setDataGroup(ClientDataGroup dataGroup) {
+	public void setDataRecordGroup(ClientDataRecordGroup dataGroup) {
 		// TODO Auto-generated method stub
 
 	}

@@ -40,30 +40,35 @@ import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarterImp;
 
 public class DataProviderTest {
 
+	private DataRecordGroupSpy dataRecordGroup;
 	private DataGroupSpy dataGroup;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		ClientDataProvider.onlyForTestSetDataFactory(null);
+		dataRecordGroup = new DataRecordGroupSpy();
 		dataGroup = new DataGroupSpy("someNameInData");
 	}
 
 	@Test
 	public void testPrivateConstructor() throws Exception {
-		Constructor<ClientDataProvider> constructor = ClientDataProvider.class.getDeclaredConstructor();
+		Constructor<ClientDataProvider> constructor = ClientDataProvider.class
+				.getDeclaredConstructor();
 		assertTrue(Modifier.isPrivate(constructor.getModifiers()));
 	}
 
 	@Test(expectedExceptions = InvocationTargetException.class)
 	public void testPrivateConstructorInvoke() throws Exception {
-		Constructor<ClientDataProvider> constructor = ClientDataProvider.class.getDeclaredConstructor();
+		Constructor<ClientDataProvider> constructor = ClientDataProvider.class
+				.getDeclaredConstructor();
 		constructor.setAccessible(true);
 		constructor.newInstance();
 	}
 
 	@Test
 	public void testStartingOfDataRecordFactoryCanOnlyBeDoneByOneThreadAtATime() throws Exception {
-		Method declaredMethod = ClientDataProvider.class.getDeclaredMethod("ensureDataFactoryIsSet");
+		Method declaredMethod = ClientDataProvider.class
+				.getDeclaredMethod("ensureDataFactoryIsSet");
 		assertTrue(Modifier.isSynchronized(declaredMethod.getModifiers()));
 	}
 
@@ -78,7 +83,7 @@ public class DataProviderTest {
 		ClientDataProvider.setStarter(new ClientDataModuleStarterImp());
 		Exception caughtException = null;
 		try {
-			ClientDataProvider.createRecordWithDataGroup(dataGroup);
+			ClientDataProvider.createRecordWithDataRecordGroup(dataRecordGroup);
 		} catch (Exception e) {
 			caughtException = e;
 		}
@@ -95,9 +100,9 @@ public class DataProviderTest {
 		DataFactorySpy dataFactorySpy = new DataFactorySpy();
 		ClientDataProvider.onlyForTestSetDataFactory(dataFactorySpy);
 
-		ClientDataProvider.createRecordWithDataGroup(dataGroup);
+		ClientDataProvider.createRecordWithDataRecordGroup(dataRecordGroup);
 
-		assertEquals(dataFactorySpy.dataGroup, dataGroup);
+		assertEquals(dataFactorySpy.dataRecordGroup, dataRecordGroup);
 	}
 
 	private DataModuleStarterSpy startDataRecordModuleInitializerWithStarterSpy() {
@@ -133,12 +138,13 @@ public class DataProviderTest {
 	public void testCreate_Record() throws Exception {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
-		ClientDataRecord dataRecord = ClientDataProvider.createRecordWithDataGroup(dataGroup);
+		ClientDataRecord dataRecord = ClientDataProvider
+				.createRecordWithDataRecordGroup(dataRecordGroup);
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
-		dataFactorySpy.MCR.assertParameters("factorRecordUsingDataGroup", 0, dataGroup);
-		dataFactorySpy.MCR.assertReturn("factorRecordUsingDataGroup", 0, dataRecord);
+		dataFactorySpy.MCR.assertParameters("factorRecordUsingDataRecordGroup", 0, dataRecordGroup);
+		dataFactorySpy.MCR.assertReturn("factorRecordUsingDataRecordGroup", 0, dataRecord);
 	}
 
 	@Test
@@ -159,7 +165,8 @@ public class DataProviderTest {
 	public void testCreate_RecordGroupFromDataGroup() throws Exception {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
-		ClientDataRecordGroup dataRecordGroup = ClientDataProvider.createRecordGroupFromDataGroup(dataGroup);
+		ClientDataRecordGroup dataRecordGroup = ClientDataProvider
+				.createRecordGroupFromDataGroup(dataGroup);
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
@@ -184,7 +191,8 @@ public class DataProviderTest {
 	public void testCreate_GroupUsingNameInData() throws Exception {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
-		ClientDataGroup dataRecordGroup = ClientDataProvider.createGroupUsingNameInData("dataGroup");
+		ClientDataGroup dataRecordGroup = ClientDataProvider
+				.createGroupUsingNameInData("dataGroup");
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
@@ -196,7 +204,8 @@ public class DataProviderTest {
 	public void testCreate_RecordLinkUsingNameInData() throws Exception {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
-		ClientDataRecordLink dataRecordLink = ClientDataProvider.createRecordLinkUsingNameInData("recordLink");
+		ClientDataRecordLink dataRecordLink = ClientDataProvider
+				.createRecordLinkUsingNameInData("recordLink");
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
@@ -236,7 +245,8 @@ public class DataProviderTest {
 	public void testCreate_AtomicUsingNameInData() throws Exception {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
-		ClientDataAtomic dataAtomic = ClientDataProvider.createAtomicUsingNameInDataAndValue("atomic", "value");
+		ClientDataAtomic dataAtomic = ClientDataProvider
+				.createAtomicUsingNameInDataAndValue("atomic", "value");
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);

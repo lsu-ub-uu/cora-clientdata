@@ -26,7 +26,7 @@ public interface ClientDataFactory {
 
 	ClientDataList factorListUsingNameOfDataType(String nameOfDataType);
 
-	ClientDataRecord factorRecordUsingDataGroup(ClientDataGroup dataGroup);
+	ClientDataRecord factorRecordUsingDataRecordGroup(ClientDataRecordGroup dataRecordGroup);
 
 	ClientDataRecordGroup factorRecordGroupUsingNameInData(String nameInData);
 

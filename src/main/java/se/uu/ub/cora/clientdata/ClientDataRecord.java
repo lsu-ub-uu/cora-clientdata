@@ -58,20 +58,21 @@ public interface ClientDataRecord
 	String getId();
 
 	/**
-	 * setDataGroup sets the DataGroup in the DataRecord replacing any preexisting DataGroup
+	 * setDataRecordGroup sets the DataRecordGroup in the DataRecord replacing any preexisting
+	 * DataRecordGroup
 	 * 
-	 * @param dataGroup
+	 * @param dataRecordGroup
 	 *            that is governed by the record
 	 */
-	void setDataGroup(ClientDataGroup dataGroup);
+	void setDataRecordGroup(ClientDataRecordGroup dataRecordGroup);
 
 	/**
-	 * getDataGroup returns the datagroup governed by the record. Multiple calls to getDataGroup
-	 * should return the same instance.
+	 * getDataRecordGroup returns the DataRecordGroup governed by the record. Multiple calls to
+	 * getDataGroup should return the same instance.
 	 * 
-	 * @return the DataGroup governed by the record
+	 * @return the DataRecordGroup governed by the record
 	 */
-	ClientDataGroup getDataGroup();
+	ClientDataRecordGroup getDataRecordGroup();
 
 	/**
 	 * addActionLink adds an ActionLink to the to this record. ActionLinks represents possible
