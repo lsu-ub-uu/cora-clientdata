@@ -19,19 +19,13 @@
 
 package se.uu.ub.cora.clientdata;
 
+import java.util.Optional;
+
 /**
- * DataLink contains information linking the {@link ClientDataRecord} this link is a part of to another
- * entity in the system.
+ * DataLink contains information linking the {@link ClientDataRecord} this link is a part of to
+ * another entity in the system.
  */
 public interface ClientDataLink extends ClientDataChild {
-
-	/**
-	 * addAction adds an Action to this DataLink. The actions added represents the actions the
-	 * current user can perform on the resource this link points to.
-	 * <p>
-	 * At this moment only READ action are implemented for DataLinks.
-	 */
-	void addAction(ClientAction action);
 
 	/**
 	 * hasReadAction returns true if the current user is allowed to read the resource this link
@@ -43,5 +37,26 @@ public interface ClientDataLink extends ClientDataChild {
 	 * @return a boolean true if this link has read as one of its actions else false
 	 */
 	boolean hasReadAction();
+
+	/**
+	 * addActionLink adds an ActionLink to the to this record. ActionLinks represents possible
+	 * actions that the user that got the record from the server can take on the returned record.
+	 * 
+	 * @param actionLink
+	 *            is the ClientActionLink to be added to the record.
+	 */
+	public void addActionLink(ClientActionLink actionLink);
+
+	/**
+	 * getActionLink returns an Optional with an ActionLink representing the requested ClientAction
+	 * if the user that got the record from the server can execute the requested action on the
+	 * returned record. An empty optional is returned if no matching actionLink exist in the record.
+	 * <p>
+	 * If there is no matching action for this record an empty Optional should be returned.
+	 * 
+	 * @return An Optional that might contain a ClientActionLink that matches the requested
+	 *         ClientAction.
+	 */
+	public Optional<ClientActionLink> getActionLink(ClientAction action);
 
 }

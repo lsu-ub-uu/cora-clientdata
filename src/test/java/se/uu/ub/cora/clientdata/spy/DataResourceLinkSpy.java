@@ -20,20 +20,16 @@
 package se.uu.ub.cora.clientdata.spy;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import se.uu.ub.cora.clientdata.ClientAction;
+import se.uu.ub.cora.clientdata.ClientActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 
 public class DataResourceLinkSpy implements ClientDataResourceLink {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
-
-	@Override
-	public void addAction(ClientAction action) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public boolean hasReadAction() {
@@ -129,6 +125,18 @@ public class DataResourceLinkSpy implements ClientDataResourceLink {
 	public String getMimeType() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void addActionLink(ClientActionLink actionLink) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Optional<ClientActionLink> getActionLink(ClientAction action) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 
 }
