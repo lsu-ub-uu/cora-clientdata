@@ -110,8 +110,8 @@ public interface ClientDataParent {
 	ClientDataChild getFirstChildWithNameInData(String nameInData);
 
 	/**
-	 * getFirstAtomicValueWithNameInData is used to get the value of the first {@link ClientDataAtomic}
-	 * that matches the specified nameInData.
+	 * getFirstAtomicValueWithNameInData is used to get the value of the first
+	 * {@link ClientDataAtomic} that matches the specified nameInData.
 	 * <p>
 	 * A {@link ClientDataMissingException} SHOULD be thrown if no child exists with the specified
 	 * nameInData.
@@ -136,8 +136,8 @@ public interface ClientDataParent {
 	ClientDataAtomic getFirstDataAtomicWithNameInData(String nameInData);
 
 	/**
-	 * getAllDataAtomicsWithNameInData is used to get a List of the all {@link ClientDataAtomic} that
-	 * matches the specified nameInData.
+	 * getAllDataAtomicsWithNameInData is used to get a List of the all {@link ClientDataAtomic}
+	 * that matches the specified nameInData.
 	 * <p>
 	 * If no matching elements are found SHOULD an empty list be returned.
 	 * 
@@ -157,8 +157,8 @@ public interface ClientDataParent {
 	 *            A String with the nameInData of the children to get
 	 * @param childAttributes
 	 *            A Varargs with attributes the children must have to be returned
-	 * @return A Collection of {@link ClientDataAtomic} that matches the specified nameInData and the
-	 *         specified attributes.
+	 * @return A Collection of {@link ClientDataAtomic} that matches the specified nameInData and
+	 *         the specified attributes.
 	 */
 	Collection<ClientDataAtomic> getAllDataAtomicsWithNameInDataAndAttributes(String nameInData,
 			ClientDataAttribute... childAttributes);
@@ -175,8 +175,8 @@ public interface ClientDataParent {
 	ClientDataGroup getFirstGroupWithNameInData(String nameInData);
 
 	/**
-	 * getAllGroupsWithNameInData is used to get a List of the all {@link ClientDataGroup} that matches
-	 * the specified nameInData.
+	 * getAllGroupsWithNameInData is used to get a List of the all {@link ClientDataGroup} that
+	 * matches the specified nameInData.
 	 * <p>
 	 * If no matching elements are found SHOULD an empty list be returned.
 	 * 
@@ -187,8 +187,8 @@ public interface ClientDataParent {
 	List<ClientDataGroup> getAllGroupsWithNameInData(String nameInData);
 
 	/**
-	 * getAllGroupsWithNameInData is used to get a List of the all {@link ClientDataGroup} that matches
-	 * the specified nameInData and the specified attributes.
+	 * getAllGroupsWithNameInData is used to get a List of the all {@link ClientDataGroup} that
+	 * matches the specified nameInData and the specified attributes.
 	 * <p>
 	 * If no matching elements are found SHOULD an empty collection be returned.
 	 * 
@@ -241,8 +241,8 @@ public interface ClientDataParent {
 	 * getAllChildrenMatchingFilter is used to get all children that matches the specified
 	 * childFilter.
 	 * </p>
-	 * See, {@link ClientDataChildFilter#childMatches(ClientDataChild)} for exactly how a child is considered a
-	 * match.
+	 * See, {@link ClientDataChildFilter#childMatches(ClientDataChild)} for exactly how a child is
+	 * considered a match.
 	 * <p>
 	 * An empty list SHOULD be returned if no child exists with the specified nameInData.
 	 * 
@@ -256,13 +256,96 @@ public interface ClientDataParent {
 	 * removeAllChildrenMatchingFilter removes all children in this DataGroup that matches the
 	 * specified childFilter.
 	 * </p>
-	 * See, {@link ClientDataChildFilter#childMatches(ClientDataChild)} for exactly how a child is considered a
-	 * match.
+	 * See, {@link ClientDataChildFilter#childMatches(ClientDataChild)} for exactly how a child is
+	 * considered a match.
 	 * 
 	 * @param childFilter
 	 *            A DataChildFilter to filter the children to remove
 	 * @return true if any child has been removed, false otherwise
 	 */
 	boolean removeAllChildrenMatchingFilter(ClientDataChildFilter childFilter);
+
+	/**
+	 * containsChildOfTypeAndName checks if this DataParent has at least one child with the
+	 * specified name class, nameInData and attributes.
+	 * 
+	 * @param <T>
+	 *            Automatically set to the requested type of class
+	 * @param type
+	 *            A Class that the child must have to be found. Must be {@link DataChild} or a class
+	 *            that extends it.
+	 * @param name
+	 *            A String with the nameInData of the child to find
+	 * @return A boolean, true if a child exists with the specified name, else false.
+	 */
+
+	<T> boolean containsChildOfTypeAndName(Class<T> type, String name);
+
+	/**
+	 * getFirstChildOfTypeAndName is used to get the first {@link ClientDataChild} that matches the
+	 * specified class, nameInData and attributes. The returned list is typed to the same class that
+	 * is requested.
+	 * <p>
+	 * A {@link ClientDataMissingException} SHOULD be thrown if no child exists with the specified
+	 * Class and nameInData.
+	 * 
+	 * @param <T>
+	 *            Automatically set to the requested type of class
+	 * @param type
+	 *            A Class that the child must have to be returned. Must be {@link ClientDataChild}
+	 *            or a class that extends it.
+	 * @param name
+	 *            A String with the nameInData of the child to get
+	 * @return
+	 */
+	<T extends ClientDataChild> T getFirstChildOfTypeAndName(Class<T> type, String name);
+
+	/**
+	 * getChildrenOfTypeAndName is used to get a List of the all {@link ClientDataChild}s that
+	 * matches the specified class, nameInData and attributes. The returned list is typed to the
+	 * same class that is requested.
+	 * <p>
+	 * An empty list SHOULD be returned if no child exists with the specified Class and nameInData.
+	 * 
+	 * @param <T>
+	 *            Automatically set to the requested type of class
+	 * @param type
+	 *            A Class that the children must have to be returned. Must be
+	 *            {@link ClientDataChild} or a class that extends it.
+	 * @param name
+	 *            A String with the nameInData of the children to get
+	 * @return
+	 */
+	<T extends ClientDataChild> List<T> getChildrenOfTypeAndName(Class<T> type, String name);
+
+	/**
+	 * removeFirstChildWithTypeAndName is used to remove the first {@link ClientDataChild}s that
+	 * matches the specified class, nameInData and attributes.
+	 * 
+	 * @param <T>
+	 *            Automatically set to the type of class to remove
+	 * @param type
+	 *            A Class that the child must have to be removed. Must be {@link ClientDataChild} or
+	 *            a class that extends it.
+	 * @param name
+	 *            A String with the nameInData of the child to remove
+	 * @return true if any child has been removed, false otherwise
+	 */
+	<T extends ClientDataChild> boolean removeFirstChildWithTypeAndName(Class<T> type, String name);
+
+	/**
+	 * removeChildrenWithTypeAndName is used to remove all {@link ClientDataChild}s that matches the
+	 * specified class, nameInData and attributes.
+	 * 
+	 * @param <T>
+	 *            Automatically set to the type of class to remove
+	 * @param type
+	 *            A Class that the children must have to be removed. Must be {@link ClientDataChild}
+	 *            or a class that extends it.
+	 * @param name
+	 *            A String with the nameInData of the children to remove
+	 * @return true if any child has been removed, false otherwise
+	 */
+	<T extends ClientDataChild> boolean removeChildrenWithTypeAndName(Class<T> type, String name);
 
 }

@@ -21,6 +21,7 @@ package se.uu.ub.cora.clientdata.spy;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
@@ -132,8 +133,8 @@ public class DataGroupSpy implements ClientDataGroup {
 	}
 
 	@Override
-	public Collection<ClientDataGroup> getAllGroupsWithNameInDataAndAttributes(String childNameInData,
-			ClientDataAttribute... childAttributes) {
+	public Collection<ClientDataGroup> getAllGroupsWithNameInDataAndAttributes(
+			String childNameInData, ClientDataAttribute... childAttributes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -198,6 +199,45 @@ public class DataGroupSpy implements ClientDataGroup {
 	public boolean removeAllChildrenMatchingFilter(ClientDataChildFilter childFilter) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public <T> boolean containsChildOfTypeAndName(Class<T> type, String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public <T extends ClientDataChild> T getFirstChildOfTypeAndName(Class<T> type, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends ClientDataChild> List<T> getChildrenOfTypeAndName(Class<T> type,
+			String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T extends ClientDataChild> boolean removeFirstChildWithTypeAndName(Class<T> type,
+			String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public <T extends ClientDataChild> boolean removeChildrenWithTypeAndName(Class<T> type,
+			String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Optional<String> getAttributeValue(String nameInData) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 
 }

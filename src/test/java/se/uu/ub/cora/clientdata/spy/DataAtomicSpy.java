@@ -19,6 +19,7 @@
 package se.uu.ub.cora.clientdata.spy;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
@@ -83,6 +84,12 @@ public class DataAtomicSpy implements ClientDataAtomic {
 	public Collection<ClientDataAttribute> getAttributes() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Optional<String> getAttributeValue(String nameInData) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
 	}
 
 }

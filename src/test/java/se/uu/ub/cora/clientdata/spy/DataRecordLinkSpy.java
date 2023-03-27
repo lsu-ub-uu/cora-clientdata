@@ -100,4 +100,10 @@ public class DataRecordLinkSpy implements ClientDataRecordLink {
 		return Optional.empty();
 	}
 
+	@Override
+	public Optional<String> getAttributeValue(String nameInData) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
+
 }

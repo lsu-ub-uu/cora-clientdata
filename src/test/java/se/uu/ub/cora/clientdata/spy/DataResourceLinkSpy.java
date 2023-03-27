@@ -139,4 +139,10 @@ public class DataResourceLinkSpy implements ClientDataResourceLink {
 		return Optional.empty();
 	}
 
+	@Override
+	public Optional<String> getAttributeValue(String nameInData) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
+
 }

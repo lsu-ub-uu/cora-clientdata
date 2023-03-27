@@ -20,6 +20,7 @@
 package se.uu.ub.cora.clientdata.ability;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
 import se.uu.ub.cora.clientdata.ClientDataMissingException;
@@ -65,5 +66,17 @@ public interface ClientDataCharacteristic {
 	 * @return A Collection of this elements DataAttributes
 	 */
 	Collection<ClientDataAttribute> getAttributes();
+
+	/**
+	 * getAttributeValue returns an {@link Optional} with the value for the requested attributes
+	 * nameInData. If no attribute exist with the specified nameInData is an empty optional
+	 * returned.
+	 * 
+	 * @param nameInData
+	 *            A String with the nameInData of the attribute
+	 * @return An {@link Optional} with the String value of the attribute or empty if no attribute
+	 *         with the specified name exists.
+	 */
+	Optional<String> getAttributeValue(String nameInData);
 
 }
