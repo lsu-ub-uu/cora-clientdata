@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,20 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
+package se.uu.ub.cora.clientdata.converter;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+import se.uu.ub.cora.clientdata.starter.DataToJsonConverterFactorySpy;
+import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
 
-/**
- * DataAttribute is the interface used for attributes to data.
- */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public class DataToJsonConverterFactoryCreatorSpy implements ClientDataToJsonConverterFactoryCreator {
+	MethodCallRecorder MCR = new MethodCallRecorder();
+
+	@Override
+	public ClientDataToJsonConverterFactory createFactory() {
+		MCR.addCall();
+		DataToJsonConverterFactorySpy factorySpy = new DataToJsonConverterFactorySpy();
+		MCR.addReturned(factorySpy);
+		return factorySpy;
+	}
+
 }

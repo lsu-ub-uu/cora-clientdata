@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2020 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,23 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
-
 /**
- * DataAttribute is the interface used for attributes to data.
+ * DataMissingException is used when an operation can not be performed as the data the operation
+ * would be performed on is missing.
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public class ClientDataMissingException extends RuntimeException {
+
+	private static final long serialVersionUID = 1L;
+
+	public ClientDataMissingException(String message) {
+		super(message);
+	}
+
+	public ClientDataMissingException(String message, Exception exception) {
+		super(message, exception);
+	}
+
 }

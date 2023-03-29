@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,65 +16,162 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package se.uu.ub.cora.clientdata;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.Set;
 
-public final class ClientDataRecord implements DataRecord, ClientData {
-	private ClientDataGroupImp clientDataGroup;
-	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
-	private Set<String> readPermissions = new LinkedHashSet<>();
-	private Set<String> writePermissions = new LinkedHashSet<>();
+/**
+ * DataRecord defines methods that can be used on a data record. The contents of the DataRecord is
+ * adapted to the User who in an interaction (read, update, etc.) with the server got the DataRecord
+ * in return.
+ * <p>
+ * The DataRecord consists of three major parts, a DataGroup holding the data for the record, a set
+ * of Actions that the User is allowed to do with the record, and permissions devided into read
+ * permissions that the User has for parts of this record, write permissions that the User has for
+ * parts of this record.
+ * <p>
+ * Links to other DataGroups within the records DataGroup has "read" action added if the User is
+ * allowed to read them.
+ *
+ */
+public interface ClientDataRecord
+		extends ClientData, ClientConvertible, ClientExternallyConvertible {
 
-	private ClientDataRecord(ClientDataGroupImp clientDataGroup) {
-		this.clientDataGroup = clientDataGroup;
-	}
+	/**
+	 * getType returns the record type for this record.
+	 * <p>
+	 * If the records type is unknown SHOULD a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return String with the type of this record
+	 */
+	String getType();
 
-	public static ClientDataRecord withClientDataGroup(ClientDataGroupImp clientDataGroup) {
-		return new ClientDataRecord(clientDataGroup);
-	}
+	/**
+	 * getId returns the record id for this record.
+	 * <p>
+	 * If the records id is unknown SHOULD a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return String with the id of this record
+	 */
+	String getId();
 
-	@Override
-	public ClientDataGroupImp getClientDataGroup() {
-		return clientDataGroup;
-	}
+	/**
+	 * setDataRecordGroup sets the DataRecordGroup in the DataRecord replacing any preexisting
+	 * DataRecordGroup
+	 * 
+	 * @param dataRecordGroup
+	 *            that is governed by the record
+	 */
+	void setDataRecordGroup(ClientDataRecordGroup dataRecordGroup);
 
-	public void addActionLink(String key, ActionLink actionLink) {
-		actionLinks.put(key, actionLink);
-	}
+	/**
+	 * getDataRecordGroup returns the DataRecordGroup governed by the record. Multiple calls to
+	 * getDataGroup should return the same instance.
+	 * 
+	 * @return the DataRecordGroup governed by the record
+	 */
+	ClientDataRecordGroup getDataRecordGroup();
 
-	public ActionLink getActionLink(String key) {
-		return actionLinks.get(key);
-	}
+	/**
+	 * addActionLink adds an ActionLink to the to this record. ActionLinks represents possible
+	 * actions that the user that got the record from the server can take on the returned record.
+	 * 
+	 * @param actionLink
+	 *            is the ClientActionLink to be added to the record.
+	 */
+	public void addActionLink(ClientActionLink actionLink);
 
-	@Override
-	public Map<String, ActionLink> getActionLinks() {
-		return actionLinks;
-	}
+	/**
+	 * getActionLink returns an Optional with an ActionLink representing the requested ClientAction
+	 * if the user that got the record from the server can execute the requested action on the
+	 * returned record. An empty optional is returned if no matching actionLink exist in the record.
+	 * <p>
+	 * If there is no matching action for this record an empty Optional should be returned.
+	 * 
+	 * @return An Optional that might contain a ClientActionLink that matches the requested
+	 *         ClientAction.
+	 */
+	public Optional<ClientActionLink> getActionLink(ClientAction action);
 
-	public void setActionLinks(Map<String, ActionLink> actionLinks) {
-		this.actionLinks = actionLinks;
-	}
+	/**
+	 * addReadPermission adds a permission to the preexisting read permission that the User has for
+	 * this record
+	 * 
+	 * @param readPermission
+	 *            is the permission to be added.
+	 */
+	void addReadPermission(String readPermission);
 
-	public void addReadPermission(String readPermission) {
-		readPermissions.add(readPermission);
-	}
+	/**
+	 * addReadPermission adds a Collection of permissions to the preexisting read permission that
+	 * the User has for this record.
+	 * 
+	 * @param readPermission
+	 *            is the permissions to be added.
+	 */
+	void addReadPermissions(Collection<String> readPermissions);
 
-	public Set<String> getReadPermissions() {
-		return readPermissions;
-	}
+	/**
+	 * getReadPermissions returns a Set with the read permissions that the User has for this record
+	 * 
+	 * @return a Set of Strings containing the read permissions
+	 */
+	Set<String> getReadPermissions();
 
-	public void addWritePermission(String writePermission) {
-		writePermissions.add(writePermission);
+	/**
+	 * hasReadPermissions returns true if this record has at least one read permission, otherwise
+	 * false.
+	 * 
+	 * @return boolean whether this record has read permissions or not
+	 */
+	boolean hasReadPermissions();
 
-	}
+	/**
+	 * addWritePermission adds a permission to the preexisting write permission hat the User has for
+	 * this record
+	 * 
+	 * @param writePermission
+	 *            A String with the
+	 */
+	void addWritePermission(String writePermission);
 
-	public Set<String> getWritePermissions() {
-		return writePermissions;
-	}
+	/**
+	 * addWritePermissions adds a Collection of permissions to the preexisting write permission that
+	 * the User has for this record.
+	 * 
+	 * @param writePermissions
+	 *            is the permissions to be added.
+	 */
+	void addWritePermissions(Collection<String> writePermissions);
+
+	/**
+	 * getWritePermissions returns a Set with the write permissions that the User has for this
+	 * record
+	 * 
+	 * @return a Set of Strings containing the write permissions
+	 */
+	Set<String> getWritePermissions();
+
+	/**
+	 * hasWritePermissions returns true if this record has at least one write permission, otherwise
+	 * false.
+	 * 
+	 * @return boolean whether this record has read permissions or not.
+	 */
+	boolean hasWritePermissions();
+
+	/**
+	 * getSearchId returns a search id if the data represents a recordType or a search.
+	 * <ul>
+	 * <li>For a recordType is the search id the linked search.</li>
+	 * <li>For a search is the search id the id of the record.</li>
+	 * </ul>
+	 * If a searchId does not exist, a {@link ClientDataMissingException} MUST be thrown.
+	 * 
+	 * @return A String with the search id
+	 */
+	String getSearchId();
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2023 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,16 +18,32 @@
  */
 package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
-
 /**
- * DataAttribute is the interface used for attributes to data.
+ * ClientActionLink defines a possible action that can be taken for a record or a search
+ *
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public interface ClientActionLink {
+
+	ClientAction getAction();
+
+	void setURL(String url);
+
+	String getURL();
+
+	void setRequestMethod(String requestMethod);
+
+	String getRequestMethod();
+
+	void setAccept(String accept);
+
+	String getAccept();
+
+	void setContentType(String contentType);
+
+	String getContentType();
+
+	void setBody(ClientDataGroup body);
+
+	ClientDataGroup getBody();
+
 }

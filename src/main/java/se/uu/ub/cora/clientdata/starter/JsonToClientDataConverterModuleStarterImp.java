@@ -16,18 +16,26 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
+package se.uu.ub.cora.clientdata.starter;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+import se.uu.ub.cora.clientdata.converter.JsonToClientDataConverterFactory;
 
-/**
- * DataAttribute is the interface used for attributes to data.
- */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
-	/**
-	 * getValue returns this DataAttributes value
-	 * 
-	 * @return A String with the value of this attribute
-	 */
-	String getValue();
+public class JsonToClientDataConverterModuleStarterImp extends ModuleStarter
+		implements JsonToClientDataConverterModuleStarter {
+
+	private JsonToClientDataConverterFactory jsonToDataConverterFactory;
+
+	@Override
+	public void startUsingConverterFactoryImplementations(
+			Iterable<JsonToClientDataConverterFactory> converterFactoryImplementations) {
+		jsonToDataConverterFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(
+				converterFactoryImplementations, "JsonToDataConverterFactory");
+
+	}
+
+	@Override
+	public JsonToClientDataConverterFactory getJsonToDataConverterFactory() {
+		return jsonToDataConverterFactory;
+	}
+
 }

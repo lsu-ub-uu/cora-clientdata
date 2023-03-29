@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2021 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,19 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
-
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+package se.uu.ub.cora.clientdata.converter;
 
 /**
- * DataAttribute is the interface used for attributes to data.
+ * DataToJsonConverterFactoryCreator is an inteface used by implementing projects to create
+ * factories of type {@link ClientDataToJsonConverterFactory}. {@link ClientDataToJsonConverterProvider} will
+ * use ServiceLoader to find implementations of this class to provide a means to get instances of
+ * DataToJsonConverterFactories.
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
+public interface ClientDataToJsonConverterFactoryCreator {
 	/**
-	 * getValue returns this DataAttributes value
+	 * createFactory creates a new instance of {@link ClientDataToJsonConverterFactory}.
 	 * 
-	 * @return A String with the value of this attribute
+	 * @return A {@link ClientDataToJsonConverterFactory}
 	 */
-	String getValue();
+	public ClientDataToJsonConverterFactory createFactory();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, 2018 Uppsala University Library
+ * Copyright 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -18,44 +18,29 @@
  */
 package se.uu.ub.cora.clientdata;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+/**
+ * DataRecordLink contains information linking the {@link ClientDataRecord} this link is a part of to
+ * another {@link ClientDataRecord}
+ */
+public interface ClientDataRecordLink extends ClientDataLink, ClientConvertible {
+	/**
+	 * getLinkedRecordId returns the record id of the record this link refers to
+	 * <p>
+	 * This information is expected to be present, if this link does not have information about what
+	 * the linked record id is, MUST a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return A String with the id of the record type that this link refers to.
+	 */
+	public String getLinkedRecordId();
 
-public final class ClientDataRecordLink extends ClientDataGroupImp {
+	/**
+	 * getLinkedRecordType returns the record type of the record this link refers to.
+	 * <p>
+	 * This information is expected to be present, if this link does not have information about what
+	 * the linked record type is, MUST a {@link ClientDataMissingException} be thrown.
+	 * 
+	 * @return A String with the record type that this link refers to.
+	 */
+	public String getLinkedRecordType();
 
-	private Map<String, ActionLink> actionLinks = new LinkedHashMap<>();
-
-	private ClientDataRecordLink(String nameInData) {
-		super(nameInData);
-	}
-
-	public static ClientDataRecordLink withNameInData(String nameInData) {
-		return new ClientDataRecordLink(nameInData);
-	}
-
-	public void addActionLink(String key, ActionLink actionLink) {
-		actionLinks.put(key, actionLink);
-	}
-
-	public ActionLink getActionLink(String key) {
-		return actionLinks.get(key);
-	}
-
-	public Map<String, ActionLink> getActionLinks() {
-		return actionLinks;
-	}
-
-	public void setActionLinks(Map<String, ActionLink> actionLinks) {
-		this.actionLinks = actionLinks;
-	}
-
-	public static ClientDataRecordLink withNameInDataAndTypeAndId(String nameInData,
-			String linkedType, String linkedId) {
-		ClientDataRecordLink clientDataRecordLink = new ClientDataRecordLink(nameInData);
-		clientDataRecordLink
-				.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordType", linkedType));
-		clientDataRecordLink
-				.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordId", linkedId));
-		return clientDataRecordLink;
-	}
 }

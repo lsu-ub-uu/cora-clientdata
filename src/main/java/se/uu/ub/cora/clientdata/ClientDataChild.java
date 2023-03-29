@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2015, 2019, 2022 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,30 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package se.uu.ub.cora.clientdata;
 
+import se.uu.ub.cora.clientdata.ability.ClientDataCharacteristic;
 import se.uu.ub.cora.clientdata.ability.ClientDataPart;
 
 /**
- * DataAttribute is the interface used for attributes to data.
+ * DataChild defines elements that can be added as children to a DataGroup.
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
+public interface ClientDataChild extends ClientDataPart, ClientDataCharacteristic {
+
 	/**
-	 * getValue returns this DataAttributes value
+	 * setRepeatId sets the DataElements repeatId, if the repeatId has been set since before should
+	 * the value be updated.
 	 * 
-	 * @return A String with the value of this attribute
+	 * @param repeatId
+	 *            A String with the repeatId
 	 */
-	String getValue();
+	void setRepeatId(String repeatId);
+
+	/**
+	 * getRepeatId returns the repeatId.
+	 * 
+	 * @return A String with the value of the repeatId
+	 */
+	String getRepeatId();
 }

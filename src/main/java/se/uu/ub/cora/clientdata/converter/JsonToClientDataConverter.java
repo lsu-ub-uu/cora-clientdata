@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2015, 2019 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -16,18 +16,24 @@
  *     You should have received a copy of the GNU General Public License
  *     along with Cora.  If not, see <http://www.gnu.org/licenses/>.
  */
-package se.uu.ub.cora.clientdata;
 
-import se.uu.ub.cora.clientdata.ability.ClientDataPart;
+package se.uu.ub.cora.clientdata.converter;
+
+import se.uu.ub.cora.clientdata.ClientConvertible;
 
 /**
- * DataAttribute is the interface used for attributes to data.
+ * JsonToDataConverter converts a json string to a DataPart object.
  */
-public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
+public interface JsonToClientDataConverter {
+
 	/**
-	 * getValue returns this DataAttributes value
+	 * toInstance method is responsible for converting a json String to a DataPart object.
+	 * <p>
+	 * If an exception occurs during conversion MUST an exception implementing
+	 * {@link ClientDataConversionException} be thrown.
 	 * 
-	 * @return A String with the value of this attribute
+	 * @return a Convertible converted from the json String
 	 */
-	String getValue();
+	ClientConvertible toInstance();
+
 }
