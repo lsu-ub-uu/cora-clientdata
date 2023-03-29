@@ -19,14 +19,14 @@
 package se.uu.ub.cora.clientdata.constructor;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 
 public class DataConstructor {
 
 	protected String dataDivider;
 
-	protected ClientDataGroup createRecordInfoGroupForId(String textId) {
-		ClientDataGroup recordInfo = ClientDataGroup.withNameInData("recordInfo");
+	protected ClientDataGroupImp createRecordInfoGroupForId(String textId) {
+		ClientDataGroupImp recordInfo = ClientDataGroupImp.withNameInData("recordInfo");
 		recordInfo.addChild(createAtomicForId(textId));
 		recordInfo.addChild(createDataDivierGroup());
 		return recordInfo;
@@ -36,14 +36,14 @@ public class DataConstructor {
 		return ClientDataAtomic.withNameInDataAndValue("id", textId);
 	}
 
-	private ClientDataGroup createDataDivierGroup() {
+	private ClientDataGroupImp createDataDivierGroup() {
 		return createDataLinkUsingNameInDataAndRecordTypeAndRecordId("dataDivider", "system",
 				dataDivider);
 	}
 
-	protected ClientDataGroup createDataLinkUsingNameInDataAndRecordTypeAndRecordId(
+	protected ClientDataGroupImp createDataLinkUsingNameInDataAndRecordTypeAndRecordId(
 			String nameInData, String linkedRecordType, String linkedRecordId) {
-		ClientDataGroup dataDividerGroup = ClientDataGroup.withNameInData(nameInData);
+		ClientDataGroupImp dataDividerGroup = ClientDataGroupImp.withNameInData(nameInData);
 		dataDividerGroup.addChild(createAtomicForLinkedRecordType(linkedRecordType));
 		dataDividerGroup.addChild(createAtomicForLinkedRecordId(linkedRecordId));
 		return dataDividerGroup;
@@ -57,9 +57,9 @@ public class DataConstructor {
 		return ClientDataAtomic.withNameInDataAndValue("linkedRecordId", linkedRecordId);
 	}
 
-	protected ClientDataGroup createDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
+	protected ClientDataGroupImp createDataLinkUsingNameInDataAndRecordTypeAndRecordIdAndRepeatId(
 			String nameInData, String linkedRecordType, String linkedRecordId, String repeatId) {
-		ClientDataGroup cdg = createDataLinkUsingNameInDataAndRecordTypeAndRecordId(nameInData,
+		ClientDataGroupImp cdg = createDataLinkUsingNameInDataAndRecordTypeAndRecordId(nameInData,
 				linkedRecordType, linkedRecordId);
 		cdg.setRepeatId(repeatId);
 		return cdg;

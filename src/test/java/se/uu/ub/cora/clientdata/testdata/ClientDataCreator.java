@@ -21,13 +21,14 @@ package se.uu.ub.cora.clientdata.testdata;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 
 public final class ClientDataCreator {
 
 	public static ClientDataGroup createWorkOrder() {
-		ClientDataGroup workOrder = ClientDataGroup.withNameInData("workOrder");
+		ClientDataGroupImp workOrder = ClientDataGroupImp.withNameInData("workOrder");
 
-		ClientDataGroup recordTypeLink = ClientDataGroup.withNameInData("recordType");
+		ClientDataGroupImp recordTypeLink = ClientDataGroupImp.withNameInData("recordType");
 		recordTypeLink
 				.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
 		recordTypeLink.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordId", "person"));

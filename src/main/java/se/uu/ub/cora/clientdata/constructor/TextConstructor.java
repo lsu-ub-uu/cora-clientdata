@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 
 public class TextConstructor extends DataConstructor {
 
@@ -30,21 +30,21 @@ public class TextConstructor extends DataConstructor {
 		this.dataDivider = dataDivider;
 	}
 
-	public ClientDataGroup constructTextUsingTextIdAndDefaultSvText(String textId,
+	public ClientDataGroupImp constructTextUsingTextIdAndDefaultSvText(String textId,
 			String defaultSvText) {
-		ClientDataGroup textGroup = ClientDataGroup.withNameInData("text");
+		ClientDataGroupImp textGroup = ClientDataGroupImp.withNameInData("text");
 		textGroup.addChild(createRecordInfoGroupForId(textId));
 		textGroup.addChild(createDefaultSvTextPartForText(defaultSvText));
 		return textGroup;
 	}
 
-	private ClientDataGroup createDefaultSvTextPartForText(String defaultSvText) {
+	private ClientDataGroupImp createDefaultSvTextPartForText(String defaultSvText) {
 		return createTextPartUsingTypeAndLangAndText("default", "sv", defaultSvText);
 	}
 
-	private ClientDataGroup createTextPartUsingTypeAndLangAndText(String type, String lang,
+	private ClientDataGroupImp createTextPartUsingTypeAndLangAndText(String type, String lang,
 			String text) {
-		ClientDataGroup textPart = ClientDataGroup.withNameInData("textPart");
+		ClientDataGroupImp textPart = ClientDataGroupImp.withNameInData("textPart");
 		textPart.addAttributeByIdWithValue("type", type);
 		textPart.addAttributeByIdWithValue("lang", lang);
 		textPart.addChild(createAtomicForText(text));
@@ -55,21 +55,21 @@ public class TextConstructor extends DataConstructor {
 		return ClientDataAtomic.withNameInDataAndValue("text", text);
 	}
 
-	public ClientDataGroup constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(
+	public ClientDataGroupImp constructTextUsingTextIdAndDefaultSvTextAndAlternativeTexts(
 			String textId, String defaultSvText, Map<String, String> alternativeTexts) {
-		ClientDataGroup textGroup = constructTextUsingTextIdAndDefaultSvText(textId, defaultSvText);
+		ClientDataGroupImp textGroup = constructTextUsingTextIdAndDefaultSvText(textId, defaultSvText);
 		addAlternativeTextsToTextGroup(alternativeTexts, textGroup);
 		return textGroup;
 	}
 
 	private void addAlternativeTextsToTextGroup(Map<String, String> alternativeTexts,
-			ClientDataGroup textGroup) {
+			ClientDataGroupImp textGroup) {
 		for (Entry<String, String> alternativeText : alternativeTexts.entrySet()) {
 			textGroup.addChild(createAlternativeTextPartForText(alternativeText));
 		}
 	}
 
-	private ClientDataGroup createAlternativeTextPartForText(
+	private ClientDataGroupImp createAlternativeTextPartForText(
 			Entry<String, String> alternativeText) {
 		return createTextPartUsingTypeAndLangAndText("alternative", alternativeText.getKey(),
 				alternativeText.getValue());

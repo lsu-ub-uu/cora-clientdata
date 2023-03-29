@@ -1,7 +1,7 @@
 package se.uu.ub.cora.clientdata.converter.jsontojava;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 import se.uu.ub.cora.clientdata.converter.javatojson.Convertible;
 import se.uu.ub.cora.json.parser.JsonObject;
 
@@ -21,7 +21,7 @@ public class JsonToDataConverterSpy implements JsonToDataConverter {
 					"atomicValue");
 		} else {
 			String nameInData = jsonValue.getValueAsJsonString("name").getStringValue();
-			returnedElement = ClientDataGroup.withNameInData(nameInData);
+			returnedElement = ClientDataGroupImp.withNameInData(nameInData);
 		}
 		return returnedElement;
 	}

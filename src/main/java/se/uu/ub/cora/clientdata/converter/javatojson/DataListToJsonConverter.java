@@ -20,7 +20,7 @@
 package se.uu.ub.cora.clientdata.converter.javatojson;
 
 import se.uu.ub.cora.clientdata.ClientData;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 import se.uu.ub.cora.clientdata.ClientDataList;
 import se.uu.ub.cora.clientdata.ClientDataRecord;
 import se.uu.ub.cora.clientdata.DataRecord;
@@ -95,7 +95,7 @@ public final class DataListToJsonConverter {
 	private void convertClientGroupToJsonBuilder(JsonArrayBuilder recordsJsonBuilder,
 			ClientData clientData) {
 		DataToJsonConverter converter = dataToJsonFactory
-				.createForClientDataElement((ClientDataGroup) clientData);
+				.createForClientDataElement((ClientDataGroupImp) clientData);
 
 		recordsJsonBuilder.addJsonObjectBuilder(converter.toJsonObjectBuilder());
 	}

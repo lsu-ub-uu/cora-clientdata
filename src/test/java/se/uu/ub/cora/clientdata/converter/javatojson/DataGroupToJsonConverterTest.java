@@ -25,20 +25,20 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
-import se.uu.ub.cora.clientdata.ClientDataGroup;
+import se.uu.ub.cora.clientdata.ClientDataGroupImp;
 import se.uu.ub.cora.json.builder.JsonBuilderFactory;
 import se.uu.ub.cora.json.builder.org.OrgJsonBuilderFactoryAdapter;
 
 public class DataGroupToJsonConverterTest {
 	private JsonBuilderFactory factory;
-	private ClientDataGroup clientDataGroup;
+	private ClientDataGroupImp clientDataGroup;
 	private DataGroupToJsonConverter dataGroupToJsonConverter;
 	private DataToJsonConverterFactorySpy dataToJsonFactory;
 
 	@BeforeMethod
 	public void beforeMethod() {
 		factory = new OrgJsonBuilderFactoryAdapter();
-		clientDataGroup = ClientDataGroup.withNameInData("groupNameInData");
+		clientDataGroup = ClientDataGroupImp.withNameInData("groupNameInData");
 		dataToJsonFactory = new DataToJsonConverterFactorySpy();
 	}
 
@@ -118,7 +118,7 @@ public class DataGroupToJsonConverterTest {
 		clientDataGroup.addChild(
 				ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
 
-		ClientDataGroup clientDataGroup2 = ClientDataGroup.withNameInData("groupNameInData2");
+		ClientDataGroupImp clientDataGroup2 = ClientDataGroupImp.withNameInData("groupNameInData2");
 		clientDataGroup.addChild(clientDataGroup2);
 
 		clientDataGroup2.addChild(
@@ -137,9 +137,9 @@ public class DataGroupToJsonConverterTest {
 		clientDataGroup.addAttributeByIdWithValue("attributeNameInData", "attributeValue");
 		clientDataGroup.addAttributeByIdWithValue("attributeNameInData2", "attributeValue2");
 
-		ClientDataGroup recordInfo = ClientDataGroup.withNameInData("recordInfo");
+		ClientDataGroupImp recordInfo = ClientDataGroupImp.withNameInData("recordInfo");
 		recordInfo.addChild(ClientDataAtomic.withNameInDataAndValue("id", "place:0001"));
-		ClientDataGroup type = ClientDataGroup.withNameInData("type");
+		ClientDataGroupImp type = ClientDataGroupImp.withNameInData("type");
 		type.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordType", "recordType"));
 		type.addChild(ClientDataAtomic.withNameInDataAndValue("linkedRecordId", "place"));
 		recordInfo.addChild(type);
@@ -150,7 +150,7 @@ public class DataGroupToJsonConverterTest {
 		clientDataGroup.addChild(
 				ClientDataAtomic.withNameInDataAndValue("atomicNameInData", "atomicValue"));
 
-		ClientDataGroup dataGroup2 = ClientDataGroup.withNameInData("groupNameInData2");
+		ClientDataGroupImp dataGroup2 = ClientDataGroupImp.withNameInData("groupNameInData2");
 		dataGroup2.addAttributeByIdWithValue("g2AttributeNameInData", "g2AttributeValue");
 		clientDataGroup.addChild(dataGroup2);
 
