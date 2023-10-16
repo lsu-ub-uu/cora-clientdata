@@ -1,6 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -19,6 +19,8 @@
  */
 package se.uu.ub.cora.clientdata.spy;
 
+import se.uu.ub.cora.clientdata.ClientAction;
+import se.uu.ub.cora.clientdata.ClientActionLink;
 import se.uu.ub.cora.clientdata.ClientDataAtomic;
 import se.uu.ub.cora.clientdata.ClientDataAttribute;
 import se.uu.ub.cora.clientdata.ClientDataChildFilter;
@@ -30,10 +32,17 @@ import se.uu.ub.cora.clientdata.ClientDataRecordGroup;
 import se.uu.ub.cora.clientdata.ClientDataRecordLink;
 import se.uu.ub.cora.clientdata.ClientDataResourceLink;
 import se.uu.ub.cora.testutils.mcr.MethodCallRecorder;
+import se.uu.ub.cora.testutils.mrv.MethodReturnValues;
 
 public class DataFactorySpy implements ClientDataFactory {
 	public MethodCallRecorder MCR = new MethodCallRecorder();
+	public MethodReturnValues MRV = new MethodReturnValues();
 	public ClientDataRecordGroup dataRecordGroup;
+
+	public DataFactorySpy() {
+		MCR.useMRV(MRV);
+		MRV.setDefaultReturnValuesSupplier("factorActionLinkUsingAction", DataActionLinkSpy::new);
+	}
 
 	@Override
 	public ClientDataList factorListUsingNameOfDataType(String nameOfDataType) {
@@ -134,6 +143,11 @@ public class DataFactorySpy implements ClientDataFactory {
 		ClientDataAttribute dataAttribute = new DataAttributeSpy();
 		MCR.addReturned(dataAttribute);
 		return dataAttribute;
+	}
+
+	@Override
+	public ClientActionLink factorActionLinkUsingAction(ClientAction clientAction) {
+		return (ClientActionLink) MCR.addCallAndReturnFromMRV("clientAction", clientAction);
 	}
 
 	@Override

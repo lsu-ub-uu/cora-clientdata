@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -90,6 +91,8 @@ public interface ClientDataRecord
 	 * <p>
 	 * If there is no matching action for this record an empty Optional should be returned.
 	 * 
+	 * @param action
+	 *            A ClientAction to get an ClientActionLink for
 	 * @return An Optional that might contain a ClientActionLink that matches the requested
 	 *         ClientAction.
 	 */

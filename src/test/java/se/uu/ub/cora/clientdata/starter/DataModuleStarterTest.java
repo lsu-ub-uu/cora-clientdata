@@ -1,6 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -45,13 +45,13 @@ public class DataModuleStarterTest {
 	}
 
 	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
-			+ "No implementations found for DataFactory")
+			+ "No implementations found for ClientDataFactory")
 	public void testStartModuleThrowsErrorIfNoDataFactoryImplementations() throws Exception {
 		starter.startUsingDataFactoryImplementations(dataFactoryImplementations);
 	}
 
 	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
-			+ "More than one implementation found for DataFactory")
+			+ "More than one implementation found for ClientDataFactory")
 	public void testStartModuleThrowsErrorIfMoreThanOneDataFactoryImplementations()
 			throws Exception {
 		dataFactoryImplementations.add(new DataFactorySpy());

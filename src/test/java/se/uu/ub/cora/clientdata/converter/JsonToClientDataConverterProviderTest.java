@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -107,7 +108,7 @@ public class JsonToClientDataConverterProviderTest {
 		}
 		assertTrue(caughtException instanceof ClientDataInitializationException);
 		assertEquals(caughtException.getMessage(),
-				"No implementations found for JsonToDataConverterFactory");
+				"No implementations found for JsonToClientDataConverterFactory");
 	}
 
 	private void assertStarterIsDataGroupModuleStarter(

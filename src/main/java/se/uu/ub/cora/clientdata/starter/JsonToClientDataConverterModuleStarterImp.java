@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -29,7 +30,7 @@ public class JsonToClientDataConverterModuleStarterImp extends ModuleStarter
 	public void startUsingConverterFactoryImplementations(
 			Iterable<JsonToClientDataConverterFactory> converterFactoryImplementations) {
 		jsonToDataConverterFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(
-				converterFactoryImplementations, "JsonToDataConverterFactory");
+				converterFactoryImplementations, "JsonToClientDataConverterFactory");
 
 	}
 

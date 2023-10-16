@@ -1,6 +1,6 @@
 /*
  * Copyright 2021 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -29,7 +29,7 @@ public class ClientDataModuleStarterImp extends ModuleStarter implements ClientD
 	public void startUsingDataFactoryImplementations(
 			Iterable<ClientDataFactory> dataFactoryImplementations) {
 		dataFactory = getImplementationThrowErrorIfNoneOrMoreThanOne(dataFactoryImplementations,
-				"DataFactory");
+				"ClientDataFactory");
 	}
 
 	@Override

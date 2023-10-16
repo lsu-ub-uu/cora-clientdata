@@ -1,6 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2022, 2023 Olov McKie
  * 
  * This file is part of Cora.
  *
@@ -20,7 +20,7 @@
 package se.uu.ub.cora.clientdata;
 
 /**
- * DataFactory is used to factor instances of data classes in a Cora system.
+ * ClientDataFactory is used to factor instances of ClientData classes in a Cora system.
  */
 public interface ClientDataFactory {
 
@@ -38,8 +38,8 @@ public interface ClientDataFactory {
 
 	ClientDataRecordLink factorRecordLinkUsingNameInData(String nameInData);
 
-	ClientDataRecordLink factorRecordLinkUsingNameInDataAndTypeAndId(String nameInData, String recordType,
-			String recordId);
+	ClientDataRecordLink factorRecordLinkUsingNameInDataAndTypeAndId(String nameInData,
+			String recordType, String recordId);
 
 	ClientDataResourceLink factorResourceLinkUsingNameInData(String nameInData);
 
@@ -49,6 +49,16 @@ public interface ClientDataFactory {
 			String repeatId);
 
 	ClientDataAttribute factorAttributeUsingNameInDataAndValue(String nameInData, String value);
+
+	/**
+	 * factorActionLinkUsingAction should be implemented so that it returns a new
+	 * {@link ClientActionLink} for each call, set up with the provided {@link ClientAction}
+	 * 
+	 * @param clientAction
+	 *            A ClientAction to use in the created ClientActionLink
+	 * @return A ClientActionLink set up to use the provided ClientAction
+	 */
+	ClientActionLink factorActionLinkUsingAction(ClientAction clientAction);
 
 	ClientDataChildFilter factorDataChildFilterUsingNameInData(String childNameInData);
 

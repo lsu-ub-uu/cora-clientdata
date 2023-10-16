@@ -1,5 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
+ * Copyright 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -44,13 +45,13 @@ public class JsonToDataConverterModuleStarterTest {
 	}
 
 	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
-			+ "No implementations found for JsonToDataConverterFactory")
+			+ "No implementations found for JsonToClientDataConverterFactory")
 	public void testStartModuleThrowsErrorIfNoConverterFactoryImplementations() throws Exception {
 		starter.startUsingConverterFactoryImplementations(converterFactoryImplementations);
 	}
 
 	@Test(expectedExceptions = ClientDataInitializationException.class, expectedExceptionsMessageRegExp = ""
-			+ "More than one implementation found for JsonToDataConverterFactory")
+			+ "More than one implementation found for JsonToClientDataConverterFactory")
 	public void testStartModuleThrowsErrorIfMoreThanOneConverterFactoryImplementations()
 			throws Exception {
 		converterFactoryImplementations.add(new JsonToClientDataConverterFactorySpy());

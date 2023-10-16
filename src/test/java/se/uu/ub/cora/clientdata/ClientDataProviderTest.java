@@ -1,6 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -38,7 +38,7 @@ import se.uu.ub.cora.clientdata.starter.ClientDataInitializationException;
 import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarter;
 import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarterImp;
 
-public class DataProviderTest {
+public class ClientDataProviderTest {
 
 	private DataRecordGroupSpy dataRecordGroup;
 	private DataGroupSpy dataGroup;
@@ -88,7 +88,8 @@ public class DataProviderTest {
 			caughtException = e;
 		}
 		assertTrue(caughtException instanceof ClientDataInitializationException);
-		assertEquals(caughtException.getMessage(), "No implementations found for DataFactory");
+		assertEquals(caughtException.getMessage(),
+				"No implementations found for ClientDataFactory");
 	}
 
 	private void assertStarterIsModuleStarter(ClientDataModuleStarter starter) {
@@ -282,6 +283,19 @@ public class DataProviderTest {
 		dataFactorySpy.MCR.assertParameters("factorAttributeUsingNameInDataAndValue", 0,
 				"attribute", "value");
 		dataFactorySpy.MCR.assertReturn("factorAttributeUsingNameInDataAndValue", 0, dataAttribute);
+	}
+
+	@Test
+	public void testCreate_ActionLinkUsingAction() throws Exception {
+		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
+
+		ClientActionLink actionLink = ClientDataProvider
+				.createActionLinkUsingAction(ClientAction.CREATE);
+
+		assertStarterWasCalled(starter);
+		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
+		dataFactorySpy.MCR.assertParameters("factorActionLinkUsingAction", 0, ClientAction.CREATE);
+		dataFactorySpy.MCR.assertReturn("factorActionLinkUsingAction", 0, actionLink);
 	}
 
 	@Test

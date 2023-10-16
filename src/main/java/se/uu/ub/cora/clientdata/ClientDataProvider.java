@@ -1,6 +1,6 @@
 /*
  * Copyright 2019 Uppsala University Library
- * Copyright 2022 Olov McKie
+ * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
  *
@@ -36,8 +36,9 @@ import se.uu.ub.cora.clientdata.starter.ClientDataModuleStarterImp;
  * DataProvider has a number of static methods that start with createX that is intended to be used
  * to create all instances of data classes in the system.
  * <p>
- * To help with testing is there a metod {@link ClientDataProvider#onlyForTestSetDataFactory(ClientDataFactory)}
- * that makes it possible to change the implementing data classes while testing.
+ * To help with testing is there a metod
+ * {@link ClientDataProvider#onlyForTestSetDataFactory(ClientDataFactory)} that makes it possible to
+ * change the implementing data classes while testing.
  */
 public class ClientDataProvider {
 
@@ -66,7 +67,8 @@ public class ClientDataProvider {
 	}
 
 	private static void getDataFactoryImpUsingModuleStarter() {
-		Iterable<ClientDataFactory> dataFactoryImplementations = ServiceLoader.load(ClientDataFactory.class);
+		Iterable<ClientDataFactory> dataFactoryImplementations = ServiceLoader
+				.load(ClientDataFactory.class);
 		dataModuleStarter.startUsingDataFactoryImplementations(dataFactoryImplementations);
 		dataFactory = dataModuleStarter.getDataFactory();
 	}
@@ -90,7 +92,8 @@ public class ClientDataProvider {
 		return dataFactory.factorListUsingNameOfDataType(nameOfDataType);
 	}
 
-	public static ClientDataRecord createRecordWithDataRecordGroup(ClientDataRecordGroup dataRecordGroup) {
+	public static ClientDataRecord createRecordWithDataRecordGroup(
+			ClientDataRecordGroup dataRecordGroup) {
 		ensureDataFactoryIsSet();
 		return dataFactory.factorRecordUsingDataRecordGroup(dataRecordGroup);
 	}
@@ -101,7 +104,8 @@ public class ClientDataProvider {
 	}
 
 	/**
-	 * createRecordGroupFromDataGroup creates a {@link ClientDataRecordGroup} from a {@link ClientDataGroup}.
+	 * createRecordGroupFromDataGroup creates a {@link ClientDataRecordGroup} from a
+	 * {@link ClientDataGroup}.
 	 * 
 	 * @param dataGroup
 	 *            A DataGroup to turn into a DataRecordGroup.
@@ -114,14 +118,16 @@ public class ClientDataProvider {
 	}
 
 	/**
-	 * createGroupFromRecordGroup creates a {@link ClientDataGroup} from a {@link ClientDataRecordGroup}.
+	 * createGroupFromRecordGroup creates a {@link ClientDataGroup} from a
+	 * {@link ClientDataRecordGroup}.
 	 * 
 	 * @param dataRecordGroup
 	 *            A DataRecordGroup to turn into a DataGroup.
 	 * @return A DataGroup with the same nameInData, attributes and children as the provided
 	 *         DataRecordGroup
 	 */
-	public static ClientDataGroup createGroupFromRecordGroup(ClientDataRecordGroup dataRecordGroup) {
+	public static ClientDataGroup createGroupFromRecordGroup(
+			ClientDataRecordGroup dataRecordGroup) {
 		ensureDataFactoryIsSet();
 		return dataFactory.factorGroupFromDataRecordGroup(dataRecordGroup);
 	}
@@ -136,8 +142,8 @@ public class ClientDataProvider {
 		return dataFactory.factorRecordLinkUsingNameInData(nameInData);
 	}
 
-	public static ClientDataRecordLink createRecordLinkUsingNameInDataAndTypeAndId(String nameInData,
-			String recordType, String recordId) {
+	public static ClientDataRecordLink createRecordLinkUsingNameInDataAndTypeAndId(
+			String nameInData, String recordType, String recordId) {
 		ensureDataFactoryIsSet();
 		return dataFactory.factorRecordLinkUsingNameInDataAndTypeAndId(nameInData, recordType,
 				recordId);
@@ -148,7 +154,8 @@ public class ClientDataProvider {
 		return dataFactory.factorResourceLinkUsingNameInData(nameInData);
 	}
 
-	public static ClientDataAtomic createAtomicUsingNameInDataAndValue(String nameInData, String value) {
+	public static ClientDataAtomic createAtomicUsingNameInDataAndValue(String nameInData,
+			String value) {
 		ensureDataFactoryIsSet();
 		return dataFactory.factorAtomicUsingNameInDataAndValue(nameInData, value);
 	}
@@ -164,6 +171,19 @@ public class ClientDataProvider {
 			String value) {
 		ensureDataFactoryIsSet();
 		return dataFactory.factorAttributeUsingNameInDataAndValue(nameInData, value);
+	}
+
+	/**
+	 * createActionLinkUsingAction creates an {@link ClientActionLink} using the provided
+	 * {@link ClientAction}
+	 * 
+	 * @param clientAction
+	 *            A ClientAction to use as action for the link
+	 * @return A ClientActionLink with the provided ClientAction
+	 */
+	public static ClientActionLink createActionLinkUsingAction(ClientAction clientAction) {
+		ensureDataFactoryIsSet();
+		return dataFactory.factorActionLinkUsingAction(clientAction);
 	}
 
 	public static ClientDataChildFilter createDataChildFilterUsingChildNameInData(
