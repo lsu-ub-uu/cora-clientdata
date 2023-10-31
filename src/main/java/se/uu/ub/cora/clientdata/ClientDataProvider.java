@@ -149,9 +149,10 @@ public class ClientDataProvider {
 				recordId);
 	}
 
-	public static ClientDataResourceLink createResourceLinkUsingNameInData(String nameInData) {
+	public static ClientDataResourceLink createResourceLinkUsingNameInDataAndMimeType(String nameInData,
+			String mimeType) {
 		ensureDataFactoryIsSet();
-		return dataFactory.factorResourceLinkUsingNameInData(nameInData);
+		return dataFactory.factorResourceLinkUsingNameInDataAndMimeType(nameInData, mimeType);
 	}
 
 	public static ClientDataAtomic createAtomicUsingNameInDataAndValue(String nameInData,

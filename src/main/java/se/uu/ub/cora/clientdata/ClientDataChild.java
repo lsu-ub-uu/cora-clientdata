@@ -28,6 +28,13 @@ import se.uu.ub.cora.clientdata.ability.ClientDataPart;
 public interface ClientDataChild extends ClientDataPart, ClientDataCharacteristic {
 
 	/**
+	 * hasRepeatId return where there is or there is not a repeatId.
+	 * 
+	 * @return A boolean saying wheter repeat exists or not.
+	 */
+	boolean hasRepeatId();
+
+	/**
 	 * setRepeatId sets the DataElements repeatId, if the repeatId has been set since before should
 	 * the value be updated.
 	 * 

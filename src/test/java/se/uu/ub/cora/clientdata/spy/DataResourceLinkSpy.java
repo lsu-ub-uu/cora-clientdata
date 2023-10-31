@@ -80,42 +80,6 @@ public class DataResourceLinkSpy implements ClientDataResourceLink {
 	}
 
 	@Override
-	public void setStreamId(String streamId) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getStreamId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setFileName(String filename) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getFileName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setFileSize(String fileSize) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getFileSize() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void setMimeType(String mimeType) {
 		// TODO Auto-generated method stub
 
@@ -143,6 +107,12 @@ public class DataResourceLinkSpy implements ClientDataResourceLink {
 	public Optional<String> getAttributeValue(String nameInData) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
+	}
+
+	@Override
+	public boolean hasRepeatId() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
