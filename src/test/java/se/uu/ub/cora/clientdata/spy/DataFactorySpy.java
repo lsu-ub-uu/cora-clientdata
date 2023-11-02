@@ -112,8 +112,9 @@ public class DataFactorySpy implements ClientDataFactory {
 	}
 
 	@Override
-	public ClientDataResourceLink factorResourceLinkUsingNameInData(String nameInData) {
-		MCR.addCall("nameInData", nameInData);
+	public ClientDataResourceLink factorResourceLinkUsingNameInDataAndMimeType(String nameInData,
+			String mimeType) {
+		MCR.addCall("nameInData", nameInData, "mimeType", mimeType);
 		ClientDataResourceLink dataLinkSpy = new DataResourceLinkSpy();
 		MCR.addReturned(dataLinkSpy);
 		return dataLinkSpy;
@@ -157,5 +158,4 @@ public class DataFactorySpy implements ClientDataFactory {
 		MCR.addReturned(dataChildFilter);
 		return dataChildFilter;
 	}
-
 }

@@ -41,7 +41,7 @@ public interface ClientDataFactory {
 	ClientDataRecordLink factorRecordLinkUsingNameInDataAndTypeAndId(String nameInData,
 			String recordType, String recordId);
 
-	ClientDataResourceLink factorResourceLinkUsingNameInData(String nameInData);
+	ClientDataResourceLink factorResourceLinkUsingNameInDataAndMimeType(String nameInData, String mimeType);
 
 	ClientDataAtomic factorAtomicUsingNameInDataAndValue(String nameInData, String value);
 

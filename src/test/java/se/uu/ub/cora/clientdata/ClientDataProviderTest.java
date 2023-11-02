@@ -230,16 +230,18 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_ResourceLinkUsingNameInData() throws Exception {
+	public void testCreate_ResourceLinkUsingNameInDataAndMimeType() throws Exception {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataResourceLink dataResourceLink = ClientDataProvider
-				.createResourceLinkUsingNameInData("resourceLink");
+				.createResourceLinkUsingNameInDataAndMimeType("resourceLink", "someMimeType");
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
-		dataFactorySpy.MCR.assertParameters("factorResourceLinkUsingNameInData", 0, "resourceLink");
-		dataFactorySpy.MCR.assertReturn("factorResourceLinkUsingNameInData", 0, dataResourceLink);
+		dataFactorySpy.MCR.assertParameters("factorResourceLinkUsingNameInDataAndMimeType", 0,
+				"resourceLink");
+		dataFactorySpy.MCR.assertReturn("factorResourceLinkUsingNameInDataAndMimeType", 0,
+				dataResourceLink);
 	}
 
 	@Test
