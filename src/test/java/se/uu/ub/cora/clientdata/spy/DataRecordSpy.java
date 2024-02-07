@@ -19,6 +19,7 @@
 package se.uu.ub.cora.clientdata.spy;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -133,6 +134,24 @@ public class DataRecordSpy implements ClientDataRecord {
 
 	@Override
 	public String getSearchId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasProtocol(String protocol) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void putProtocol(String protocol, Map<String, String> protocolProperties) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Map<String, String> getProtocol(String protocol) {
 		// TODO Auto-generated method stub
 		return null;
 	}

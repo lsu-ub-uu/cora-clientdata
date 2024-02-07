@@ -20,18 +20,24 @@
 package se.uu.ub.cora.clientdata;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 /**
- * DataRecord defines methods that can be used on a data record. The contents of the DataRecord is
- * adapted to the User who in an interaction (read, update, etc.) with the server got the DataRecord
- * in return.
+ * ClientDataRecord defines methods that can be used on a data record. The contents of the
+ * ClientDataRecord is adapted to the User who in an interaction (read, update, etc.) with the
+ * server got the ClientDataRecord in return.
  * <p>
- * The DataRecord consists of three major parts, a DataGroup holding the data for the record, a set
- * of Actions that the User is allowed to do with the record, and permissions devided into read
- * permissions that the User has for parts of this record, write permissions that the User has for
- * parts of this record.
+ * A ClientDataRecord consists of up to four major parts:
+ * <ul>
+ * <li>a DataGroup holding the data for the record</li>
+ * <li>a set of Actions that the User is allowed to do with the record</li>
+ * <li>permissions divided into read and write permissions that the User has for parts of this
+ * record. Permissions are only present if there are recordPartRestrictions on the record.</li>
+ * <li>otherProtocols a list of protocols that can be used to access this record or parts of it
+ * through other protocols, other protocols are only applicable records of type binary</li>
+ * </ul>
  * <p>
  * Links to other DataGroups within the records DataGroup has "read" action added if the User is
  * allowed to read them.
@@ -59,7 +65,7 @@ public interface ClientDataRecord
 	String getId();
 
 	/**
-	 * setDataRecordGroup sets the DataRecordGroup in the DataRecord replacing any preexisting
+	 * setDataRecordGroup sets the DataRecordGroup in the ClientDataRecord replacing any preexisting
 	 * DataRecordGroup
 	 * 
 	 * @param dataRecordGroup
@@ -176,5 +182,26 @@ public interface ClientDataRecord
 	 * @return A String with the search id
 	 */
 	String getSearchId();
+
+	/**
+	 * 
+	 * @param protocol
+	 * @return
+	 */
+	boolean hasProtocol(String protocol);
+
+	/**
+	 * 
+	 * @param protocol
+	 * @param protocolProperties
+	 */
+	void putProtocol(String protocol, Map<String, String> protocolProperties);
+
+	/**
+	 * 
+	 * @param protocol
+	 * @return
+	 */
+	Map<String, String> getProtocol(String protocol);
 
 }
