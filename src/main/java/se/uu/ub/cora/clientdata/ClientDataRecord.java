@@ -184,23 +184,36 @@ public interface ClientDataRecord
 	String getSearchId();
 
 	/**
+	 * hasProtocols response with a boolean wheter a protocol exist or not for a dataRecord.
 	 * 
 	 * @param protocol
-	 * @return
+	 *            The name of the protocol.
+	 * @return boolean wheter protocol exists or not.
 	 */
 	boolean hasProtocol(String protocol);
 
 	/**
+	 * putProtocl sets a Map with protocol properties to a given protocol.
 	 * 
 	 * @param protocol
+	 *            The name of the protocol.
 	 * @param protocolProperties
+	 *            A Map with proptocol properties. The Map holds pairs of (propertyName and
+	 *            propertyValue)
 	 */
 	void putProtocol(String protocol, Map<String, String> protocolProperties);
 
 	/**
+	 * getProtocols returns a Map with all the properties of the requested protocol if present.
+	 * Otherwise a {@link ClientDataMissingException} is thrown if the requested protocol is not
+	 * present.
 	 * 
 	 * @param protocol
-	 * @return
+	 *            The name of the protocol to request.
+	 * @throws ClientDataMissingException
+	 *             if ther requested protocol does not exists in the dataRecord
+	 * @return A Map with proptocol properties. The Map holds pairs of (propertyName and
+	 *         propertyValue)
 	 */
 	Map<String, String> getProtocol(String protocol);
 
