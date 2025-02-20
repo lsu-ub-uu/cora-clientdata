@@ -263,12 +263,12 @@ public class ClientDataProviderTest {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataAtomic dataAtomic = ClientDataProvider
-				.createAtomicUsingNameInDataAndValueAndRepeatId("atomic", "value", "repeatid");
+				.createAtomicUsingNameInDataAndValueAndRepeatId("atomic", "value", "repeatId");
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
 		dataFactorySpy.MCR.assertParameters("factorAtomicUsingNameInDataAndValueAndRepeatId", 0,
-				"atomic", "value", "repeatid");
+				"atomic", "value", "repeatId");
 		dataFactorySpy.MCR.assertReturn("factorAtomicUsingNameInDataAndValueAndRepeatId", 0,
 				dataAtomic);
 	}
