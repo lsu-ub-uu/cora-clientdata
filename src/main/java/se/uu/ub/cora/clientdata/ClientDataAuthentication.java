@@ -18,6 +18,7 @@
  */
 package se.uu.ub.cora.clientdata;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -83,6 +84,16 @@ public interface ClientDataAuthentication
 	 * @return A String with the authetication lastName.
 	 */
 	public String getLastName();
+
+	/**
+	 * getPermissionUnitIds returns a List of Strings with permission unit ids that the
+	 * authentication logedin user has can alter data for.
+	 * <p>
+	 * If the user has no permission units is empty List returned.
+	 * 
+	 * @return A List of Strings with permission unit ids.
+	 */
+	public List<String> getPermissionUnitIds();
 
 	/**
 	 * getActionLink returns an Optional with an ActionLink representing the requested ClientAction
