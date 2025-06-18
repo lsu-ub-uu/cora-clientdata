@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -149,10 +149,11 @@ public class ClientDataProvider {
 				recordId);
 	}
 
-	public static ClientDataResourceLink createResourceLinkUsingNameInDataAndMimeType(String nameInData,
-			String mimeType) {
+	public static ClientDataResourceLink createResourceLinkUsingNameInDataAndTypeAndIdAndMimeType(
+			String nameInData, String recordType, String recordId, String mimeType) {
 		ensureDataFactoryIsSet();
-		return dataFactory.factorResourceLinkUsingNameInDataAndMimeType(nameInData, mimeType);
+		return dataFactory.factorResourceLinkUsingNameInDataAndTypeAndIdAndMimeType(nameInData,
+				recordType, recordId, mimeType);
 	}
 
 	public static ClientDataAtomic createAtomicUsingNameInDataAndValue(String nameInData,

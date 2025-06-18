@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  * Copyright 2022, 2023 Olov McKie
  *
  * This file is part of Cora.
@@ -73,7 +73,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testInitUsesDefaultLoggerModuleStarter() throws Exception {
+	public void testInitUsesDefaultLoggerModuleStarter() {
 		makeSureErrorIsThrownAsNoImplementationsExistInThisModule();
 		ClientDataModuleStarter starter = ClientDataProvider.getStarter();
 		assertStarterIsModuleStarter(starter);
@@ -97,7 +97,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testOnlyForTestetSetDataFactory() throws Exception {
+	public void testOnlyForTestetSetDataFactory() {
 		DataFactorySpy dataFactorySpy = new DataFactorySpy();
 		ClientDataProvider.onlyForTestSetDataFactory(dataFactorySpy);
 
@@ -124,7 +124,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_DataList() throws Exception {
+	public void testCreate_DataList() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataList dataList = ClientDataProvider.createListWithNameOfDataType("dataType");
@@ -136,7 +136,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_Record() throws Exception {
+	public void testCreate_Record() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataRecord dataRecord = ClientDataProvider
@@ -149,7 +149,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_RecordGroupUsingNameInData() throws Exception {
+	public void testCreate_RecordGroupUsingNameInData() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataRecordGroup dataRecordGroup = ClientDataProvider
@@ -163,7 +163,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_RecordGroupFromDataGroup() throws Exception {
+	public void testCreate_RecordGroupFromDataGroup() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataRecordGroup dataRecordGroup = ClientDataProvider
@@ -176,7 +176,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_GroupFromRecordGroup() throws Exception {
+	public void testCreate_GroupFromRecordGroup() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 		ClientDataRecordGroup dataRecordGroup = new DataRecordGroupSpy();
 
@@ -189,7 +189,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_GroupUsingNameInData() throws Exception {
+	public void testCreate_GroupUsingNameInData() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataGroup dataRecordGroup = ClientDataProvider
@@ -202,7 +202,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_RecordLinkUsingNameInData() throws Exception {
+	public void testCreate_RecordLinkUsingNameInData() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataRecordLink dataRecordLink = ClientDataProvider
@@ -215,7 +215,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_RecordLinkUsingNameInDataAndTypeAndId() throws Exception {
+	public void testCreate_RecordLinkUsingNameInDataAndTypeAndId() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataRecordLink dataRecordLink = ClientDataProvider
@@ -230,22 +230,23 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_ResourceLinkUsingNameInDataAndMimeType() throws Exception {
+	public void testCreate_ResourceLinkUsingNameInDataAndMimeType() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataResourceLink dataResourceLink = ClientDataProvider
-				.createResourceLinkUsingNameInDataAndMimeType("resourceLink", "someMimeType");
+				.createResourceLinkUsingNameInDataAndTypeAndIdAndMimeType("resourceLink",
+						"someType", "someId", "someMimeType");
 
 		assertStarterWasCalled(starter);
 		DataFactorySpy dataFactorySpy = getFactorySpyFromStarterSpy(starter);
-		dataFactorySpy.MCR.assertParameters("factorResourceLinkUsingNameInDataAndMimeType", 0,
-				"resourceLink");
-		dataFactorySpy.MCR.assertReturn("factorResourceLinkUsingNameInDataAndMimeType", 0,
-				dataResourceLink);
+		dataFactorySpy.MCR.assertParameters(
+				"factorResourceLinkUsingNameInDataAndTypeAndIdAndMimeType", 0, "resourceLink");
+		dataFactorySpy.MCR.assertReturn("factorResourceLinkUsingNameInDataAndTypeAndIdAndMimeType",
+				0, dataResourceLink);
 	}
 
 	@Test
-	public void testCreate_AtomicUsingNameInData() throws Exception {
+	public void testCreate_AtomicUsingNameInData() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataAtomic dataAtomic = ClientDataProvider
@@ -259,7 +260,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_AtomicUsingNameInDataAndValueAndRepeatId() throws Exception {
+	public void testCreate_AtomicUsingNameInDataAndValueAndRepeatId() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataAtomic dataAtomic = ClientDataProvider
@@ -274,7 +275,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_AttributeUsingNameInDataAndValue() throws Exception {
+	public void testCreate_AttributeUsingNameInDataAndValue() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientDataAttribute dataAttribute = ClientDataProvider
@@ -288,7 +289,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreate_ActionLinkUsingAction() throws Exception {
+	public void testCreate_ActionLinkUsingAction() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		ClientActionLink actionLink = ClientDataProvider
@@ -301,7 +302,7 @@ public class ClientDataProviderTest {
 	}
 
 	@Test
-	public void testCreateDataChildFilterUsingChildNameInData() throws Exception {
+	public void testCreateDataChildFilterUsingChildNameInData() {
 		DataModuleStarterSpy starter = startDataRecordModuleInitializerWithStarterSpy();
 
 		String childNameInData = "someChildNameInData";

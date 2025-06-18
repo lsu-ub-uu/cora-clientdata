@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  * Copyright 2022, 2023 Olov McKie
  * 
  * This file is part of Cora.
@@ -41,7 +41,8 @@ public interface ClientDataFactory {
 	ClientDataRecordLink factorRecordLinkUsingNameInDataAndTypeAndId(String nameInData,
 			String recordType, String recordId);
 
-	ClientDataResourceLink factorResourceLinkUsingNameInDataAndMimeType(String nameInData, String mimeType);
+	ClientDataResourceLink factorResourceLinkUsingNameInDataAndTypeAndIdAndMimeType(
+			String nameInData, String recordType, String recordId, String mimeType);
 
 	ClientDataAtomic factorAtomicUsingNameInDataAndValue(String nameInData, String value);
 

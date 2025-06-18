@@ -112,9 +112,10 @@ public class DataFactorySpy implements ClientDataFactory {
 	}
 
 	@Override
-	public ClientDataResourceLink factorResourceLinkUsingNameInDataAndMimeType(String nameInData,
-			String mimeType) {
-		MCR.addCall("nameInData", nameInData, "mimeType", mimeType);
+	public ClientDataResourceLink factorResourceLinkUsingNameInDataAndTypeAndIdAndMimeType(
+			String nameInData, String recordType, String recordId, String mimeType) {
+		MCR.addCall("nameInData", nameInData, "recordType", recordType, "recordId", recordId,
+				"mimeType", mimeType);
 		ClientDataResourceLink dataLinkSpy = new DataResourceLinkSpy();
 		MCR.addReturned(dataLinkSpy);
 		return dataLinkSpy;
