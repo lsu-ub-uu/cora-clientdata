@@ -42,12 +42,4 @@ public class DataToJsonConverterFactorySpy implements ClientDataToJsonConverterF
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public ClientDataToJsonConverter factorUsingBaseUrlAndRecordUrlAndConvertible(String baseUrl, String recordUrl,
-			ClientConvertible convertible) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

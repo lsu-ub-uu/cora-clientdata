@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Uppsala University Library
+ * Copyright 2015, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -22,8 +22,8 @@ package se.uu.ub.cora.clientdata.converter;
 import se.uu.ub.cora.clientdata.ClientConvertible;
 
 /**
- * DataToJsonConverterFactory is a factory that creates new instances of {@link ClientDataToJsonConverter}
- * for provided {@link ClientConvertible}s
+ * DataToJsonConverterFactory is a factory that creates new instances of
+ * {@link ClientDataToJsonConverter} for provided {@link ClientConvertible}s
  * <p>
  * By default SHOULD implementations generate converters that creates json without action links. To
  * get converters to generate action links call the method
@@ -40,8 +40,8 @@ public interface ClientDataToJsonConverterFactory {
 	 * @param convertible
 	 *            A {@link ClientConvertible} to create a converter for
 	 * 
-	 * @return returns a {@link ClientDataToJsonConverter} capable of converting the {@link ClientConvertible}
-	 *         to a json String.
+	 * @return returns a {@link ClientDataToJsonConverter} capable of converting the
+	 *         {@link ClientConvertible} to a json String.
 	 */
 	ClientDataToJsonConverter factorUsingConvertible(ClientConvertible convertible);
 
@@ -53,22 +53,7 @@ public interface ClientDataToJsonConverterFactory {
 	 * @param convertible
 	 * @return
 	 */
-	ClientDataToJsonConverter factorUsingBaseUrlAndConvertible(String baseUrl, ClientConvertible convertible);
-
-	/**
-	 * factorUsingRecordUrlAndConvertible creates a {@link ClientDataToJsonConverter} for the provided
-	 * {@link ClientConvertible} using the provided recordUrl when creating action links.
-	 * 
-	 * @param baseUrl
-	 *            The baseUrl related to the convertible
-	 * @param recordUrl
-	 *            The recordUrl related to the convertible
-	 * @param convertible
-	 *            A {@link ClientConvertible} to create a converter for
-	 * 
-	 * @return
-	 */
-	ClientDataToJsonConverter factorUsingBaseUrlAndRecordUrlAndConvertible(String baseUrl,
-			String recordUrl, ClientConvertible convertible);
+	ClientDataToJsonConverter factorUsingBaseUrlAndConvertible(String baseUrl,
+			ClientConvertible convertible);
 
 }
