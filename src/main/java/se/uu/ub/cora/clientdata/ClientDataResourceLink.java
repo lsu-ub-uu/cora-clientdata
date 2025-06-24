@@ -32,6 +32,20 @@ package se.uu.ub.cora.clientdata;
 public interface ClientDataResourceLink extends ClientDataLink, ClientConvertible {
 
 	/**
+	 * getType returns the record type for this link.
+	 * 
+	 * @return A String with the record type for this link.
+	 */
+	String getType();
+
+	/**
+	 * getId returns the id for this link.
+	 * 
+	 * @return A String with the id for this link.
+	 */
+	String getId();
+
+	/**
 	 * setMimeType sets the mimeType for this link.
 	 * <p>
 	 * If there is a mimeType since before must it be replaced by this method so that only one
