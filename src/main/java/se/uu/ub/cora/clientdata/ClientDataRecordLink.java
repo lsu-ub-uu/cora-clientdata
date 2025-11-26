@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -19,8 +19,8 @@
 package se.uu.ub.cora.clientdata;
 
 /**
- * DataRecordLink contains information linking the {@link ClientDataRecord} this link is a part of to
- * another {@link ClientDataRecord}
+ * DataRecordLink contains information linking the {@link ClientDataRecord} this link is a part of
+ * to another {@link ClientDataRecord}
  */
 public interface ClientDataRecordLink extends ClientDataLink, ClientConvertible {
 	/**
@@ -32,6 +32,19 @@ public interface ClientDataRecordLink extends ClientDataLink, ClientConvertible 
 	 * @return A String with the id of the record type that this link refers to.
 	 */
 	public String getLinkedRecordId();
+
+	/**
+	 * setLinkedRecordId set the provided value as the recordId in this ClientDataRecordLink.
+	 * </p>
+	 * 
+	 * <b>Note!</b></br>
+	 * Null and empty SHOULD never be set as a value, if the link does not have a linkedRecordId,
+	 * remove it from its parent instead.
+	 * 
+	 * @param value
+	 *            A String with the value to set
+	 */
+	void setLinkedRecordId(String value);
 
 	/**
 	 * getLinkedRecordType returns the record type of the record this link refers to.

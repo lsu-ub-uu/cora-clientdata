@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -30,4 +30,17 @@ public interface ClientDataAttribute extends ClientDataPart, ClientConvertible {
 	 * @return A String with the value of this attribute
 	 */
 	String getValue();
+
+	/**
+	 * setValue set the provided value in this DataAttribute.
+	 * </p>
+	 * 
+	 * <b>Note!</b></br>
+	 * Null and empty SHOULD never be set as a value, if the attribute does not have a value, remove
+	 * it from its parent instead.
+	 * 
+	 * @param value
+	 *            A String with the value to set
+	 */
+	void setValue(String value);
 }

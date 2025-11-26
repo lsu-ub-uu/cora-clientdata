@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -96,6 +96,12 @@ public class DataAtomicSpy implements ClientDataAtomic {
 	public boolean hasRepeatId() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void setValue(String value) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

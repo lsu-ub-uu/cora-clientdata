@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -20,5 +20,21 @@ package se.uu.ub.cora.clientdata;
 
 public interface ClientDataAtomic extends ClientDataChild, ClientConvertible {
 
+	/**
+	 * getValue returns A String with the current value for this ClientDataAtomic
+	 */
 	String getValue();
+
+	/**
+	 * setValue set the provided value in this ClientDataAtomic.
+	 * </p>
+	 * 
+	 * <b>Note!</b></br>
+	 * Null and empty SHOULD never be set as a value, if the atomic does not have a value, remove it
+	 * from its parent instead.
+	 * 
+	 * @param value
+	 *            A String with the value to set
+	 */
+	void setValue(String value);
 }

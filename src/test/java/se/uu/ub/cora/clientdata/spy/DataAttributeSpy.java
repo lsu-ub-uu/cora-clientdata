@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  *
  * This file is part of Cora.
  *
@@ -34,4 +34,8 @@ public class DataAttributeSpy implements ClientDataAttribute {
 		return null;
 	}
 
+	@Override
+	public void setValue(String value) {
+		// TODO Auto-generated method stub
+	}
 }

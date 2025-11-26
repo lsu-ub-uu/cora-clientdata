@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Uppsala University Library
+ * Copyright 2019, 2025 Uppsala University Library
  * Copyright 2022 Olov McKie
  *
  * This file is part of Cora.
@@ -110,6 +110,12 @@ public class DataRecordLinkSpy implements ClientDataRecordLink {
 	public boolean hasRepeatId() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void setLinkedRecordId(String value) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
